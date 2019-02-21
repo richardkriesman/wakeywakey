@@ -142,9 +142,6 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                               "position": "absolute",
                               "right": 0,
                               "shadowColor": "black",
-                              "shadowOffset": Object {
-                                "height": -3,
-                              },
                               "shadowOpacity": 0.1,
                               "shadowRadius": 3,
                             }
@@ -182,12 +179,12 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                                     "color": "rgba(96,100,109, 0.8)",
                                   },
                                   Object {
-                                    "fontFamily": "space-mono",
+                                    "fontFamily": "SpaceMono",
                                   },
                                 ]
                               }
                             >
-                              navigation/MainTabNavigator.js
+                              src/navigation/MainTabNavigator.tsx
                             </Text>
                           </View>
                         </View>

@@ -1,14 +1,19 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
     "android": "expo start --android",
-    "ios": "expo start --ios",
+    "build": "yarn clean && yarn tsc",
+    "clean": "rimraf build",
     "eject": "expo eject",
-    "test": "node ./node_modules/jest/bin/jest.js"
-  },
-  "jest": {
-    "preset": "jest-expo"
+    "ios": "expo start --ios",
+    "lint": "tslint --project .",
+    "snapshot": "yarn test --updateSnapshot",
+    "start": "concurrently \"expo start\" \"yarn watch\"",
+    "test": "node ./node_modules/jest/bin/jest.js",
+    "test:coverage": "yarn test --coverage; open coverage/lcov-report/index.html",
+    "test:ci": "yarn build && yarn lint && yarn test",
+    "tsc": "tsc",
+    "watch": "yarn build -- -w"
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
@@ -18,8 +23,23 @@
     "react-navigation": "^3.0.9"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@types/expo": "^32.0.2",
+    "@types/expo__vector-icons": "^9.0.1",
+    "@types/jest": "^24.0.6",
+    "@types/react": "^16.8.4",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-native": "^0.57.37",
+    "@types/react-navigation": "^3.0.3",
+    "@types/react-test-renderer": "^16.8.1",
     "babel-preset-expo": "^5.0.0",
-    "jest-expo": "^32.0.0"
+    "concurrently": "^4.1.0",
+    "jest": "^24.1.0",
+    "jest-expo": "^32.0.0",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.0",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
   },
   "private": true
 }
