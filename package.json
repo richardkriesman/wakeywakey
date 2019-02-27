@@ -8,13 +8,11 @@
     "eject": "expo eject",
     "ios": "expo start --ios",
     "lint": "tslint src/**/*.ts",
+    "snapshot": "",
     "test": "node ./node_modules/jest/bin/jest.js",
     "coverage": "yarn test --coverage",
     "tsc": "tsc",
     "watch": "yarn build -w"
-  },
-  "jest": {
-    "preset": "jest-expo"
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
@@ -25,7 +23,7 @@
   },
   "devDependencies": {
     "@types/expo": "^32.0.3",
-    "@types/jest": "^24.0.8",
+    "@types/jest": "^24.0.9",
     "@types/react": "^16.8.5",
     "@types/react-dom": "^16.8.2",
     "@types/react-native": "^0.57.38",
@@ -33,7 +31,9 @@
     "@types/react-test-renderer": "^16.8.1",
     "babel-preset-expo": "^5.0.0",
     "concurrently": "^4.1.0",
+    "jest": "^24.1.0",
     "jest-expo": "^32.0.0",
+    "react-test-renderer": "^16.8.3",
     "rimraf": "^2.6.3",
     "tslint": "^5.13.0",
     "typescript": "^3.3.3333"
