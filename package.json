@@ -8,8 +8,9 @@
     "eject": "expo eject",
     "ios": "expo start --ios",
     "lint": "tslint src/**/*.ts",
-    "snapshot": "",
+    "snapshot": "yarn test --updateSnapshot",
     "test": "node ./node_modules/jest/bin/jest.js",
+    "test:ci": "yarn build && yarn lint && yarn test",
     "coverage": "yarn test --coverage",
     "tsc": "tsc",
     "watch": "yarn build -w"
