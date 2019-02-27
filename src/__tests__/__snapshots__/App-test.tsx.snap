@@ -142,9 +142,6 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                               "position": "absolute",
                               "right": 0,
                               "shadowColor": "black",
-                              "shadowOffset": Object {
-                                "height": -3,
-                              },
                               "shadowOpacity": 0.1,
                               "shadowRadius": 3,
                             }
