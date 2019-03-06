@@ -27,7 +27,8 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps> {
         return (
             <View style={this.props.wrapperStyle}>
                 <Text style={styles.clock}>
-                    {this._pad(now.getHours())}:{this._pad(now.getMinutes())}
+                    {/* {this._pad(now.getHours())}:{this._pad(now.getMinutes())} */}
+                    XX:XX
                 </Text>
             </View>
         );
