@@ -1,15 +1,20 @@
 import React, { ReactNode } from "react";
 import { View, StyleSheet } from "react-native";
 
-import SlideUpIndicator from "../components/HomeScreen/SlideUpIndicator";
+import { SlideUpIndicator } from "../components/HomeScreen/SlideUpIndicator";
 
 export default class HomeScreen extends React.Component {
 
-    public render(): ReactNode {
+    private switchToSettings() {
+        // TODO
+        alert("hi");
+    }
+
+    public render() : ReactNode {
         return (
             <View style={ExtraStyles.container}>
                 <View style={ExtraStyles.bottom}>
-                    <SlideUpIndicator />
+                    <SlideUpIndicator onPress={this.switchToSettings.bind(this)} />
                 </View>
             </View>
         );

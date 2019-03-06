@@ -3,18 +3,34 @@ import { StyleSheet, View } from "react-native";
 
 import { Button, Icon } from "react-native-elements";
 
-// shouldn't need any props, should be straightforward
-// isn't intended to be derived from in any way
+/**
+ * Properties that must be passed to <SlideUpIndicator />
+ * @author Shawn Lutch
+ */
+export interface SlideUpIndicatorProps {
+    // onPress event required
+    onPress : VoidFunction;
+}
 
 /**
- * Indicator at the bottom of the screen to slide up
+ * Indicator at the bottom of the screen to slide up.
+ * @author Shawn Lutch
  */
-export default class SlideUpIndicator extends React.Component {
+export class SlideUpIndicator extends React.Component<SlideUpIndicatorProps> {
+
+    protected onSwitch : VoidFunction;
+
+    public constructor(props : SlideUpIndicatorProps) {
+        super(props);
+        this.onSwitch = props.onPress;
+    }
+
     public render(): ReactNode {
         return (
             <View style={styles.container}>
                 <Button
                     buttonStyle={styles.indicator}
+                    onPress={() => { this.onSwitch(); }}
                     icon={
                         <Icon
                             name="up"
