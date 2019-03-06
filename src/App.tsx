@@ -35,7 +35,7 @@ export default class App extends React.Component<AppProps, AppState> {
             return (
                 <View style={styles.container}>
                     {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-                    <HomeScreen />
+                    <HomeScreen initialMessageText="Hello, world!" />
                 </View>
             );
         }

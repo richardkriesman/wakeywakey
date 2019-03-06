@@ -27,31 +27,25 @@ export class SlideUpIndicator extends React.Component<SlideUpIndicatorProps> {
 
     public render(): ReactNode {
         return (
-            <View style={styles.container}>
-                <Button
-                    buttonStyle={styles.indicator}
-                    onPress={this.onSwitch}
-                    icon={
-                        <Icon
-                            name="up"
-                            type="antdesign"
-                            size={32}
-                            color="white"
-                        />
-                    }
-                />
-            </View>
+            <Button
+                buttonStyle={styles.indicator}
+                onPress={this.onSwitch}
+                icon={
+                    <Icon
+                        name="up"
+                        type="antdesign"
+                        size={32}
+                        color="white"
+                    />
+                }
+            />
         );
     }
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-end'
-    },
     indicator: {
         backgroundColor: 'black',
-        width: 50
+        width: '100%'
     }
 });
