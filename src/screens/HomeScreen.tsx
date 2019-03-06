@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
+
 import Styles from "./styles/MainStyles";
 
 export default class HomeScreen extends React.Component {
@@ -13,3 +14,7 @@ export default class HomeScreen extends React.Component {
     }
 
 };
+
+const ExtraStyles = StyleSheet.create({
+
+});
