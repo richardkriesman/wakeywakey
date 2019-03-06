@@ -30,7 +30,7 @@ export class SlideUpIndicator extends React.Component<SlideUpIndicatorProps> {
             <View style={styles.container}>
                 <Button
                     buttonStyle={styles.indicator}
-                    onPress={() => { this.onSwitch(); }}
+                    onPress={this.onSwitch}
                     icon={
                         <Icon
                             name="up"
