@@ -1,6 +1,6 @@
 import { StyleSheet, Platform } from "react-native";
 
-const Styles = StyleSheet.create({
+export default StyleSheet.create({
     codeHighlightContainer: {
         backgroundColor: "rgba(0,0,0,0.05)",
         borderRadius: 3,
@@ -87,6 +87,3 @@ const Styles = StyleSheet.create({
         width: 100
     }
 });
-
-
-export default Styles;
