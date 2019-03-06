@@ -8,7 +8,7 @@ import {
     View,
 } from "react-native";
 
-import Styles from "../styles/MainStyles";
+import Styles from "./styles/LegacyStyles";
 
 import {NavigationScreenOptions} from "react-navigation";
 import { MonoText } from "../../components/StyledText";
