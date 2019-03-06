@@ -44,19 +44,29 @@ exports[`App snapshot renders the root without loading screen 1`] = `
       <View
         style={Object {}}
       >
-        <Text
+        <View
           style={
             Object {
-              "color": "black",
-              "fontSize": 70,
               "marginBottom": 20,
               "marginTop": 20,
-              "textAlign": "center",
             }
           }
         >
-          XX:XX
-        </Text>
+          <Text
+            style={
+              Object {
+                "fontSize": 60,
+                "textAlign": "center",
+              }
+            }
+          >
+            12
+            :
+            22
+             
+            PM
+          </Text>
+        </View>
       </View>
       <View
         style={
