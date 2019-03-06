@@ -3,6 +3,11 @@ import { View, StyleSheet } from "react-native";
 
 import { SlideUpIndicator } from "../components/HomeScreen/SlideUpIndicator";
 
+/**
+ * The home screen, where the current status, current time, and decorations will show.
+ * 
+ * @author Shawn Lutch
+ */
 export default class HomeScreen extends React.Component {
 
     private switchToSettings() {
@@ -22,8 +27,6 @@ export default class HomeScreen extends React.Component {
 
 };
 
-// unused for now
-// tslint:disable-next-line:6133
 const ExtraStyles = StyleSheet.create({
     container: {
         marginTop: 20,
