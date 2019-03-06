@@ -20,7 +20,7 @@ export default class HomeScreen extends React.Component<HomeScreenProps, HomeScr
 
     static defaultInitialMessageText : string = "Hello, world!";
 
-    constructor(props : HomeScreenProps) {
+    public constructor(props : HomeScreenProps) {
         super(props);
 
         this.state = {

@@ -1,17 +1,17 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
 export interface SnoozeButtonProps {
     onPress : VoidFunction
-};
+}
 
 export class SnoozeButton extends React.Component<SnoozeButtonProps> {
-    constructor(props : SnoozeButtonProps) {
+    public constructor(props : SnoozeButtonProps) {
         super(props);
     }
 
-    render() {
+    public render(): ReactNode {
         return (
             <Button
                 buttonStyle={styles.button}
@@ -20,7 +20,7 @@ export class SnoozeButton extends React.Component<SnoozeButtonProps> {
             />
         );
     }
-};
+}
 
 const styles = StyleSheet.create({
     button: {

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet} from "react-native";
 
 import { Button, Icon } from "react-native-elements";
 
@@ -41,7 +41,7 @@ export class SlideUpIndicator extends React.Component<SlideUpIndicatorProps> {
             />
         );
     }
-};
+}
 
 const styles = StyleSheet.create({
     indicator: {

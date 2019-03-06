@@ -6,16 +6,16 @@ export interface HomeScreenMessageProps {
 }
 
 export class HomeScreenMessage extends React.Component<HomeScreenMessageProps> {
-    constructor(props : HomeScreenMessageProps) {
+    public constructor(props : HomeScreenMessageProps) {
         super(props);
     }
 
-    render() : ReactNode {
+    public render() : ReactNode {
         return (
             <Text style={styles.message}>{this.props.text}</Text>
         );
     }
-};
+}
 
 const styles = StyleSheet.create({
     message: {
