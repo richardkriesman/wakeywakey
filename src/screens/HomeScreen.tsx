@@ -15,6 +15,8 @@ export default class HomeScreen extends React.Component {
 
 };
 
+// unused for now
+// tslint:disable-next-line:6133
 const ExtraStyles = StyleSheet.create({
 
 });
