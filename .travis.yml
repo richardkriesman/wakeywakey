@@ -5,6 +5,8 @@ cache:
   yarn: true
   directories:
     - node_modules
+before_script:
+  - export TZ=America/Chicago
 script:
   - yarn test:ci
 after_success:
