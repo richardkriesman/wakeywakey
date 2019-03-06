@@ -55,9 +55,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
             }
           }
         >
-          11
-          :
-          38
+          XX:XX
         </Text>
       </View>
       <View
