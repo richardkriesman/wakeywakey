@@ -2,9 +2,16 @@ import React, { ReactNode } from "react";
 import { View, StyleSheet } from "react-native";
 
 import { Message, Clock, SnoozeButton, SlideUpIndicator } from "../components/HomeScreen";
+import { NavigationScreenProp, NavigationScreenOptions } from "react-navigation";
 
-interface HomeScreenProps {
+/**
+ * Home screen properties. Navigation by Miika
+ * 
+ * @author Miika Raina
+ */
+export interface HomeScreenProps {
     initialMessageText : string;
+    navigation: NavigationScreenProp<any, any>;
 }
 
 interface HomeScreenState {
@@ -14,28 +21,33 @@ interface HomeScreenState {
 /**
  * The home screen, where the current status, current time, and decorations will show.
  * 
- * @author Shawn Lutch
+ * @author Shawn Lutch, Miika Raina
  */
 export default class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
+    static navigationOptions : NavigationScreenOptions = {
+        // hide header
+        header: null
+    }
 
     static defaultInitialMessageText : string = "Hello, world!";
 
     public constructor(props : HomeScreenProps) {
         super(props);
-
-        this.state = {
-            messageText: this.props.initialMessageText
-        }
     }
 
     private switchToSettings() : void {
         // TODO
         this.setState({ messageText: "Switch to settings!" });
+        this.props.navigation.navigate("SettingsMain");
     }
 
     private onSnoozePressed() : void {
         // TODO
         this.setState({ messageText: "Alarm snoozed!" });
+    }
+
+    public componentWillMount() : void {
+        this.setState({ messageText: "Hello, world!" });
     }
 
     public render() : ReactNode {
