@@ -1,56 +1,43 @@
 import React, { ReactNode } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { Message, Clock, SnoozeButton, SlideUpIndicator } from "../components/HomeScreen";
-import { NavigationScreenProp, NavigationScreenOptions } from "react-navigation";
+import { NavigationParams, NavigationScreenOptions, NavigationScreenProp } from "react-navigation";
+import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 
 /**
- * Home screen properties. Navigation by Miika
- * 
- * @author Miika Raina
+ * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.
+ * @author Miika Raina, Richard Kriesman, Shawn Lutch
  */
 export interface HomeScreenProps {
-    initialMessageText : string;
-    navigation: NavigationScreenProp<any, any>;
+    initialMessageText: string;
+    navigation: NavigationScreenProp<NavigationParams, any>;
 }
 
 interface HomeScreenState {
-    messageText : string;
+    messageText: string;
 }
 
 /**
  * The home screen, where the current status, current time, and decorations will show.
- * 
  * @author Shawn Lutch, Miika Raina
  */
 export default class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
-    static navigationOptions : NavigationScreenOptions = {
+    public static navigationOptions: NavigationScreenOptions = {
         // hide header
         header: null
-    }
+    };
 
-    static defaultInitialMessageText : string = "Hello, world!";
+    public static defaultInitialMessageText: string = "Hello, world!";
 
-    public constructor(props : HomeScreenProps) {
+    public constructor(props: HomeScreenProps) {
         super(props);
     }
 
-    private switchToSettings() : void {
-        // TODO
-        this.setState({ messageText: "Switch to settings!" });
-        this.props.navigation.navigate("SettingsMain");
-    }
-
-    private onSnoozePressed() : void {
-        // TODO
-        this.setState({ messageText: "Alarm snoozed!" });
-    }
-
-    public componentWillMount() : void {
+    public componentWillMount(): void {
         this.setState({ messageText: "Hello, world!" });
     }
 
-    public render() : ReactNode {
+    public render(): ReactNode {
         return (
             <View style={ExtraStyles.container}>
                 <View style={ExtraStyles.contentWrapper}>
@@ -65,30 +52,39 @@ export default class HomeScreen extends React.Component<HomeScreenProps, HomeScr
         );
     }
 
-};
+    private switchToSettings(): void {
+        // TODO
+        this.setState({ messageText: "Switch to settings!" });
+        this.props.navigation.navigate("SettingsMain");
+    }
+
+    private onSnoozePressed(): void {
+        // TODO
+        this.setState({ messageText: "Alarm snoozed!" });
+    }
+
+}
 
 const ExtraStyles = StyleSheet.create({
+    bottom: {
+        alignItems: "center",
+        bottom: -10,
+        justifyContent: "center",
+        position: "absolute",
+        width: "100%",
+        zIndex: 99,
+    },
+    clockWrapper: {},
     container: {
-        marginTop: 20,
-        padding: 0,
+        alignItems: "center",
         flex: 1,
-        alignItems: 'center'
+        marginTop: 20,
+        padding: 0
     },
     contentWrapper: {
         flex: 1,
-        flexBasis: '100%',
-        justifyContent: 'center',
-        width: '85%',
-    },
-    clockWrapper: {
-        
-    },
-    bottom: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 99,
-        position: 'absolute',
-        bottom: -10,
-        width: '100%'
+        flexBasis: "100%",
+        justifyContent: "center",
+        width: "85%",
     }
 });
