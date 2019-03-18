@@ -1,7 +1,7 @@
 import { createStackNavigator } from "react-navigation";
 
 import HomeScreen from "../screens/HomeScreen";
-import MainSettingsScreen from "../screens/settings/MainSettingsScreen";
+import MainSettingsScreen, { MainSettingsScreenProps } from "../screens/settings/MainSettingsScreen";
 
 /**
  * Main StackNavigator that handles navigation throughout the app.
@@ -17,7 +17,12 @@ export default createStackNavigator(
 
         SettingsMain: {
             // headerBackTitle does not work. -sL 2019/03/08
-            navigationOptions: () => ({ title: "Settings", headerBackTitle: "Done" }),
+            navigationOptions: ({ navigation }: MainSettingsScreenProps) => {
+                return {
+                    headerBackTitle: "Done",
+                    title: "Settings"
+                };
+            },
             screen: MainSettingsScreen
         }
     },
