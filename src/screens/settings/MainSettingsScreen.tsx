@@ -18,11 +18,11 @@ export interface MainSettingsScreenProps {
  * @author Shawn Lutch, Miika Raina
  */
 export default class MainSettingsScreen extends React.Component<MainSettingsScreenProps> {
-    public constructor(props : MainSettingsScreenProps) {
+    public constructor(props: MainSettingsScreenProps) {
         super(props);
     }
 
-    public render() : ReactNode {
+    public render(): ReactNode {
         return (
             <View>
 
