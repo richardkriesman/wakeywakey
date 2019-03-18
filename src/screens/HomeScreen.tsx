@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { View, StyleSheet } from "react-native";
 
 import { Message, Clock, SnoozeButton, SlideUpIndicator } from "../components/HomeScreen";
-import { NavigationScreenProp, NavigationScreenOptions } from "react-navigation";
+import {NavigationScreenOptions, NavigationScreenProps} from "react-navigation";
 
 /**
  * Home screen properties. Navigation by Miika
@@ -11,7 +11,6 @@ import { NavigationScreenProp, NavigationScreenOptions } from "react-navigation"
  */
 export interface HomeScreenProps {
     initialMessageText : string;
-    navigation: NavigationScreenProp<any, any>;
 }
 
 interface HomeScreenState {
@@ -23,15 +22,15 @@ interface HomeScreenState {
  * 
  * @author Shawn Lutch, Miika Raina
  */
-export default class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
+export default class HomeScreen extends React.Component<HomeScreenProps & NavigationScreenProps, HomeScreenState> {
     static navigationOptions : NavigationScreenOptions = {
         // hide header
         header: null
-    }
+    };
 
     static defaultInitialMessageText : string = "Hello, world!";
 
-    public constructor(props : HomeScreenProps) {
+    public constructor(props : HomeScreenProps & NavigationScreenProps) {
         super(props);
     }
 

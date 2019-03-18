@@ -35,6 +35,7 @@
     "@types/react-test-renderer": "^16.8.1",
     "babel-preset-expo": "^5.0.0",
     "concurrently": "^4.1.0",
+    "expo-cli": "^2.11.9",
     "jest": "^24.1.0",
     "jest-expo": "^32.0.0",
     "mockdate": "^2.0.2",
