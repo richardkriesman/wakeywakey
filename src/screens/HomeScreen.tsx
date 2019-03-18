@@ -12,6 +12,10 @@ export interface HomeScreenProps {
     initialMessageText: string;
 }
 
+/**
+ * Home screen state
+ * @author Richard Kriesman
+ */
 interface HomeScreenState {
     messageText: string;
 }
