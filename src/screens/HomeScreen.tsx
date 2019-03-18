@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { NavigationParams, NavigationScreenOptions, NavigationScreenProp } from "react-navigation";
+import { NavigationScreenOptions, NavigationScreenProps } from "react-navigation";
 import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 
 /**
@@ -10,7 +10,6 @@ import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/Ho
  */
 export interface HomeScreenProps {
     initialMessageText: string;
-    navigation: NavigationScreenProp<NavigationParams, any>;
 }
 
 interface HomeScreenState {
@@ -21,7 +20,7 @@ interface HomeScreenState {
  * The home screen, where the current status, current time, and decorations will show.
  * @author Shawn Lutch, Miika Raina
  */
-export default class HomeScreen extends React.Component<HomeScreenProps, HomeScreenState> {
+export default class HomeScreen extends React.Component<HomeScreenProps & NavigationScreenProps, HomeScreenState> {
     public static navigationOptions: NavigationScreenOptions = {
         // hide header
         header: null
@@ -29,7 +28,7 @@ export default class HomeScreen extends React.Component<HomeScreenProps, HomeScr
 
     public static defaultInitialMessageText: string = "Hello, world!";
 
-    public constructor(props: HomeScreenProps) {
+    public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
     }
 
