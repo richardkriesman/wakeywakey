@@ -43,7 +43,7 @@ export default class MainSettingsScreen
         return {
             headerRight: (
                 <HeaderAddButton
-                    onPress={() => { alert("add schedule"); }}
+                    onPress={() => { navigation.navigate("Home"); }}
                 />
             )
         };
