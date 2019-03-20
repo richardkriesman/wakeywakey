@@ -22,6 +22,7 @@ export interface MainSettingsScreenSchedulesState {
     enabled: boolean;
     key: number;
     name: string;
+    ref?: ScheduleListItem;
 }
 
 /**
@@ -67,6 +68,7 @@ export default class MainSettingsScreen
             newSchedules.forEach((s: MainSettingsScreenSchedulesState) => {
                 if (s.key !== key) {
                     s.enabled = false;
+                    s.ref.forceEnabled(false);
                 }
             });
         }
@@ -77,9 +79,14 @@ export default class MainSettingsScreen
     public render(): ReactNode {
         return (
             <SectionList
-                renderItem={({item}) => (
-                    <ScheduleListItem title={item.name} enabled={item.enabled} myKey={item.key}
-                        onSwitchToggled={this.onScheduleItemToggled.bind(this)} />
+                renderItem={({ item }) => (
+                    <ScheduleListItem
+                        ref={(me: ScheduleListItem) => { this.state.schedules[item.key].ref = me; }}
+                        onSwitchToggled={this.onScheduleItemToggled.bind(this)}
+                        title={item.name}
+                        enabled={item.enabled}
+                        myKey={item.key}
+                    />
                 )}
                 renderSectionHeader={({section}) => <ScheduleListHeader title={section.title} />}
                 sections={[ { data: this.state.schedules , title: "Schedules" } ]}

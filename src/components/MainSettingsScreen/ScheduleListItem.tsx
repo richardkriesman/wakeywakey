@@ -24,8 +24,12 @@ export class ScheduleListItem extends React.Component<ScheduleListItemProps, Sch
     }
 
     public onSwitchValueChanged(isEnabledNow: boolean) {
-        this.setState({ enabled: isEnabledNow });
+        this.forceEnabled(isEnabledNow);
         this.props.onSwitchToggled(this.props.myKey, isEnabledNow);
+    }
+
+    public forceEnabled(e: boolean) {
+        this.setState({ enabled: e });
     }
 
     public render(): ReactNode {
