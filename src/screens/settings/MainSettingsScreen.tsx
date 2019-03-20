@@ -43,6 +43,7 @@ export default class MainSettingsScreen
         return {
             headerRight: (
                 <HeaderAddButton
+                    // TODO instead navigate to "Add Alarm" with proper params
                     onPress={() => { navigation.navigate("Home"); }}
                 />
             )
@@ -54,7 +55,7 @@ export default class MainSettingsScreen
     }
 
     public componentWillMount(): void {
-        // TODO proper state handling
+        // TODO properly load schedules from disk
         this.setState({ schedules: testSchedulesList });
     }
 
