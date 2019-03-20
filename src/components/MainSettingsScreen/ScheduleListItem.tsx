@@ -1,10 +1,12 @@
 import React, { ReactNode } from "react";
-import { StyleSheet } from "react-native";
 import { Icon, ListItem } from "react-native-elements";
 
 export interface ScheduleListItemProps {
     enabled: boolean;
     title: string;
+    myKey: number;
+
+    onSwitchToggled: (key: number, enabled: boolean) => void;
 }
 
 export interface ScheduleListItemState {
@@ -21,15 +23,22 @@ export class ScheduleListItem extends React.Component<ScheduleListItemProps, Sch
         this.setState({ enabled: this.props.enabled });
     }
 
+    public onSwitchValueChanged(isEnabledNow: boolean) {
+        this.setState({ enabled: isEnabledNow });
+        this.props.onSwitchToggled(this.props.myKey, isEnabledNow);
+    }
+
     public render(): ReactNode {
         return (
             <ListItem
                 title={this.props.title}
                 rightIcon={<Icon name="arrow-forward" type="ionicons"/>}
+                switch={{
+                    onValueChange: this.onSwitchValueChanged.bind(this),
+                    value: this.state.enabled
+                }}
             />
         );
     }
 
 }
-
-const styles = StyleSheet.create({});

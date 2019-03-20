@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { SectionList, StyleSheet } from "react-native";
+import { SectionList, StyleSheet, Alert } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
@@ -58,10 +58,28 @@ export default class MainSettingsScreen
         this.setState({ schedules: testSchedulesList });
     }
 
+    public onScheduleItemToggled(key: number, newEnabled: boolean): void {
+        const newSchedules: MainSettingsScreenSchedulesState[] = this.state.schedules;
+        newSchedules[key].enabled = newEnabled;
+
+        if (newEnabled) {
+            newSchedules.forEach((s: MainSettingsScreenSchedulesState) => {
+                if (s.key !== key) {
+                    s.enabled = false;
+                }
+            });
+        }
+
+        this.setState({ schedules: newSchedules });
+    }
+
     public render(): ReactNode {
         return (
             <SectionList
-                renderItem={({item}) => <ScheduleListItem title={item.name} enabled={item.enabled} />}
+                renderItem={({item}) => (
+                    <ScheduleListItem title={item.name} enabled={item.enabled} myKey={item.key}
+                        onSwitchToggled={this.onScheduleItemToggled.bind(this)} />
+                )}
                 renderSectionHeader={({section}) => <ScheduleListHeader title={section.title} />}
                 sections={[ { data: this.state.schedules , title: "Schedules" } ]}
             />
