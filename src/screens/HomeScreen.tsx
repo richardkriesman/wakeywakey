@@ -75,7 +75,7 @@ const ExtraStyles = StyleSheet.create({
         justifyContent: "center",
         position: "absolute",
         width: "100%",
-        zIndex: 99,
+        zIndex: 99
     },
     clockWrapper: {},
     container: {
@@ -88,6 +88,6 @@ const ExtraStyles = StyleSheet.create({
         flex: 1,
         flexBasis: "100%",
         justifyContent: "center",
-        width: "85%",
+        width: "85%"
     }
 });
