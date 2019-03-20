@@ -4,7 +4,7 @@ import {NavigationScreenOptions} from "react-navigation";
 
 export default class SettingsScreen extends React.Component {
     public static navigationOptions: NavigationScreenOptions = {
-        title: "app.json",
+        title: "app.json"
     };
 
     public render(): ReactNode {
