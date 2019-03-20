@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
-import { SectionList } from "react-native";
-
+import { SectionList, StyleSheet } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
+
+import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
 import { ScheduleListHeader } from "../../components/MainSettingsScreen/ScheduleListHeader";
 import { ScheduleListItem } from "../../components/MainSettingsScreen/ScheduleListItem";
 
@@ -38,6 +39,16 @@ export interface SettingsListItemProps {
 export default class MainSettingsScreen
     extends React.Component<NavigationScreenProps, MainSettingsScreenState> {
 
+    public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
+        return {
+            headerRight: (
+                <HeaderAddButton
+                    onPress={() => { alert("add schedule"); }}
+                />
+            )
+        };
+    }
+
     public constructor(props: NavigationScreenProps) {
         super(props);
     }
@@ -58,7 +69,7 @@ export default class MainSettingsScreen
     }
 }
 
-// TODO proper schedule handling
+// TODO save and load schedules
 const testSchedulesList: MainSettingsScreenSchedulesState[] = [
     {
         enabled: true,
