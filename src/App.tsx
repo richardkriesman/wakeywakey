@@ -1,7 +1,7 @@
 import { AppLoading, Asset, Font, Icon } from "expo";
 import React, {ReactNode} from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
-// import AppNavigator from "./navigation/legacy/LegacyAppNavigator";
+import AppNavigator from "./navigation/AppNavigator";
 
 import HomeScreen from "./screens/HomeScreen";
 
@@ -35,7 +35,7 @@ export default class App extends React.Component<AppProps, AppState> {
             return (
                 <View style={styles.container}>
                     {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-                    <HomeScreen initialMessageText="Hello, world!" />
+                    <AppNavigator />
                 </View>
             );
         }
