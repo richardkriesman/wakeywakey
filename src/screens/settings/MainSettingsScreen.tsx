@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { SectionList, StyleSheet, Alert } from "react-native";
+import { SectionList } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
