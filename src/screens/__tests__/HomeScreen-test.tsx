@@ -1,10 +1,10 @@
+import MockDate from "mockdate";
 import React from "react";
 import "react-native";
 import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import renderer from "react-test-renderer";
-import HomeScreen from "../HomeScreen";
-import MockDate from "mockdate";
 import {createNavigationMock} from "../../utils/testUtils";
+import HomeScreen from "../HomeScreen";
 
 const fakeDateMillis = 1551896555862;
 const initialMessageText: string = "Lorem ipsum dolar sit amet";
