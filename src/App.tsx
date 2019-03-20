@@ -3,8 +3,6 @@ import React, {ReactNode} from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import AppNavigator from "./navigation/AppNavigator";
 
-import HomeScreen from "./screens/HomeScreen";
-
 export interface AppProps {
     skipLoadingScreen?: boolean;
 }
