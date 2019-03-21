@@ -5,7 +5,7 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 
 import Styles from "./styles/LegacyStyles";
@@ -15,7 +15,7 @@ import { MonoText } from "../../components/StyledText";
 
 export default class HomeScreen extends React.Component {
     public static navigationOptions: NavigationScreenOptions = {
-        header: null,
+        header: null
     };
 
     public render(): ReactNode {
@@ -98,4 +98,3 @@ export default class HomeScreen extends React.Component {
         );
     }
 }
-

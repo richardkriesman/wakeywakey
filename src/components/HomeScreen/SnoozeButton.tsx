@@ -3,11 +3,11 @@ import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 
 export interface SnoozeButtonProps {
-    onPress : VoidFunction
+    onPress: VoidFunction;
 }
 
 export class SnoozeButton extends React.Component<SnoozeButtonProps> {
-    public constructor(props : SnoozeButtonProps) {
+    public constructor(props: SnoozeButtonProps) {
         super(props);
     }
 
@@ -24,7 +24,7 @@ export class SnoozeButton extends React.Component<SnoozeButtonProps> {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: 'black',
+        backgroundColor: "black",
         padding: 15
     }
 });

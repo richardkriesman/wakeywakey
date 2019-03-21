@@ -10,5 +10,5 @@ export default {
     tabIconSelected: tintColor,
     tintColor,
     warningBackground: "#EAEB5E",
-    warningText: "#666804",
+    warningText: "#666804"
 };
