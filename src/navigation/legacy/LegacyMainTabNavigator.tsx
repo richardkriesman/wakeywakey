@@ -8,7 +8,7 @@ import LinksScreen from "../../screens/legacy/LegacyLinksScreen";
 import SettingsScreen from "../../screens/legacy/LegacySettingsScreen";
 
 const HomeStack = createStackNavigator({
-    Home: HomeScreen,
+    Home: HomeScreen
 });
 
 HomeStack.navigationOptions = {
@@ -26,7 +26,7 @@ HomeStack.navigationOptions = {
 };
 
 const LinksStack = createStackNavigator({
-    Links: LinksScreen,
+    Links: LinksScreen
 });
 
 LinksStack.navigationOptions = {
@@ -40,7 +40,7 @@ LinksStack.navigationOptions = {
 };
 
 const SettingsStack = createStackNavigator({
-    Settings: SettingsScreen,
+    Settings: SettingsScreen
 });
 
 SettingsStack.navigationOptions = {
@@ -56,5 +56,5 @@ SettingsStack.navigationOptions = {
 export default createBottomTabNavigator({
     HomeStack,
     LinksStack,
-    SettingsStack,
+    SettingsStack
 });

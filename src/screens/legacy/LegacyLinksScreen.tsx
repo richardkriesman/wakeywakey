@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet } from "react-native";
 
 export default class LinksScreen extends React.Component {
     public static navigationOptions = {
-        title: "Links",
+        title: "Links"
     };
 
     public render() {
@@ -23,5 +23,5 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         flex: 1,
         paddingTop: 15
-    },
+    }
 });

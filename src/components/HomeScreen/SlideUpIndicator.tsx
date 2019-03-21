@@ -9,7 +9,7 @@ import { Button, Icon } from "react-native-elements";
  */
 export interface SlideUpIndicatorProps {
     // onPress event required
-    onPress : VoidFunction;
+    onPress: VoidFunction;
 }
 
 /**
@@ -18,9 +18,9 @@ export interface SlideUpIndicatorProps {
  */
 export class SlideUpIndicator extends React.Component<SlideUpIndicatorProps> {
 
-    protected onSwitch : VoidFunction;
+    protected onSwitch: VoidFunction;
 
-    public constructor(props : SlideUpIndicatorProps) {
+    public constructor(props: SlideUpIndicatorProps) {
         super(props);
         this.onSwitch = props.onPress;
     }
@@ -45,7 +45,7 @@ export class SlideUpIndicator extends React.Component<SlideUpIndicatorProps> {
 
 const styles = StyleSheet.create({
     indicator: {
-        backgroundColor: 'black',
-        width: '100%'
+        backgroundColor: "black",
+        width: "100%"
     }
 });
