@@ -9,6 +9,7 @@ const subheaderColor = "#5e5e5e";
 export default {
     appleButtonBlue,
     appleButtonRed,
+    black: "#000000",
     errorBackground: "red",
     errorText: "#fff",
     headerBackground,
@@ -20,5 +21,6 @@ export default {
     tabIconSelected: tintColor,
     tintColor,
     warningBackground: "#eaeB5e",
-    warningText: "#666804"
+    warningText: "#666804",
+    white: "#ffffff"
 };
