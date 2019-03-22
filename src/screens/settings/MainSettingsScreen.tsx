@@ -49,7 +49,7 @@ export default class MainSettingsScreen
                 />
             )
         };
-    };
+    }
 
     public constructor(props: NavigationScreenProps) {
         super(props);
