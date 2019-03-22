@@ -6,7 +6,7 @@ export interface EditAlarmScreenState {
     title: string;
 }
 
-export class EditAlarmScreen extends React.Component<NavigationScreenProps, EditAlarmScreenState> {
+export default class EditAlarmScreen extends React.Component<NavigationScreenProps, EditAlarmScreenState> {
 
     private static defaultName: string = "Add Alarm";
 
