@@ -1,4 +1,4 @@
-import { createStackNavigator, NavigationScreenProps } from "react-navigation";
+import { createStackNavigator } from "react-navigation";
 
 import HomeScreen from "../screens/HomeScreen";
 import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
@@ -22,11 +22,6 @@ export default createStackNavigator(
         },
 
         EditAlarm: {
-            navigationOptions: ({ navigation }: NavigationScreenProps) => {
-                return {
-                    title: navigation.getParam("title")
-                };
-            },
             screen: EditAlarmScreen
         }
     },
