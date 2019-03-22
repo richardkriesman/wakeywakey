@@ -1,9 +1,10 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, Divider, ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
 import Colors from "../../constants/Colors";
+import Layout from "../../constants/Layout";
 
 // tslint:disable-next-line:no-empty-interface
 export interface EditAlarmScreenState {
@@ -42,8 +43,17 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
 
     public render(): ReactNode {
         return (
-            <View>
-
+            <View style={styles.viewScroller}>
+                <Text style={styles.textSectionHeader}>Days</Text>
+                <Text h3>Blocked</Text>
+                <Divider style={styles.divider}/>
+                <Text style={styles.textSectionHeader}>Alarm Times</Text>
+                <ListItem key={0} title="Sleep" subtitle="8:00 PM" rightIcon={{ name: "arrow-forward" }}/>
+                <ListItem key={1} title="Wake up" subtitle="6:00 AM" rightIcon={{ name: "arrow-forward" }}/>
+                <ListItem key={2} title="Get up" subtitle="7:00 AM" rightIcon={{ name: "arrow-forward" }}/>
+                <Divider style={styles.divider}/>
+                <Button buttonStyle={styles.deleteButton} containerStyle={styles.deleteButtonContainer}
+                        titleStyle={styles.deleteButtonTitle} title="Delete Alarm"/>
             </View>
         );
     }
@@ -54,9 +64,33 @@ const styles = StyleSheet.create({
         color: Colors.appleButtonRed,
         marginLeft: 10
     },
+    deleteButton: {
+        backgroundColor: Colors.appleButtonRed
+    },
+    deleteButtonContainer: {
+        padding: 20
+    },
+    deleteButtonTitle: {
+        color: "#fff"
+    },
+    divider: {
+        backgroundColor: Colors.headerBackground,
+        marginBottom: 20,
+        marginTop: 10
+    },
     saveButton: {
         color: Colors.appleButtonBlue,
         fontWeight: "500",
         marginRight: 10
+    },
+    textSectionHeader: {
+        color: Colors.subheaderColor,
+        fontSize: 17,
+        fontWeight: "600",
+        marginBottom: 10
+    },
+    viewScroller: {
+        height: Layout.window.height,
+        padding: 20
     }
 });
