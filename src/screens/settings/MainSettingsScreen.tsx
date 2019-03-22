@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { SectionList, StyleSheet } from "react-native";
+import { SectionList } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
@@ -22,6 +22,7 @@ export interface MainSettingsScreenSchedulesState {
     enabled: boolean;
     key: number;
     name: string;
+    ref?: ScheduleListItem;
 }
 
 /**
@@ -43,7 +44,8 @@ export default class MainSettingsScreen
         return {
             headerRight: (
                 <HeaderAddButton
-                    onPress={() => { alert("add schedule"); }}
+                    // TODO instead navigate to "Add Alarm" with proper params
+                    onPress={() => { navigation.navigate("Home"); }}
                 />
             )
         };
@@ -54,14 +56,37 @@ export default class MainSettingsScreen
     }
 
     public componentWillMount(): void {
-        // TODO proper state handling
+        // TODO properly load schedules from disk
         this.setState({ schedules: testSchedulesList });
+    }
+
+    public onScheduleItemToggled(key: number, newEnabled: boolean): void {
+        const newSchedules: MainSettingsScreenSchedulesState[] = this.state.schedules;
+        newSchedules[key].enabled = newEnabled;
+
+        if (newEnabled) {
+            newSchedules.forEach((s: MainSettingsScreenSchedulesState) => {
+                if (s.key !== key) {
+                    s.enabled = false;
+                    s.ref.forceEnabled(false);
+                }
+            });
+        }
+
+        this.setState({ schedules: newSchedules });
     }
 
     public render(): ReactNode {
         return (
             <SectionList
-                renderItem={({item}) => <ScheduleListItem title={item.name} enabled={item.enabled} />}
+                renderItem={({ item }) => (
+                    <ScheduleListItem
+                        ref={(me: ScheduleListItem) => { this.state.schedules[item.key].ref = me; }}
+                        onSwitchToggled={this.onScheduleItemToggled.bind(this, item.key)}
+                        title={item.name}
+                        enabled={item.enabled}
+                    />
+                )}
                 renderSectionHeader={({section}) => <ScheduleListHeader title={section.title} />}
                 sections={[ { data: this.state.schedules , title: "Schedules" } ]}
             />

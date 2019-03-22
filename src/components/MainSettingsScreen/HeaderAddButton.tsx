@@ -2,6 +2,8 @@ import React, { ReactNode } from "react";
 import { StyleSheet } from "react-native";
 import { Button, Icon } from "react-native-elements";
 
+import Colors from "../../constants/Colors";
+
 export interface HeaderAddButtonProps {
     onPress: VoidFunction;
 }
@@ -15,9 +17,10 @@ export class HeaderAddButton extends React.Component<HeaderAddButtonProps> {
     public render(): ReactNode {
         return (
             <Button
-                style={styles.topRightButton}
+                type="clear"
+                buttonStyle={styles.topRightButton}
                 onPress={this.props.onPress.bind(this)}
-                icon={<Icon name="add" type="ionicons" />}
+                icon={<Icon name="add" type="ionicons" color={Colors.appleButtonBlue} />}
             />
         );
     }
@@ -26,6 +29,6 @@ export class HeaderAddButton extends React.Component<HeaderAddButtonProps> {
 
 const styles = StyleSheet.create({
     topRightButton: {
-
+        marginRight: 10
     }
 });

@@ -1,6 +1,9 @@
 const tintColor = "#2f95dc";
 
+const appleButtonBlue = "#007AFF";
+
 export default {
+    appleButtonBlue,
     errorBackground: "red",
     errorText: "#fff",
     noticeBackground: tintColor,
