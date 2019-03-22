@@ -2,7 +2,9 @@ const tintColor = "#2f95dc";
 
 const appleButtonBlue = "#007aff";
 const appleButtonRed = "#ff3b30";
+
 const headerBackground = "#fff";
+const subheaderColor = "#5e5e5e";
 
 export default {
     appleButtonBlue,
@@ -12,6 +14,7 @@ export default {
     headerBackground,
     noticeBackground: tintColor,
     noticeText: "#fff",
+    subheaderColor,
     tabBar: "#fefefe",
     tabIconDefault: "#ccc",
     tabIconSelected: tintColor,
