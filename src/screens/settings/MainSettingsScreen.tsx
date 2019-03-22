@@ -49,7 +49,7 @@ export default class MainSettingsScreen
                 />
             )
         };
-    }
+    };
 
     public constructor(props: NavigationScreenProps) {
         super(props);
@@ -82,10 +82,9 @@ export default class MainSettingsScreen
                 renderItem={({ item }) => (
                     <ScheduleListItem
                         ref={(me: ScheduleListItem) => { this.state.schedules[item.key].ref = me; }}
-                        onSwitchToggled={this.onScheduleItemToggled.bind(this)}
+                        onSwitchToggled={this.onScheduleItemToggled.bind(this, item.key)}
                         title={item.name}
                         enabled={item.enabled}
-                        myKey={item.key}
                     />
                 )}
                 renderSectionHeader={({section}) => <ScheduleListHeader title={section.title} />}

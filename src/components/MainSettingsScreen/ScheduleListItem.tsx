@@ -4,9 +4,8 @@ import { Icon, ListItem } from "react-native-elements";
 export interface ScheduleListItemProps {
     enabled: boolean;
     title: string;
-    myKey: number;
 
-    onSwitchToggled: (key: number, enabled: boolean) => void;
+    onSwitchToggled: (enabled: boolean) => void;
 }
 
 export interface ScheduleListItemState {
@@ -25,7 +24,7 @@ export class ScheduleListItem extends React.Component<ScheduleListItemProps, Sch
 
     public onSwitchValueChanged(isEnabledNow: boolean) {
         this.forceEnabled(isEnabledNow);
-        this.props.onSwitchToggled(this.props.myKey, isEnabledNow);
+        this.props.onSwitchToggled(isEnabledNow);
     }
 
     public forceEnabled(e: boolean) {
