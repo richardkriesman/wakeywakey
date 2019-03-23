@@ -48,7 +48,7 @@ export default class MainSettingsScreen
                     onPress={() => {
                         navigation.navigate(
                             "EditSchedule",
-                            { title: "rawr XD *nuzzles you*" }
+                            { title: "Add Schedule" }
                         );
                     }}
                 />
