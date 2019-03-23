@@ -52,7 +52,8 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Alarms</Text>
-                <ListItem key={0} title="8:00 PM - 6:00 AM" subtitle="M, Tu, W, Th, F" rightIcon={{ name: "arrow-forward" }}/>
+                <ListItem key={0} title="8:00 PM - 6:00 AM" subtitle="M, Tu, W, Th, F"
+                          rightIcon={{ name: "arrow-forward" }}/>
                 <ListItem key={1} title="10:00 PM - 8:00 AM" subtitle="Sa, Su" rightIcon={{ name: "arrow-forward" }}/>
                 <Divider style={styles.divider}/>
             </View>
