@@ -47,8 +47,8 @@ export default class MainSettingsScreen
                     // TODO instead navigate to "Add Alarm" with proper params
                     onPress={() => {
                         navigation.navigate(
-                            "EditAlarm",
-                            { title: "Add Alarm" }
+                            "EditSchedule",
+                            { title: "rawr XD *nuzzles you*" }
                         );
                     }}
                 />
