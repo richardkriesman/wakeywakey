@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders title correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#007aff",
+      },
+      Object {
+        "alignItems": "center",
+        "borderRadius": 24,
+        "height": 48,
+        "justifyContent": "center",
+        "width": 48,
+      },
+    ]
+  }
+>
+  <View
+    accessible={true}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "rgba(255, 255, 255, 1)",
+        "borderRadius": 22,
+        "height": 44,
+        "justifyContent": "center",
+        "width": 44,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "rgba(0, 0, 0, 1)",
+        }
+      }
+    >
+      OwO
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`sets toggle state 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#007aff",
+      },
+      Object {
+        "alignItems": "center",
+        "borderRadius": 24,
+        "height": 48,
+        "justifyContent": "center",
+        "width": 48,
+      },
+    ]
+  }
+>
+  <View
+    accessible={true}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "rgba(0, 122, 255, 1)",
+        "borderRadius": 22,
+        "height": 44,
+        "justifyContent": "center",
+        "width": 44,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "rgba(255, 255, 255, 1)",
+        }
+      }
+    >
+      OwO
+    </Text>
+  </View>
+</View>
+`;

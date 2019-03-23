@@ -45,7 +45,12 @@ export default class MainSettingsScreen
             headerRight: (
                 <HeaderAddButton
                     // TODO instead navigate to "Add Alarm" with proper params
-                    onPress={() => { navigation.navigate("Home"); }}
+                    onPress={() => {
+                        navigation.navigate(
+                            "EditSchedule",
+                            { title: "Add Schedule" }
+                        );
+                    }}
                 />
             )
         };
