@@ -2,6 +2,7 @@ import { createStackNavigator } from "react-navigation";
 
 import HomeScreen from "../screens/HomeScreen";
 import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
+import EditScheduleScreen from "../screens/settings/EditScheduleScreen";
 import MainSettingsScreen from "../screens/settings/MainSettingsScreen";
 
 /**
@@ -23,6 +24,10 @@ export default createStackNavigator(
 
         EditAlarm: {
             screen: EditAlarmScreen
+        },
+
+        EditSchedule: {
+            screen: EditScheduleScreen
         }
     },
 
