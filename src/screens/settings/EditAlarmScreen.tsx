@@ -25,6 +25,7 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
             headerRight: (
                 <Button type="clear" titleStyle={styles.saveButton} title="Save"
                         onPress={() => {
+                            // TODO persistence
                             navigation.navigate("SettingsMain");
                         }}/>
             ),
