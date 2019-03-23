@@ -5,20 +5,23 @@ import { NavigationScreenProps } from "react-navigation";
 import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
 import { ScheduleListHeader } from "../../components/MainSettingsScreen/ScheduleListHeader";
 import { ScheduleListItem } from "../../components/MainSettingsScreen/ScheduleListItem";
+import { AlarmModel, TestAlarms } from "../../models/AlarmModel";
+import { ScheduleModel } from "../../models/ScheduleModel";
 
 /**
  * Main settings screen state. Includes schedule states.
  * @author Shawn Lutch
  */
 export interface MainSettingsScreenState {
-    schedules: MainSettingsScreenSchedulesState[];
+    schedules: ScheduleWithRef[];
 }
 
 /**
  * (Hopefully temporary) schedules state.
  * @author Shawn Lutch
  */
-export interface MainSettingsScreenSchedulesState {
+export interface ScheduleWithRef {
+    alarms: AlarmModel[];
     enabled: boolean;
     key: number;
     name: string;
@@ -66,11 +69,11 @@ export default class MainSettingsScreen
     }
 
     public onScheduleItemToggled(key: number, newEnabled: boolean): void {
-        const newSchedules: MainSettingsScreenSchedulesState[] = this.state.schedules;
+        const newSchedules: ScheduleWithRef[] = this.state.schedules;
         newSchedules[key].enabled = newEnabled;
 
         if (newEnabled) {
-            newSchedules.forEach((s: MainSettingsScreenSchedulesState) => {
+            newSchedules.forEach((s: ScheduleWithRef) => {
                 if (s.key !== key) {
                     s.enabled = false;
                     s.ref.forceEnabled(false);
@@ -81,12 +84,20 @@ export default class MainSettingsScreen
         this.setState({ schedules: newSchedules });
     }
 
+    public onScheduleItemPressed(key: number): void {
+        this.props.navigation.navigate("EditAlarm", {
+            alarm: this.state.schedules[key].alarms[0],
+            title: this.state.schedules[key].name
+        });
+    }
+
     public render(): ReactNode {
         return (
             <SectionList
                 renderItem={({ item }) => (
                     <ScheduleListItem
                         ref={(me: ScheduleListItem) => { this.state.schedules[item.key].ref = me; }}
+                        onPress={this.onScheduleItemPressed.bind(this, item.key)}
                         onSwitchToggled={this.onScheduleItemToggled.bind(this, item.key)}
                         title={item.name}
                         enabled={item.enabled}
@@ -100,13 +111,15 @@ export default class MainSettingsScreen
 }
 
 // TODO save and load schedules
-const testSchedulesList: MainSettingsScreenSchedulesState[] = [
+const testSchedulesList: ScheduleModel[] = [
     {
+        alarms: [ TestAlarms[0] ],
         enabled: true,
         key: 0,
         name: "Test Schedule 1"
     },
     {
+        alarms: [ TestAlarms[1] ],
         enabled: false,
         key: 1,
         name: "Test Schedule 2"
