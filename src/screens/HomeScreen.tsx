@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 
 import { NavigationScreenOptions, NavigationScreenProps } from "react-navigation";
 import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
-import {ToggleButton} from "../components/ToggleButton";
 
 /**
  * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.

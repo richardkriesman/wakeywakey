@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Divider, ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
+import {ToggleButton} from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 
@@ -45,7 +46,15 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Days</Text>
-                <Text h3>Blocked</Text>
+                <View style={styles.daySelector}>
+                    <ToggleButton title="M"/>
+                    <ToggleButton title="Tu"/>
+                    <ToggleButton title="W"/>
+                    <ToggleButton title="Th"/>
+                    <ToggleButton title="F"/>
+                    <ToggleButton title="Sa"/>
+                    <ToggleButton title="Su"/>
+                </View>
                 <Divider style={styles.divider}/>
                 <Text style={styles.textSectionHeader}>Alarm Times</Text>
                 <ListItem key={0} title="Sleep" subtitle="8:00 PM" rightIcon={{ name: "arrow-forward" }}/>
@@ -63,6 +72,10 @@ const styles = StyleSheet.create({
     cancelButton: {
         color: Colors.appleButtonRed,
         marginLeft: 10
+    },
+    daySelector: {
+        flexDirection: "row",
+        justifyContent: "space-around"
     },
     deleteButton: {
         backgroundColor: Colors.appleButtonRed
