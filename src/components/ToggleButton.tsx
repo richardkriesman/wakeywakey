@@ -21,7 +21,7 @@ export class ToggleButton extends React.Component<ToggleButtonProps> {
 
     public render(): ReactNode {
         return (
-            <View style={[styles.container, { "backgroundColor": this.props.backgroundColor }]}>
+            <View style={[styles.container, { backgroundColor: this.props.backgroundColor }]}>
                 <Text>{this.props.title}</Text>
             </View>
         );
@@ -30,12 +30,12 @@ export class ToggleButton extends React.Component<ToggleButtonProps> {
 }
 
 const styles = StyleSheet.create({
-    "container": {
-        "height": 100,
-        "width": 100
+    container: {
+        height: 100,
+        width: 100
     },
-    "text": {
-        "alignContent": "center",
-        "justifyContent": "center"
+    text: {
+        alignContent: "center",
+        justifyContent: "center"
     }
 });
