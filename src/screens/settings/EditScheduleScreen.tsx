@@ -1,16 +1,20 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Divider, ListItem, Text } from "react-native-elements";
-import { NavigationScreenProps } from "react-navigation";
+import { FlatList, StyleSheet, View } from "react-native";
+import { ListItem, Text } from "react-native-elements";
+import { NavigationScreenProps, StackActions } from "react-navigation";
+import { HeaderBackButton } from "../../components/HeaderBackButton";
+
+import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
 
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
-
-import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
+import { AlarmModel } from "../../models/AlarmModel";
+import { ScheduleModel } from "../../models/ScheduleModel";
 
 // tslint:disable-next-line:no-empty-interface
 export interface EditScheduleScreenState {
     headerTitle: string;
+    schedule?: ScheduleModel;
 }
 
 export default class EditScheduleScreen extends React.Component<NavigationScreenProps, EditScheduleScreenState> {
@@ -18,10 +22,7 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
     public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             headerLeft: (
-                <Button type="clear" titleStyle={styles.cancelButton} title="Back"
-                        onPress={() => {
-                            navigation.navigate("SettingsMain");
-                        }}/>
+                <HeaderBackButton title="Cancel" navigation={navigation}/>
             ),
             headerRight: (
                 <HeaderAddButton
@@ -38,24 +39,65 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
         };
     }
 
+    private static padTime(time: number): string {
+        return ("0" + time).slice(-2);
+    }
+
+    private static formatTime(date: Date): string {
+        return `${this.padTime(date.getHours())}:${this.padTime(date.getMinutes())}`;
+    }
+
+    // noinspection JSUnusedLocalSymbols
+    private static getAlarmTitle(alarm: AlarmModel): string {
+        const start = this.formatTime(alarm.sleepTime);
+        const end = this.formatTime(alarm.getUpTime);
+        return `${start} – ${end}`;
+    }
+
+    // noinspection JSUnusedLocalSymbols
+    private static getAlarmSubtitle(alarm: AlarmModel): string {
+        return alarm.days.join(", ");
+    }
+
     public constructor(props: NavigationScreenProps) {
         super(props);
     }
 
     public componentWillMount(): void {
         this.setState({
-            headerTitle: this.props.navigation.getParam("title")
+            headerTitle: this.props.navigation.getParam("title"),
+            schedule: this.props.navigation.getParam("schedule") || null
         });
+    }
+
+    public onAlarmPressed(key: number): void {
+        this.props.navigation.dispatch(StackActions.push({
+            params: {
+                alarm: this.state.schedule.alarms[key],
+                title: this.state.headerTitle
+            },
+            routeName: "EditAlarm"
+        }));
     }
 
     public render(): ReactNode {
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Alarms</Text>
-                <ListItem key={0} title="8:00 PM - 6:00 AM" subtitle="M, Tu, W, Th, F"
-                          rightIcon={{ name: "arrow-forward" }}/>
-                <ListItem key={1} title="10:00 PM - 8:00 AM" subtitle="Sa, Su" rightIcon={{ name: "arrow-forward" }}/>
-                <Divider style={styles.divider}/>
+
+                <FlatList
+                    data={this.state.schedule ? this.state.schedule.alarms : []}
+                    keyExtractor={(item: AlarmModel): string => String(item.key)}
+                    renderItem={({ item }) => (
+                        <ListItem
+                            onPress={this.onAlarmPressed.bind(this, item.key)}
+                            title={EditScheduleScreen.getAlarmTitle(item)}
+                            subtitle={EditScheduleScreen.getAlarmSubtitle(item)}
+                            rightIcon={{ name: "arrow-forward", type: "ionicons" }}
+                        />
+                    )}
+                />
+
             </View>
         );
     }

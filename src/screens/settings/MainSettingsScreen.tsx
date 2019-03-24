@@ -1,11 +1,11 @@
 import React, { ReactNode } from "react";
 import { SectionList } from "react-native";
-import { NavigationScreenProps } from "react-navigation";
+import { NavigationScreenProps, StackActions } from "react-navigation";
 
 import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
 import { ScheduleListHeader } from "../../components/MainSettingsScreen/ScheduleListHeader";
 import { ScheduleListItem } from "../../components/MainSettingsScreen/ScheduleListItem";
-import { AlarmModel, TestAlarms } from "../../models/AlarmModel";
+import { TestAlarms } from "../../models/AlarmModel";
 import { ScheduleModel } from "../../models/ScheduleModel";
 
 /**
@@ -13,19 +13,7 @@ import { ScheduleModel } from "../../models/ScheduleModel";
  * @author Shawn Lutch
  */
 export interface MainSettingsScreenState {
-    schedules: ScheduleWithRef[];
-}
-
-/**
- * (Hopefully temporary) schedules state.
- * @author Shawn Lutch
- */
-export interface ScheduleWithRef {
-    alarms: AlarmModel[];
-    enabled: boolean;
-    key: number;
-    name: string;
-    ref?: ScheduleListItem;
+    schedules: ScheduleModel[];
 }
 
 /**
@@ -69,14 +57,14 @@ export default class MainSettingsScreen
     }
 
     public onScheduleItemToggled(key: number, newEnabled: boolean): void {
-        const newSchedules: ScheduleWithRef[] = this.state.schedules;
+        const newSchedules: ScheduleModel[] = this.state.schedules;
         newSchedules[key].enabled = newEnabled;
 
         if (newEnabled) {
-            newSchedules.forEach((s: ScheduleWithRef) => {
+            newSchedules.forEach((s: ScheduleModel) => {
                 if (s.key !== key) {
                     s.enabled = false;
-                    s.ref.forceEnabled(false);
+                    s.listItemRef.forceEnabled(false);
                 }
             });
         }
@@ -85,10 +73,13 @@ export default class MainSettingsScreen
     }
 
     public onScheduleItemPressed(key: number): void {
-        this.props.navigation.navigate("EditAlarm", {
-            alarm: this.state.schedules[key].alarms[0],
-            title: this.state.schedules[key].name
-        });
+        this.props.navigation.dispatch(StackActions.push({
+            params: {
+                schedule: this.state.schedules[key],
+                title: this.state.schedules[key].name
+            },
+            routeName: "EditSchedule"
+        }));
     }
 
     public render(): ReactNode {
@@ -96,15 +87,17 @@ export default class MainSettingsScreen
             <SectionList
                 renderItem={({ item }) => (
                     <ScheduleListItem
-                        ref={(me: ScheduleListItem) => { this.state.schedules[item.key].ref = me; }}
+                        ref={(me: ScheduleListItem) => {
+                            this.state.schedules[item.key].listItemRef = me;
+                        }}
                         onPress={this.onScheduleItemPressed.bind(this, item.key)}
                         onSwitchToggled={this.onScheduleItemToggled.bind(this, item.key)}
                         title={item.name}
                         enabled={item.enabled}
                     />
                 )}
-                renderSectionHeader={({section}) => <ScheduleListHeader title={section.title} />}
-                sections={[ { data: this.state.schedules , title: "Schedules" } ]}
+                renderSectionHeader={({ section }) => <ScheduleListHeader title={section.title}/>}
+                sections={[{ data: this.state.schedules, title: "Schedules" }]}
             />
         );
     }
@@ -113,13 +106,13 @@ export default class MainSettingsScreen
 // TODO save and load schedules
 const testSchedulesList: ScheduleModel[] = [
     {
-        alarms: [ TestAlarms[0] ],
+        alarms: TestAlarms,
         enabled: true,
         key: 0,
         name: "Test Schedule 1"
     },
     {
-        alarms: [ TestAlarms[1] ],
+        alarms: TestAlarms,
         enabled: false,
         key: 1,
         name: "Test Schedule 2"
