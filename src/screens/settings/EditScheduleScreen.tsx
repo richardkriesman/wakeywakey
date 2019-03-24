@@ -9,11 +9,12 @@ import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddBu
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel } from "../../models/AlarmModel";
+import { ScheduleModel } from "../../models/ScheduleModel";
 
 // tslint:disable-next-line:no-empty-interface
 export interface EditScheduleScreenState {
     headerTitle: string;
-    alarms: AlarmModel[];
+    schedule?: ScheduleModel;
 }
 
 export default class EditScheduleScreen extends React.Component<NavigationScreenProps, EditScheduleScreenState> {
@@ -21,7 +22,7 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
     public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             headerLeft: (
-                <HeaderBackButton title="Cancel" navigation={ navigation }/>
+                <HeaderBackButton title="Cancel" navigation={navigation}/>
             ),
             headerRight: (
                 <HeaderAddButton
@@ -38,14 +39,24 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
         };
     }
 
+    private static padTime(time: number): string {
+        return ("0" + time).slice(-2);
+    }
+
+    private static formatTime(date: Date): string {
+        return `${this.padTime(date.getHours())}:${this.padTime(date.getMinutes())}`;
+    }
+
     // noinspection JSUnusedLocalSymbols
     private static getAlarmTitle(alarm: AlarmModel): string {
-        return "title";
+        const start = this.formatTime(alarm.sleepTime);
+        const end = this.formatTime(alarm.getUpTime);
+        return `${start} – ${end}`;
     }
 
     // noinspection JSUnusedLocalSymbols
     private static getAlarmSubtitle(alarm: AlarmModel): string {
-        return "subtitle";
+        return alarm.days.join(", ");
     }
 
     public constructor(props: NavigationScreenProps) {
@@ -54,14 +65,15 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
 
     public componentWillMount(): void {
         this.setState({
-            headerTitle: this.props.navigation.getParam("title")
+            headerTitle: this.props.navigation.getParam("title"),
+            schedule: this.props.navigation.getParam("schedule") || null
         });
     }
 
     public onAlarmPressed(key: number): void {
         this.props.navigation.dispatch(StackActions.push({
             params: {
-                alarm: this.state.alarms[key],
+                alarm: this.state.schedule.alarms[key],
                 title: this.state.headerTitle
             },
             routeName: "EditAlarm"
@@ -74,13 +86,15 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
                 <Text style={styles.textSectionHeader}>Alarms</Text>
 
                 <FlatList
-                    data={this.state.alarms}
+                    data={this.state.schedule ? this.state.schedule.alarms : []}
+                    keyExtractor={(item: AlarmModel): string => String(item.key)}
                     renderItem={({ item }) => (
-                              <ListItem
-                                  onPress={this.onAlarmPressed.bind(this, item.key)}
-                                  title={EditScheduleScreen.getAlarmTitle(item)}
-                                  subtitle={EditScheduleScreen.getAlarmSubtitle(item)}
-                              />
+                        <ListItem
+                            onPress={this.onAlarmPressed.bind(this, item.key)}
+                            title={EditScheduleScreen.getAlarmTitle(item)}
+                            subtitle={EditScheduleScreen.getAlarmSubtitle(item)}
+                            rightIcon={{ name: "arrow-forward", type: "ionicons" }}
+                        />
                     )}
                 />
 
