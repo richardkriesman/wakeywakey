@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, ListItem, Text } from "react-native-elements";
-import { NavigationScreenProps } from "react-navigation";
+import { NavigationScreenProps, StackActions } from "react-navigation";
 import { HeaderBackButton } from "../../components/HeaderBackButton";
 
 import { ToggleButton } from "../../components/ToggleButton";
@@ -20,14 +20,15 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
     public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             headerLeft: (
-                <HeaderBackButton title="Cancel" navigation={ navigation }/>
+                <HeaderBackButton title="Cancel" navigation={navigation}/>
             ),
             headerRight: (
                 <Button type="clear" titleStyle={styles.saveButton} title="Save"
                         onPress={() => {
                             // TODO persistence
-                            navigation.navigate("SettingsMain");
-                        }}/>
+                            navigation.dispatch(StackActions.pop({ n: 1 }));
+                        }}
+                />
             ),
             title: navigation.getParam("title")
         };
@@ -49,7 +50,7 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Days</Text>
 
-                { /* TODO use a map here? wow this looks bad */ }
+                { /* TODO use a map here? wow this looks bad */}
                 <View style={styles.daySelector}>
                     <ToggleButton title="M" isToggled={this.daysContains(DayOfWeek.Monday)}/>
                     <ToggleButton title="Tu" isToggled={this.daysContains(DayOfWeek.Tuesday)}/>
