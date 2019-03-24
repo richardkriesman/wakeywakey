@@ -1,7 +1,6 @@
 import React from "react";
 import "react-native";
 import renderer from "react-test-renderer";
-import { MonoText } from "../StyledText";
 import {ToggleButton} from "../ToggleButton";
 
 it("renders title correctly", () => {

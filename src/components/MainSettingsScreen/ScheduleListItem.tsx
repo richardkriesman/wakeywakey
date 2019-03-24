@@ -5,6 +5,7 @@ export interface ScheduleListItemProps {
     enabled: boolean;
     title: string;
 
+    onPress: () => void;
     onSwitchToggled: (enabled: boolean) => void;
 }
 
@@ -36,6 +37,7 @@ export class ScheduleListItem extends React.Component<ScheduleListItemProps, Sch
             <ListItem
                 title={this.props.title}
                 rightIcon={<Icon name="arrow-forward" type="ionicons"/>}
+                onPress={this.props.onPress}
                 switch={{
                     onValueChange: this.onSwitchValueChanged.bind(this),
                     value: this.state.enabled

@@ -3,13 +3,15 @@ import { StyleSheet, View } from "react-native";
 import { Button, Divider, ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
-import {ToggleButton} from "../../components/ToggleButton";
+import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
+import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
 
 // tslint:disable-next-line:no-empty-interface
 export interface EditAlarmScreenState {
     headerTitle: string;
+    alarm: AlarmModel;
 }
 
 export default class EditAlarmScreen extends React.Component<NavigationScreenProps, EditAlarmScreenState> {
@@ -25,6 +27,7 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
             headerRight: (
                 <Button type="clear" titleStyle={styles.saveButton} title="Save"
                         onPress={() => {
+                            // TODO persistence
                             navigation.navigate("SettingsMain");
                         }}/>
             ),
@@ -38,6 +41,7 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
 
     public componentWillMount(): void {
         this.setState({
+            alarm: this.props.navigation.getParam("alarm"),
             headerTitle: this.props.navigation.getParam("title")
         });
     }
@@ -46,25 +50,35 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Days</Text>
+
+                { /* TODO use a map here? wow this looks bad */ }
                 <View style={styles.daySelector}>
-                    <ToggleButton title="M"/>
-                    <ToggleButton title="Tu"/>
-                    <ToggleButton title="W"/>
-                    <ToggleButton title="Th"/>
-                    <ToggleButton title="F"/>
-                    <ToggleButton title="Sa"/>
-                    <ToggleButton title="Su"/>
+                    <ToggleButton title="M" isToggled={this.daysContains(DayOfWeek.Monday)}/>
+                    <ToggleButton title="Tu" isToggled={this.daysContains(DayOfWeek.Tuesday)}/>
+                    <ToggleButton title="W" isToggled={this.daysContains(DayOfWeek.Wednesday)}/>
+                    <ToggleButton title="Th" isToggled={this.daysContains(DayOfWeek.Thursday)}/>
+                    <ToggleButton title="F" isToggled={this.daysContains(DayOfWeek.Friday)}/>
+                    <ToggleButton title="Sa" isToggled={this.daysContains(DayOfWeek.Saturday)}/>
+                    <ToggleButton title="Su" isToggled={this.daysContains(DayOfWeek.Sunday)}/>
                 </View>
+
                 <Divider style={styles.divider}/>
+
                 <Text style={styles.textSectionHeader}>Alarm Times</Text>
                 <ListItem key={0} title="Sleep" subtitle="8:00 PM" rightIcon={{ name: "arrow-forward" }}/>
                 <ListItem key={1} title="Wake up" subtitle="6:00 AM" rightIcon={{ name: "arrow-forward" }}/>
                 <ListItem key={2} title="Get up" subtitle="7:00 AM" rightIcon={{ name: "arrow-forward" }}/>
+
                 <Divider style={styles.divider}/>
+
                 <Button buttonStyle={styles.deleteButton} containerStyle={styles.deleteButtonContainer}
                         titleStyle={styles.deleteButtonTitle} title="Delete Alarm"/>
             </View>
         );
+    }
+
+    private daysContains(specificDay: DayOfWeek): boolean {
+        return this.state.alarm.days.indexOf(specificDay) > -1;
     }
 }
 

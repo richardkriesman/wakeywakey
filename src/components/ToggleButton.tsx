@@ -20,7 +20,7 @@ const ANIMATION_TIME_MS = 75;
 export class ToggleButton extends React.Component<ToggleButtonProps, ToggleButtonState> {
 
     public get isToggled(): boolean {
-        return this.props.isToggled;
+        return this.state.isToggled;
     }
 
     private readonly backgroundColor: string;
