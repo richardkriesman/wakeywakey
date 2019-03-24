@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
+import { HeaderBackButton } from "../../components/HeaderBackButton";
 
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
@@ -11,7 +12,7 @@ import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
 // tslint:disable-next-line:no-empty-interface
 export interface EditAlarmScreenState {
     headerTitle: string;
-    alarm: AlarmModel;
+    alarm?: AlarmModel;
 }
 
 export default class EditAlarmScreen extends React.Component<NavigationScreenProps, EditAlarmScreenState> {
@@ -19,10 +20,7 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
     public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             headerLeft: (
-                <Button type="clear" titleStyle={styles.cancelButton} title="Cancel"
-                        onPress={() => {
-                            navigation.navigate("SettingsMain");
-                        }}/>
+                <HeaderBackButton title="Cancel" navigation={ navigation }/>
             ),
             headerRight: (
                 <Button type="clear" titleStyle={styles.saveButton} title="Save"
@@ -78,15 +76,11 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
     }
 
     private daysContains(specificDay: DayOfWeek): boolean {
-        return this.state.alarm.days.indexOf(specificDay) > -1;
+        return this.state.alarm && this.state.alarm.days.indexOf(specificDay) > -1;
     }
 }
 
 const styles = StyleSheet.create({
-    cancelButton: {
-        color: Colors.appleButtonRed,
-        marginLeft: 10
-    },
     daySelector: {
         flexDirection: "row",
         justifyContent: "space-around"
