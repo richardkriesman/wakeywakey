@@ -1,16 +1,19 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Divider, ListItem, Text } from "react-native-elements";
-import { NavigationScreenProps } from "react-navigation";
+import { FlatList, StyleSheet, View } from "react-native";
+import { ListItem, Text } from "react-native-elements";
+import { NavigationScreenProps, StackActions } from "react-navigation";
+import { HeaderBackButton } from "../../components/HeaderBackButton";
+
+import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
 
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
-
-import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
+import { AlarmModel } from "../../models/AlarmModel";
 
 // tslint:disable-next-line:no-empty-interface
 export interface EditScheduleScreenState {
     headerTitle: string;
+    alarms: AlarmModel[];
 }
 
 export default class EditScheduleScreen extends React.Component<NavigationScreenProps, EditScheduleScreenState> {
@@ -18,10 +21,7 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
     public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             headerLeft: (
-                <Button type="clear" titleStyle={styles.cancelButton} title="Back"
-                        onPress={() => {
-                            navigation.navigate("SettingsMain");
-                        }}/>
+                <HeaderBackButton title="Cancel" navigation={ navigation }/>
             ),
             headerRight: (
                 <HeaderAddButton
@@ -38,6 +38,16 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
         };
     }
 
+    // noinspection JSUnusedLocalSymbols
+    private static getAlarmTitle(alarm: AlarmModel): string {
+        return "title";
+    }
+
+    // noinspection JSUnusedLocalSymbols
+    private static getAlarmSubtitle(alarm: AlarmModel): string {
+        return "subtitle";
+    }
+
     public constructor(props: NavigationScreenProps) {
         super(props);
     }
@@ -48,14 +58,32 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
         });
     }
 
+    public onAlarmPressed(key: number): void {
+        this.props.navigation.dispatch(StackActions.push({
+            params: {
+                alarm: this.state.alarms[key],
+                title: this.state.headerTitle
+            },
+            routeName: "EditAlarm"
+        }));
+    }
+
     public render(): ReactNode {
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Alarms</Text>
-                <ListItem key={0} title="8:00 PM - 6:00 AM" subtitle="M, Tu, W, Th, F"
-                          rightIcon={{ name: "arrow-forward" }}/>
-                <ListItem key={1} title="10:00 PM - 8:00 AM" subtitle="Sa, Su" rightIcon={{ name: "arrow-forward" }}/>
-                <Divider style={styles.divider}/>
+
+                <FlatList
+                    data={this.state.alarms}
+                    renderItem={({ item }) => (
+                              <ListItem
+                                  onPress={this.onAlarmPressed.bind(this, item.key)}
+                                  title={EditScheduleScreen.getAlarmTitle(item)}
+                                  subtitle={EditScheduleScreen.getAlarmSubtitle(item)}
+                              />
+                    )}
+                />
+
             </View>
         );
     }
