@@ -31,7 +31,6 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
      */
     public componentWillMount(): void {
         this.updateInternalDate();
-        setInterval(this.updateInternalDate.bind(this), 1000);
     }
 
     public render(): ReactNode {
@@ -44,6 +43,14 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
                 </View>
             </View>
         );
+    }
+
+    /**
+     * Schedules a clock update when the system time advances to the next second.
+     */
+    private scheduleClockUpdate(): void {
+        const msUntilNextSecond: number = 1000 - (new Date()).getMilliseconds();
+        setTimeout(this.updateInternalDate.bind(this), msUntilNextSecond);
     }
 
     /**
@@ -61,6 +68,8 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
             am_pm: isPm ? "PM" : "AM",
             hours: this.pad(hours, 1),
             minutes: this.pad(now.getMinutes(), 2)
+        }, () => { // state has been updated, schedule an update for the next second
+            this.scheduleClockUpdate();
         });
     }
 
