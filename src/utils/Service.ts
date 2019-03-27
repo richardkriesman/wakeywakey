@@ -4,7 +4,7 @@ export abstract class Service {
 
     protected db: AppDatabase;
 
-    protected constructor(db: AppDatabase) {
+    public constructor(db: AppDatabase) {
         this.db = db;
     }
 

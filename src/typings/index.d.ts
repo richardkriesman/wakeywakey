@@ -1,4 +1,5 @@
 /* tslint:disable:max-classes-per-file - this is just a typedef file, there's no actual code here */
+/* tslint:disable:interface-over-type-literal - we need to be able to define types here */
 
 // react-navigation test utilities
 declare module "react-navigation/NavigationTestUtils" {
@@ -17,6 +18,8 @@ declare module "expo" {
 
 // expo sample views
 declare module "@expo/samples" {
+    import * as React from "react";
+
     declare class ExpoLinksView extends React.Component {}
     declare class ExpoConfigView extends React.Component {}
 }

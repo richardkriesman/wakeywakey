@@ -1,8 +1,8 @@
 import {AppLoading, Font} from "expo";
 import React, {ReactNode} from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
-import {AppDatabase} from "./db/AppDatabase";
 import AppNavigator from "./navigation/AppNavigator";
+import {AppDatabase} from "./utils/AppDatabase";
 
 export interface AppProps {
     skipLoadingScreen?: boolean;

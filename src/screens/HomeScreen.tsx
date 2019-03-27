@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-
-import { NavigationScreenOptions, NavigationScreenProps } from "react-navigation";
+import { NavigationScreenProps } from "react-navigation";
 import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
+import { NoHeader, UIScreen } from "../utils/UIScreen";
 
 /**
  * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.
@@ -24,11 +24,8 @@ interface HomeScreenState {
  * The home screen, where the current status, current time, and decorations will show.
  * @author Shawn Lutch, Miika Raina
  */
-export default class HomeScreen extends React.Component<HomeScreenProps & NavigationScreenProps, HomeScreenState> {
-    public static navigationOptions: NavigationScreenOptions = {
-        // hide header
-        header: null
-    };
+@NoHeader
+export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
     public static defaultInitialMessageText: string = "Hello, world!";
 
@@ -40,7 +37,7 @@ export default class HomeScreen extends React.Component<HomeScreenProps & Naviga
         this.setState({ messageText: "Hello, world!" });
     }
 
-    public render(): ReactNode {
+    public renderContent(): ReactNode {
         return (
             <View style={ExtraStyles.container}>
                 <View style={ExtraStyles.contentWrapper}>
@@ -56,9 +53,8 @@ export default class HomeScreen extends React.Component<HomeScreenProps & Naviga
     }
 
     private switchToSettings(): void {
-        // TODO
         this.setState({ messageText: "Switch to settings!" });
-        this.props.navigation.navigate("SettingsMain");
+        this.present("SettingsMain");
     }
 
     private onSnoozePressed(): void {
