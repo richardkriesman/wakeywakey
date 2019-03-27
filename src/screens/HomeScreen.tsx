@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationScreenOptions, NavigationScreenProps } from "react-navigation";
-import { HomeScreenClock, HomeScreenMessage, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
+import { HomeScreenClock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 
 /**
  * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.
@@ -44,7 +44,7 @@ export default class HomeScreen extends React.Component<HomeScreenProps & Naviga
         return (
             <View style={ExtraStyles.container}>
                 <View style={ExtraStyles.contentWrapper}>
-                    <HomeScreenMessage initialText={this.state.messageText} />
+                    <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
                     <HomeScreenClock wrapperStyle={ExtraStyles.clockWrapper} />
                     <SnoozeButton onPress={this.onSnoozePressed.bind(this)} />
                 </View>
@@ -89,5 +89,9 @@ const ExtraStyles = StyleSheet.create({
         flexBasis: "100%",
         justifyContent: "center",
         width: "85%"
+    },
+    message: {
+        fontSize: 30,
+        textAlign: "center"
     }
 });
