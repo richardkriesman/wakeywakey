@@ -4,7 +4,9 @@ import renderer from "react-test-renderer";
 import { HeaderAddButton } from "../HeaderAddButton";
 
 it("renders correctly", () => {
-    expect(renderer.create(<HeaderAddButton onPress={() => void 0}/>)).toMatchSnapshot();
+    expect(
+        renderer.create(<HeaderAddButton onPress={() => void 0}/>).toJSON()
+    ).toMatchSnapshot();
 });
 
 it("responds to press", () => {
