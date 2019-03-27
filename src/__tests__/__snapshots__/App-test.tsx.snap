@@ -127,11 +127,7 @@ exports[`App snapshot renders the root without loading screen 1`] = `
                           }
                         }
                       >
-                        12
-                        :
-                        22
-                         
-                        PM
+                        12:22 pm
                       </Text>
                     </View>
                   </View>
