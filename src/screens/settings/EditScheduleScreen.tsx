@@ -2,8 +2,8 @@ import React, { ReactNode } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps, StackActions } from "react-navigation";
-import { HeaderBackButton } from "../../components/HeaderBackButton";
 
+import { HeaderBackButton } from "../../components/HeaderBackButton";
 import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
 
 import Colors from "../../constants/Colors";
@@ -11,7 +11,8 @@ import Layout from "../../constants/Layout";
 import { AlarmModel } from "../../models/AlarmModel";
 import { ScheduleModel } from "../../models/ScheduleModel";
 
-// tslint:disable-next-line:no-empty-interface
+import AlarmUtils from "../../utils/AlarmUtils";
+
 export interface EditScheduleScreenState {
     headerTitle: string;
     schedule?: ScheduleModel;
@@ -19,6 +20,7 @@ export interface EditScheduleScreenState {
 
 export default class EditScheduleScreen extends React.Component<NavigationScreenProps, EditScheduleScreenState> {
 
+    // TODO how to test?
     public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             headerLeft: (
@@ -37,26 +39,6 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
             ),
             title: navigation.getParam("title")
         };
-    }
-
-    private static padTime(time: number): string {
-        return ("0" + time).slice(-2);
-    }
-
-    private static formatTime(date: Date): string {
-        return `${this.padTime(date.getHours())}:${this.padTime(date.getMinutes())}`;
-    }
-
-    // noinspection JSUnusedLocalSymbols
-    private static getAlarmTitle(alarm: AlarmModel): string {
-        const start = this.formatTime(alarm.sleepTime);
-        const end = this.formatTime(alarm.getUpTime);
-        return `${start} – ${end}`;
-    }
-
-    // noinspection JSUnusedLocalSymbols
-    private static getAlarmSubtitle(alarm: AlarmModel): string {
-        return alarm.days.join(", ");
     }
 
     public constructor(props: NavigationScreenProps) {
@@ -91,8 +73,8 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
                     renderItem={({ item }) => (
                         <ListItem
                             onPress={this.onAlarmPressed.bind(this, item.key)}
-                            title={EditScheduleScreen.getAlarmTitle(item)}
-                            subtitle={EditScheduleScreen.getAlarmSubtitle(item)}
+                            title={AlarmUtils.getAlarmTitle(item)}
+                            subtitle={AlarmUtils.getAlarmSubtitle(item)}
                             rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                         />
                     )}
