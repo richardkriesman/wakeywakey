@@ -9,7 +9,6 @@ import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
 
-// tslint:disable-next-line:no-empty-interface
 export interface EditAlarmScreenState {
     headerTitle: string;
     alarm?: AlarmModel;
