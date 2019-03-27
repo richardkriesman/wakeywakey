@@ -6,7 +6,7 @@ import { SnoozeButton } from "../SnoozeButton";
 describe("SnoozeButton", () => {
 
     it("renders correctly", () => {
-        const tree = renderer.create(<SnoozeButton onPress={() => void 0}/>);
+        const tree = renderer.create(<SnoozeButton onPress={() => void 0}/>).toJSON();
         expect(tree).toMatchSnapshot();
     });
 
