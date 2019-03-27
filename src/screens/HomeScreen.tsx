@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { NavigationScreenOptions, NavigationScreenProps } from "react-navigation";
-import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
+import { HomeScreenClock, HomeScreenMessage, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 
 /**
  * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.
@@ -44,8 +44,8 @@ export default class HomeScreen extends React.Component<HomeScreenProps & Naviga
         return (
             <View style={ExtraStyles.container}>
                 <View style={ExtraStyles.contentWrapper}>
-                    <Message text={this.state.messageText} />
-                    <Clock wrapperStyle={ExtraStyles.clockWrapper} />
+                    <HomeScreenMessage initialText={this.state.messageText} />
+                    <HomeScreenClock wrapperStyle={ExtraStyles.clockWrapper} />
                     <SnoozeButton onPress={this.onSnoozePressed.bind(this)} />
                 </View>
                 <View style={ExtraStyles.bottom}>
