@@ -1,4 +1,4 @@
-import {AppDatabase} from "../utils/AppDatabase";
+import {AppDatabase} from "./AppDatabase";
 
 export abstract class Service {
 

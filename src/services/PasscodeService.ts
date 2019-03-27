@@ -1,4 +1,6 @@
-import {Service} from "./Service";
+import {Service} from "../db/Service";
+
+const PREF_NAME = "passcode";
 
 export class PasscodeService extends Service {
 
@@ -7,12 +9,17 @@ export class PasscodeService extends Service {
      *
      * @param passcode The new passcode.
      */
-    public async setPasscode(passcode: string): Promise<void> {
-        await this.db.readTransaction(async transaction => {
-            await transaction.execute(`
-                
-            `);
-        });
+    public setPasscode(passcode: string): Promise<void> {
+        return this.db.setPreference(PREF_NAME, passcode);
+    }
+
+    /**
+     * Determines whether the provided passcode matches the set passcode.
+     *
+     * @param attempt The passcode to test.
+     */
+    public async verifyPasscode(attempt: string): Promise<boolean> {
+        return (await this.db.getPreference(PREF_NAME)) === attempt;
     }
 
 }
