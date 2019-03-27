@@ -45,8 +45,8 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         return (
             <View style={ExtraStyles.container}>
                 <View style={ExtraStyles.contentWrapper}>
-                    <Message text={this.state.messageText} />
-                    <Clock wrapperStyle={ExtraStyles.clockWrapper} />
+                    <HomeScreenMessage initialText={this.state.messageText} />
+                    <HomeScreenClock wrapperStyle={ExtraStyles.clockWrapper} />
                     <SnoozeButton onPress={this.onSnoozePressed.bind(this)} />
                 </View>
                 <View style={ExtraStyles.bottom}>
