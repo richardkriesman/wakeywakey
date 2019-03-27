@@ -6,7 +6,7 @@ import { SlideUpIndicator } from "../SlideUpIndicator";
 describe("SlideUpIndicator", () => {
 
     it("renders properly", () => {
-        const tree = renderer.create(<SlideUpIndicator onPress={() => void 0}/>);
+        const tree = renderer.create(<SlideUpIndicator onPress={() => void 0}/>).toJSON();
         expect(tree).toMatchSnapshot();
     });
 
