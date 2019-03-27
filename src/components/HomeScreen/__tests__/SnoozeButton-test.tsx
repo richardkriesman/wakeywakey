@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button } from "react-native-elements";
 import renderer from "react-test-renderer";
-import { SlideUpIndicator } from "../SlideUpIndicator";
 import { SnoozeButton } from "../SnoozeButton";
 
 describe("SnoozeButton", () => {
@@ -17,7 +16,7 @@ describe("SnoozeButton", () => {
         const onPress = jest.fn();
         onPress.mockReturnValue(resultText);
 
-        const tree = renderer.create(<SlideUpIndicator onPress={onPress}/>);
+        const tree = renderer.create(<SnoozeButton onPress={onPress}/>);
         expect(tree.root.findByType(Button).props.onPress()).toBe(resultText);
     });
 
