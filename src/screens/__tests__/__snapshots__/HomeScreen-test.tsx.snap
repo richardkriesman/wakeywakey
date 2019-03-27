@@ -60,7 +60,7 @@ exports[`App snapshot renders the screen 1`] = `
             12
             :
             22
-             
+
             PM
           </Text>
         </View>
