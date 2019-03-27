@@ -1,7 +1,8 @@
-import { AppLoading, Asset, Font, Icon } from "expo";
+import {AppLoading, Font} from "expo";
 import React, {ReactNode} from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import AppNavigator from "./navigation/AppNavigator";
+import {AppDatabase} from "./utils/AppDatabase";
 
 export interface AppProps {
     skipLoadingScreen?: boolean;
@@ -12,6 +13,8 @@ export interface AppState {
 }
 
 export default class App extends React.Component<AppProps, AppState> {
+
+    public db: AppDatabase;
 
     public constructor(props: AppProps) {
         super(props);
@@ -24,7 +27,7 @@ export default class App extends React.Component<AppProps, AppState> {
         if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
             return (
                 <AppLoading
-                    startAsync={this.loadResourcesAsync.bind(this)}
+                    startAsync={this.loadResources.bind(this)}
                     onError={this.handleLoadingError.bind(this)}
                     onFinish={this.handleFinishLoading.bind(this)}
                 />
@@ -39,20 +42,15 @@ export default class App extends React.Component<AppProps, AppState> {
         }
     }
 
-    private loadResourcesAsync(): Promise<any> {
-        return Promise.all([
-            Asset.loadAsync([
-                require("../assets/images/robot-dev.png"),
-                require("../assets/images/robot-prod.png")
-            ]),
-            Font.loadAsync({
-                // This is the font that we are using for our tab bar
-                ...Icon.Ionicons.font,
-                // We include SpaceMono because we use it in HomeScreen.js. Feel free
-                // to remove this if you are not using it in your app
-                "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf")
-            })
-        ]);
+    private async loadResources(): Promise<void> {
+
+        // open the database
+        this.db = new AppDatabase();
+
+        // load fonts
+        await Font.loadAsync({
+            "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf")
+        });
     }
 
     private handleLoadingError(error: Error): void {

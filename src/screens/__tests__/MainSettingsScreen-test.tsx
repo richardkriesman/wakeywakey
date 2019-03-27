@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import renderer from "react-test-renderer";
-import {createNavigationMock} from "../../utils/testUtils";
+import {createNavigationMock} from "../../utils/TestUtils";
 import MainSettingsScreen from "../settings/MainSettingsScreen";
 
 describe("App snapshot", () => {
