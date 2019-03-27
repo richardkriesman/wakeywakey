@@ -73,6 +73,10 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
         this.updateInternalDate();
     }
 
+    /**
+     * Rendering method.
+     * Runs initially after componentWillMount(), and then again anytime the state changes.
+     */
     public render(): ReactNode {
         return (
             <View style={this.props.wrapperStyle}>
@@ -85,12 +89,18 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
         );
     }
 
+    /**
+     * Set the date displayed on the clock. Changes state, so render() will be called again as a result.
+     * @param date The date to display on the clock
+     * @param callback Callback passed to setState()
+     */
     public setDate(date: Date, callback: () => void): void {
         this.setState({ date }, callback);
     }
 
     /**
      * Schedules a clock update when the system time advances to the next second.
+     * TODO will become obsolete once timer service is implemented -sL 3/26
      */
     private scheduleClockUpdate(): void {
         const msUntilNextSecond: number = 1000 - (new Date()).getMilliseconds();
