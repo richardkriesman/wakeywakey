@@ -15,7 +15,6 @@ import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 
-// tslint:disable-next-line:no-empty-interface
 export interface EditAlarmScreenState {
     alarm?: AlarmModel;
 }
