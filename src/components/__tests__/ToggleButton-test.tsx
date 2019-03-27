@@ -1,7 +1,7 @@
 import React from "react";
 import "react-native";
 import renderer from "react-test-renderer";
-import {ToggleButton} from "../ToggleButton";
+import { ToggleButton } from "../ToggleButton";
 
 it("renders title correctly", () => {
     const tree = renderer.create(<ToggleButton title="OwO"/>).toJSON();
@@ -9,6 +9,6 @@ it("renders title correctly", () => {
 });
 
 it("sets toggle state", () => {
-  const tree = renderer.create(<ToggleButton title="OwO" isToggled={true} />).toJSON();
-  expect(tree).toMatchSnapshot();
+    const tree = renderer.create(<ToggleButton title="OwO" isToggled={true}/>).toJSON();
+    expect(tree).toMatchSnapshot();
 });
