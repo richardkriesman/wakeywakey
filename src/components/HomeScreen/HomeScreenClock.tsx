@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, View, ViewStyle} from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 
 import { Text } from "react-native";
 
@@ -8,9 +8,7 @@ interface HomeScreenClockProps {
 }
 
 interface HomeScreenClockState {
-    hours: string;
-    minutes: string;
-    am_pm: string;
+    date?: Date;
 }
 
 /**
@@ -19,10 +17,52 @@ interface HomeScreenClockState {
  * @author Shawn Lutch
  */
 export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeScreenClockState> {
+
+    /**
+     * Get the number of hours past midnight
+     */
+    public get hours(): number {
+        return this.state.date.getHours();
+    }
+
+    /**
+     * Get the number of minutes since the last hour rollover
+     */
+    public get minutes(): number {
+        return this.state.date.getMinutes();
+    }
+
+    /**
+     * Get a 12-hour formatted time string - HH:mm xx
+     */
+    public get timeString(): string {
+        let hours = this.hours;
+        const ampm = this.hours >= 12 ? "pm" : "am";
+
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+
+        return `${HomeScreenClock.pad(hours)}:${HomeScreenClock.pad(this.minutes)} ${ampm}`;
+    }
+
+    /**
+     * Pads a number out into a string with a minimum number of digits.
+     * e.g. `pad(2, 2) => '02'`, `pad(12, 1) => '12'`
+     *
+     * @param num The number to pad
+     * @param digits The minimum number of digits to pad to
+     */
+    private static pad(num: number, digits: number = 2): string {
+        let result = "" + num;
+        while (result.length < digits) {
+            result = "0" + result;
+        }
+        return result;
+    }
     public constructor(props: HomeScreenClockProps) {
         super(props);
 
-        this.state = { hours: "", minutes: "", am_pm: "" };
+        this.state = { date: new Date() };
     }
 
     /**
@@ -38,11 +78,15 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
             <View style={this.props.wrapperStyle}>
                 <View style={styles.innerWrapper}>
                     <Text style={styles.clockText}>
-                        {this.state.hours}:{this.state.minutes} {this.state.am_pm}
+                        {this.timeString}
                     </Text>
                 </View>
             </View>
         );
+    }
+
+    public setDate(date: Date, callback: () => void): void {
+        this.setState({ date }, callback);
     }
 
     /**
@@ -57,33 +101,12 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
      * Update the state using a `new Date()` as `now`.
      */
     private updateInternalDate(): void {
+        // TODO needs to come from timer service once that's implemented -sL 3/26
         const now: Date = new Date();
 
-        let hours: number = now.getHours();
-        hours = hours <= 12 ? hours : (hours % 12);
-
-        const isPm: boolean = now.getHours() >= 12;
-
-        this.setState({
-            am_pm: isPm ? "PM" : "AM",
-            hours: this.pad(hours, 1),
-            minutes: this.pad(now.getMinutes(), 2)
-        }, () => { // state has been updated, schedule an update for the next second
+        this.setDate(now, () => {
             this.scheduleClockUpdate();
         });
-    }
-
-    /**
-     * Pads a number out into a string with a minimum number of digits.
-     * e.g. `_pad(2, 2) => '02'`, `_pad(12, 1) => '12'`
-     *
-     * @param num The number to pad
-     * @param digits The minimum number of digits to pad to
-     */
-    private pad(num: number, digits: number = 2): string {
-        let result = "" + num;
-        while (result.length < digits) { result = "0" + result; }
-        return result;
     }
 }
 
