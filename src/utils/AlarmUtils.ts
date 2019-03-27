@@ -3,7 +3,7 @@ import { AlarmModel } from "../models/AlarmModel";
 export function getAlarmTitle(alarm: AlarmModel): string {
     const start = formatTime(alarm.sleepTime);
     const end = formatTime(alarm.getUpTime);
-    return `${start} – ${end}`;
+    return `${start} - ${end}`;
 }
 
 export function getAlarmSubtitle(alarm: AlarmModel): string {
@@ -19,6 +19,7 @@ export function padTime(time: number): string {
 }
 
 const AlarmUtils = {
+    formatTime,
     getAlarmSubtitle,
     getAlarmTitle,
     padTime
