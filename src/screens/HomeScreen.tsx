@@ -55,13 +55,13 @@ export default class HomeScreen extends React.Component<HomeScreenProps & Naviga
         );
     }
 
-    private switchToSettings(): void {
+    public switchToSettings(): void {
         // TODO
         this.setState({ messageText: "Switch to settings!" });
         this.props.navigation.navigate("SettingsMain");
     }
 
-    private onSnoozePressed(): void {
+    public onSnoozePressed(): void {
         // TODO
         this.setState({ messageText: "Alarm snoozed!" });
     }
