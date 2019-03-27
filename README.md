@@ -1,6 +1,6 @@
 # wakeywakey
 
-![Travis (.com) branch](https://img.shields.io/travis/com/richardkriesman/wakeywakey/issue-44.svg?label=issue-44&logo=Branch&style=flat-square) 
-![Coveralls github branch](https://img.shields.io/coveralls/github/richardkriesman/wakeywakey/issue-44.svg?style=flat-square)
+[![Build Status](https://travis-ci.com/richardkriesman/wakeywakey.svg?branch=issue-44)](https://travis-ci.com/richardkriesman/wakeywakey) 
+[![Coverage Status](https://coveralls.io/repos/github/richardkriesman/wakeywakey/badge.svg?branch=issue-44)](https://coveralls.io/github/richardkriesman/wakeywakey?branch=issue-44)
 
 Put something cool here
