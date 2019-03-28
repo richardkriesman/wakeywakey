@@ -1,8 +1,7 @@
 import React, { ReactNode } from "react";
-import { Button, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
-import { PasscodeService } from "../services/PasscodeService";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
