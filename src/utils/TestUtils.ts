@@ -5,7 +5,9 @@ import {ReactTestInstance} from "react-test-renderer";
  */
 export function createNavigationMock(): any {
     return {
-        navigation: jest.fn()
+        getParam: jest.fn(),
+        navigation: jest.fn(),
+        setParams: jest.fn()
     };
 }
 

@@ -1,38 +1,41 @@
 import React, {ReactNode} from "react";
 import {SafeAreaView, StyleSheet} from "react-native";
-import { NavigationParams, NavigationScreenOptions, NavigationScreenProps, StackActions } from "react-navigation";
-import { AppDatabase } from "./AppDatabase";
-import { Service } from "./Service";
-
-/**
- * Removes the screen's header
- */
-export function NoHeader<T>(constructor: T) {
-    (constructor as any).navigationOptions.header = null;
-}
+import { NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
+import { AppDatabase } from "../AppDatabase";
+import { Service } from "../Service";
 
 export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & NavigationScreenProps, S> {
-    public static navigationOptions: NavigationScreenOptions = {};
+    public static navigationOptions = ({navigation}: NavigationScreenProps) => ({
+        title: navigation.getParam("title", "Untitled")
+    })
 
-    private readonly db?: AppDatabase;
+    private db?: AppDatabase;
 
     protected constructor(props: P & NavigationScreenProps) {
         super(props);
 
         // extract the database from the navigation props
-        this.db = this.props.navigation.getParam("database", undefined);
+        this.db = this.props.navigation.getParam("database");
         if (this.db) {
             delete this.props.navigation.state.params.database;
+        } else { // database has not yet been opened, initialize it
+            AppDatabase.init()
+                .then((db) => {
+                    this.db = db;
+                });
         }
 
+        // add this screen to its own navigation params - this is nasty but it's needed for the decorators
+        this.props.navigation.setParams({
+            screen: this
+        });
     }
 
-    public render(): ReactNode {
-        return (
-            <SafeAreaView style={styles.container}>
-                {this.renderContent()}
-            </SafeAreaView>
-        );
+    /**
+     * Dismisses this {@link Screen}, revealing the screen below it.
+     */
+    public dismiss(): void {
+        this.props.navigation.dispatch(StackActions.pop({ n: 1 }));
     }
 
     /**
@@ -40,7 +43,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      *
      * @param service The {@link Service} class to retrieve.
      */
-    protected getService<T extends Service>(service: new(db: AppDatabase) => T): T {
+    public getService<T extends Service>(service: new(db: AppDatabase) => T): T {
         return new service(this.db);
     }
 
@@ -51,13 +54,21 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @param routeName The name of the screen to present.
      * @param params Additional parameters to pass through to the new Screen.
      */
-    protected present(routeName: string, params?: NavigationParams): void {
+    public present(routeName: string, params?: NavigationParams): void {
         this.props.navigation.dispatch(StackActions.push({
             params: {
                 ...params
             },
             routeName
         }));
+    }
+
+    public render(): ReactNode {
+        return (
+            <SafeAreaView style={styles.container}>
+                {this.renderContent()}
+            </SafeAreaView>
+        );
     }
 
     /**

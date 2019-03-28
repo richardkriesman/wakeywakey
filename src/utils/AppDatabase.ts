@@ -97,15 +97,11 @@ export class AppDatabase {
      */
     public async setPreference(key: string, value: string): Promise<void> {
         await this.execute(`
-            INSERT INTO preferences
+            INSERT OR REPLACE INTO preferences
                 (name, value)
             VALUES
-                (?, ?)
-            ON CONFLICT(name)
-                DO UPDATE
-                SET
-                    value = ?
-        `, [key, value, value]);
+                (?, ?);
+        `, [key, value]);
     }
 
 }

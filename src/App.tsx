@@ -2,7 +2,6 @@ import {AppLoading, Font} from "expo";
 import React, {ReactNode} from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import AppNavigator from "./navigation/AppNavigator";
-import {AppDatabase} from "./utils/AppDatabase";
 
 export interface AppProps {
     skipLoadingScreen?: boolean;
@@ -13,8 +12,6 @@ export interface AppState {
 }
 
 export default class App extends React.Component<AppProps, AppState> {
-
-    private db: AppDatabase;
 
     public constructor(props: AppProps) {
         super(props);
@@ -43,11 +40,6 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     private async loadResources(): Promise<void> {
-
-        // open the database
-        this.db = await AppDatabase.init();
-
-        // load fonts
         await Font.loadAsync({
             "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf")
         });
