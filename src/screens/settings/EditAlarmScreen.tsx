@@ -1,38 +1,25 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, ListItem, Text } from "react-native-elements";
-import { NavigationScreenProps, StackActions } from "react-navigation";
+import { NavigationScreenProps} from "react-navigation";
 import { HeaderBackButton } from "../../components/HeaderBackButton";
 
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
+import { UIScreen } from "../../utils/screen";
+import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 
 // tslint:disable-next-line:no-empty-interface
 export interface EditAlarmScreenState {
-    headerTitle: string;
     alarm?: AlarmModel;
 }
 
-export default class EditAlarmScreen extends React.Component<NavigationScreenProps, EditAlarmScreenState> {
-
-    public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
-        return {
-            headerLeft: (
-                <HeaderBackButton title="Cancel" navigation={navigation}/>
-            ),
-            headerRight: (
-                <Button type="clear" titleStyle={styles.saveButton} title="Save"
-                        onPress={() => {
-                            // TODO persistence
-                            navigation.dispatch(StackActions.pop({ n: 1 }));
-                        }}
-                />
-            ),
-            title: navigation.getParam("title")
-        };
-    }
+@HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()} />)
+@HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
+                                       onPress={() => screen.dismiss()} />)
+export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
 
     public constructor(props: NavigationScreenProps) {
         super(props);
@@ -40,12 +27,11 @@ export default class EditAlarmScreen extends React.Component<NavigationScreenPro
 
     public componentWillMount(): void {
         this.setState({
-            alarm: this.props.navigation.getParam("alarm"),
-            headerTitle: this.props.navigation.getParam("title")
+            alarm: this.props.navigation.getParam("alarm")
         });
     }
 
-    public render(): ReactNode {
+    public renderContent(): ReactNode {
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Days</Text>

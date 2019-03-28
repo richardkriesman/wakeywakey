@@ -7,6 +7,8 @@ import { ScheduleListHeader } from "../../components/MainSettingsScreen/Schedule
 import { ScheduleListItem } from "../../components/MainSettingsScreen/ScheduleListItem";
 import { TestAlarms } from "../../models/AlarmModel";
 import { ScheduleModel } from "../../models/ScheduleModel";
+import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { UIScreen } from "../../utils/screen/UIScreen";
 
 /**
  * Main settings screen state. Includes schedule states.
@@ -28,24 +30,9 @@ export interface SettingsListItemProps {
  * Main Settings screen.
  * @author Shawn Lutch, Miika Raina
  */
-export default class MainSettingsScreen
-    extends React.Component<NavigationScreenProps, MainSettingsScreenState> {
-
-    public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
-        return {
-            headerRight: (
-                <HeaderAddButton
-                    // TODO instead navigate to "Add Alarm" with proper params
-                    onPress={() => {
-                        navigation.navigate(
-                            "EditSchedule",
-                            { title: "Add Schedule" }
-                        );
-                    }}
-                />
-            )
-        };
-    }
+@HeaderButtonRight((screen) =>
+    <HeaderAddButton onPress={() => screen.present("EditSchedule", { title: "Add Schedule" })} />)
+export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
 
     public constructor(props: NavigationScreenProps) {
         super(props);
@@ -82,7 +69,7 @@ export default class MainSettingsScreen
         }));
     }
 
-    public render(): ReactNode {
+    public renderContent(): ReactNode {
         return (
             <SectionList
                 renderItem={({ item }) => (

@@ -3,7 +3,7 @@ import React from "react";
 import "react-native";
 import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import renderer from "react-test-renderer";
-import {createNavigationMock} from "../../utils/testUtils";
+import {createNavigationMock} from "../../utils/TestUtils";
 import HomeScreen from "../HomeScreen";
 
 const fakeDateMillis = 1551896555862;

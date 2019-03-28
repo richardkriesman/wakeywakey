@@ -10,6 +10,8 @@ import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel } from "../../models/AlarmModel";
 import { ScheduleModel } from "../../models/ScheduleModel";
+import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { UIScreen } from "../../utils/screen/UIScreen";
 
 // tslint:disable-next-line:no-empty-interface
 export interface EditScheduleScreenState {
@@ -17,27 +19,10 @@ export interface EditScheduleScreenState {
     schedule?: ScheduleModel;
 }
 
-export default class EditScheduleScreen extends React.Component<NavigationScreenProps, EditScheduleScreenState> {
-
-    public static navigationOptions = ({ navigation }: NavigationScreenProps) => {
-        return {
-            headerLeft: (
-                <HeaderBackButton title="Cancel" navigation={navigation}/>
-            ),
-            headerRight: (
-                <HeaderAddButton
-                    // TODO instead navigate to "Add Alarm" with proper params
-                    onPress={() => {
-                        navigation.navigate(
-                            "EditAlarm",
-                            { title: "Add Alarm" }
-                        );
-                    }}
-                />
-            ),
-            title: navigation.getParam("title")
-        };
-    }
+@HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()} />)
+@HeaderButtonRight((screen) =>
+    <HeaderAddButton onPress={() => screen.present("EditAlarm", { title: "Add Alarm" })} />)
+export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
 
     private static padTime(time: number): string {
         return ("0" + time).slice(-2);
@@ -80,7 +65,7 @@ export default class EditScheduleScreen extends React.Component<NavigationScreen
         }));
     }
 
-    public render(): ReactNode {
+    public renderContent(): ReactNode {
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Alarms</Text>
