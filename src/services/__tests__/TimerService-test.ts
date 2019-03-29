@@ -9,7 +9,7 @@ describe("TimerService", () => {
 
     beforeEach(() => {
         MockDate.set(0);
-        timer = new TimerService(null);
+        timer = TimerService.Instance;
     });
 
     afterEach(() => {

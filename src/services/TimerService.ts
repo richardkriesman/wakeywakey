@@ -29,6 +29,16 @@ export enum TimerEvent {
 export class TimerService extends Service {
 
     /**
+     * Retrieve the static instance of {@link TimerService}.
+     * @constructor
+     */
+    public static get Instance(): TimerService {
+        return TimerService.INSTANCE;
+    }
+
+    private static readonly INSTANCE: TimerService = new TimerService();
+
+    /**
      * An instance field containing this service's {@link NodeJS.Timeout}'s ID.
      *
      * Can be undefined if no {@link NodeJS.Timeout} is scheduled for this {@TimerService} instance.
@@ -39,6 +49,13 @@ export class TimerService extends Service {
      * A map to register {@link TimerEvent}s and their respective lists of {@link TimerHandler}s.
      */
     private handlers: TimerHandlerMap = new Map<TimerEvent, TimerHandler[]>();
+
+    /**
+     * TimerService constructor. Made private to disallow use outside of singleton.
+     */
+    private constructor() {
+        super(null);
+    }
 
     /**
      * Add a handler that listens for the given Timer event
