@@ -2,6 +2,7 @@ import {AppLoading, Font} from "expo";
 import React, {ReactNode} from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import AppNavigator from "./navigation/AppNavigator";
+import { TimerService } from "./services/TimerService";
 
 export interface AppProps {
     skipLoadingScreen?: boolean;
@@ -13,6 +14,18 @@ export interface AppState {
 
 export default class App extends React.Component<AppProps, AppState> {
 
+    private static async loadResources(): Promise<void> {
+        await Font.loadAsync({
+            "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf")
+        });
+    }
+
+    private static handleLoadingError(error: Error): void {
+        // In this case, you might want to report the error to your error
+        // reporting service, for example Sentry
+        console.warn(error);
+    }
+
     public constructor(props: AppProps) {
         super(props);
         this.state = {
@@ -20,12 +33,17 @@ export default class App extends React.Component<AppProps, AppState> {
         };
     }
 
+    public componentWillMount() {
+        // start services
+        TimerService.Instance.start();
+    }
+
     public render(): ReactNode {
         if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
             return (
                 <AppLoading
-                    startAsync={this.loadResources.bind(this)}
-                    onError={this.handleLoadingError.bind(this)}
+                    startAsync={App.loadResources.bind(this)}
+                    onError={App.handleLoadingError.bind(this)}
                     onFinish={this.handleFinishLoading.bind(this)}
                 />
             );
@@ -37,18 +55,6 @@ export default class App extends React.Component<AppProps, AppState> {
                 </View>
             );
         }
-    }
-
-    private async loadResources(): Promise<void> {
-        await Font.loadAsync({
-            "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf")
-        });
-    }
-
-    private handleLoadingError(error: Error): void {
-        // In this case, you might want to report the error to your error
-        // reporting service, for example Sentry
-        console.warn(error);
     }
 
     private handleFinishLoading(): void {
