@@ -10,7 +10,7 @@
     "ios": "expo start --ios",
     "lint": "tslint --project .",
     "snapshot": "yarn test --updateSnapshot",
-    "test": "node ./node_modules/jest/bin/jest.js",
+    "test": "node ./node_modules/jest/bin/jest.js --silent",
     "test:ci": "yarn build && yarn lint && yarn test",
     "coverage": "yarn test --coverage",
     "tsc": "tsc",
