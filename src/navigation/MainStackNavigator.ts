@@ -9,6 +9,7 @@ import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 import HomeScreen from "../screens/HomeScreen";
 import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
 import MainSettingsScreen from "../screens/settings/MainSettingsScreen";
+import PasscodeChangeScreen from "../screens/settings/PasscodeChangeScreen";
 import ScheduleDetailsNavigator from "./ScheduleDetailsNavigator";
 
 /**
@@ -23,6 +24,10 @@ export default createStackNavigator(
                 title: "Home"
             },
             screen: HomeScreen
+        },
+
+        PasscodeChange: {
+            screen: PasscodeChangeScreen
         },
 
         SettingsMain: {
