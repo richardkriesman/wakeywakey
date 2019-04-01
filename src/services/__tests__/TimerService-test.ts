@@ -17,16 +17,13 @@ describe("TimerService", () => {
         timer.stop();
     });
 
-    it("schedules a tick and fires events on start", () => {
+    it("schedules a tick and fires events on start with on()", () => {
         const onStart = jest.fn();
-        const addHandler = jest.spyOn(timer, "addHandler");
-
         timer.on("start", onStart);
 
         timer.start();
 
         expect(onStart).toHaveBeenCalledTimes(1);
-        expect(addHandler).toHaveBeenCalledTimes(1);
         expect(setTimeout).toHaveBeenCalledTimes(1);
     });
 
@@ -37,15 +34,34 @@ describe("TimerService", () => {
         timer.on("second", onSecond);
 
         timer.start();
+
+        // no events should fire on Start except for START
         expect(onSecond).not.toHaveBeenCalled();
+
+        const step: number = 1000;
 
         for (let i: number = 0; i < numSeconds; i++) {
             // increase mocked time by one second and advance timers
-            MockDate.set((i + 1) * 1000);
-            jest.advanceTimersByTime(1000);
+            MockDate.set((i + 1) * step);
+            jest.advanceTimersByTime(step);
         }
 
         expect(onSecond).toHaveBeenCalledTimes(numSeconds);
+    });
+
+    it("clears timeout on stop()", () => {
+        const onStop = jest.fn();
+        timer.on("stop", onStop);
+
+        timer.start();
+        expect(onStop).not.toHaveBeenCalled();
+
+        timer.stop();
+
+        expect(clearTimeout).toHaveBeenCalled();
+        expect(onStop).toHaveBeenCalledTimes(1);
+
+        expect(timer.timeoutId).toBeUndefined();
     });
 
 });
