@@ -15,11 +15,14 @@ export type TimerHandlerMap = Map<string, TimerHandler[]>;
  */
 export enum TimerEvent {
     SECOND = "second",
-    MINUTE = "minute",
-    HOUR = "hour",
     START = "start",
     STOP = "stop"
 }
+
+/**
+ * String representation of TimerEvents.
+ */
+export type TimerEventStr = "start" | "second" | "stop";
 
 /**
  * Timer service: fires {@link TimerEvent}s when appropriate.
@@ -27,6 +30,8 @@ export enum TimerEvent {
  * Register a {@link TimerHandler} to listen for {@link TimerEvent}s by using {@link on}
  */
 export class TimerService extends Service {
+
+    private static readonly INSTANCE: TimerService = new TimerService();
 
     /**
      * Retrieve the static instance of {@link TimerService}.
@@ -36,14 +41,21 @@ export class TimerService extends Service {
         return TimerService.INSTANCE;
     }
 
-    private static readonly INSTANCE: TimerService = new TimerService();
-
     /**
      * An instance field containing this service's {@link NodeJS.Timeout}'s ID.
      *
      * Can be undefined if no {@link NodeJS.Timeout} is scheduled for this {@TimerService} instance.
      */
-    private timeout?: number;
+    private timeout?: number = undefined;
+
+    /**
+     * Getter for {@link NodeJS.Timeout} ID.
+     *
+     * Can be undefined if no {@link NodeJS.Timeout} is scheduled for this {@TimerService} instance.
+     */
+    public get timeoutId(): number {
+        return this.timeout;
+    }
 
     /**
      * A map to register {@link TimerEvent}s and their respective lists of {@link TimerHandler}s.
@@ -58,26 +70,17 @@ export class TimerService extends Service {
     }
 
     /**
-     * Add a handler that listens for the given Timer event
+     * Add a handler that listens for the given Timer event.
      * @param eventType A {@link TimerEvent} corresponding with the event to listen for
      * @param handler The {@link TimerHandler} to run when this event fires
      */
-    public addHandler(eventType: TimerEvent | string, handler: TimerHandler): void {
+    public on(eventType: TimerEvent | TimerEventStr, handler: TimerHandler): void {
         let handlersArr: TimerHandler[] = this.handlers.get(eventType);
         handlersArr = handlersArr ? handlersArr : [];
 
         handlersArr.push(handler);
 
         this.handlers.set(eventType, handlersArr);
-    }
-
-    /**
-     * Add a handler that listens for the given Timer event. Alias for {@link addHandler}.
-     * @param eventType A {@link TimerEvent} corresponding with the event to listen for
-     * @param handler The {@link TimerHandler} to run when this event fires
-     */
-    public on(eventType: TimerEvent | string, handler: TimerHandler): void {
-        return this.addHandler(eventType, handler);
     }
 
     /**
@@ -95,7 +98,8 @@ export class TimerService extends Service {
     public stop() {
         console.log("stopping Timer service");
         if (this.timeout) {
-            clearInterval(this.timeout);
+            clearTimeout(this.timeout);
+            this.timeout = undefined;
         }
 
         this.fireAll(TimerEvent.STOP);
@@ -128,16 +132,6 @@ export class TimerService extends Service {
 
             // fire events for this second
             this.fireAll(TimerEvent.SECOND, now);
-
-            // if seconds == 0, we are on a new minute
-            if (now.getSeconds() === 0) {
-                this.fireAll(TimerEvent.MINUTE, now);
-            }
-
-            // if minutes == 0, we are on a new hour
-            if (now.getMinutes() === 0) {
-                this.fireAll(TimerEvent.HOUR, now);
-            }
         }
 
         this.scheduleNext();
