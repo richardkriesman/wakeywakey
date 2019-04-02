@@ -1,5 +1,3 @@
-import { Service } from "../utils/Service";
-
 /**
  * A function to execute when a {@link TimerEvent} fires.
  */
@@ -20,7 +18,8 @@ export enum TimerEvent {
 }
 
 /**
- * String representation of TimerEvents.
+ * String representation of TimerEvents. Too verbose?
+ * Prevents attaching to events that will never be fired.
  */
 export type TimerEventStr = "start" | "second" | "stop";
 
@@ -29,16 +28,16 @@ export type TimerEventStr = "start" | "second" | "stop";
  *
  * Register a {@link TimerHandler} to listen for {@link TimerEvent}s by using {@link on}
  */
-export class TimerService extends Service {
+export class AppTimer {
 
-    private static readonly INSTANCE: TimerService = new TimerService();
+    private static readonly INSTANCE: AppTimer = new AppTimer();
 
     /**
-     * Retrieve the static instance of {@link TimerService}.
+     * Retrieve the static instance of {@link AppTimer}.
      * @constructor
      */
-    public static get Instance(): TimerService {
-        return TimerService.INSTANCE;
+    public static get Instance(): AppTimer {
+        return AppTimer.INSTANCE;
     }
 
     /**
@@ -63,13 +62,6 @@ export class TimerService extends Service {
     private handlers: TimerHandlerMap = new Map<TimerEvent, TimerHandler[]>();
 
     /**
-     * TimerService constructor. Made private to disallow use outside of singleton.
-     */
-    private constructor() {
-        super(null);
-    }
-
-    /**
      * Add a handler that listens for the given Timer event.
      * @param eventType A {@link TimerEvent} corresponding with the event to listen for
      * @param handler The {@link TimerHandler} to run when this event fires
@@ -84,7 +76,7 @@ export class TimerService extends Service {
     }
 
     /**
-     * Start this {@link TimerService} instance.
+     * Start this {@link AppTimer} instance.
      */
     public start() {
         console.log("starting Timer service");
@@ -93,7 +85,7 @@ export class TimerService extends Service {
     }
 
     /**
-     * Stop this {@link TimerService} instance and clear its {@link NodeJS.Timeout}, if defined.
+     * Stop this {@link AppTimer} instance and clear its {@link NodeJS.Timeout}, if defined.
      */
     public stop() {
         console.log("stopping Timer service");
@@ -147,3 +139,5 @@ export class TimerService extends Service {
     }
 
 }
+
+export default (() => AppTimer.Instance)();

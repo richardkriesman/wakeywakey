@@ -1,8 +1,9 @@
-import {AppLoading, Font} from "expo";
-import React, {ReactNode} from "react";
+import { AppLoading, Font } from "expo";
+import React, { ReactNode } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
+
 import AppNavigator from "./navigation/AppNavigator";
-import { TimerService } from "./services/TimerService";
+import AppTimer from "./utils/AppTimer";
 
 export interface AppProps {
     skipLoadingScreen?: boolean;
@@ -35,7 +36,7 @@ export default class App extends React.Component<AppProps, AppState> {
 
     public componentWillMount() {
         // start services
-        TimerService.Instance.start();
+        AppTimer.start();
     }
 
     public render(): ReactNode {
@@ -50,8 +51,8 @@ export default class App extends React.Component<AppProps, AppState> {
         } else {
             return (
                 <View style={styles.container}>
-                    {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-                    <AppNavigator />
+                    {Platform.OS === "ios" && <StatusBar barStyle="default"/>}
+                    <AppNavigator/>
                 </View>
             );
         }

@@ -1,7 +1,7 @@
 import MockDate from "mockdate";
-import { TimerService } from "../TimerService";
+import { AppTimer } from "../AppTimer";
 
-let timer: TimerService;
+let timer: AppTimer;
 
 describe("TimerService", () => {
 
@@ -9,7 +9,7 @@ describe("TimerService", () => {
 
     beforeEach(() => {
         MockDate.set(0);
-        timer = TimerService.Instance;
+        timer = AppTimer.Instance;
     });
 
     afterEach(() => {

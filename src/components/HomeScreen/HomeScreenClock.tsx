@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
 import { Text } from "react-native";
-import { TimerService } from "../../services/TimerService";
+import { AppTimer } from "../../utils/AppTimer";
 
 interface HomeScreenClockProps {
     wrapperStyle?: ViewStyle;
@@ -48,7 +48,7 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
      */
     public componentWillMount(): void {
         this.updateInternalDate(new Date());
-        TimerService.Instance.on("second", this.updateInternalDate.bind(this));
+        AppTimer.Instance.on("second", this.updateInternalDate.bind(this));
     }
 
     public render(): ReactNode {
