@@ -1,11 +1,11 @@
 import { createBottomTabNavigator, NavigationScreenProps } from "react-navigation";
 
-import EditScheduleScreen from "../screens/settings/EditScheduleScreen";
+import ScheduleAlarmsScreen from "../screens/settings/ScheduleAlarmsScreen";
 import { ScheduleOptionsScreen } from "../screens/settings/ScheduleOptionsScreen";
 
 const ScheduleDetailScreens = {
     EditSchedule: {
-        screen: EditScheduleScreen
+        screen: ScheduleAlarmsScreen
     },
 
     ScheduleOptions: {

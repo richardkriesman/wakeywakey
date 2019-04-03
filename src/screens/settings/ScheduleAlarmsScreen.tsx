@@ -14,7 +14,7 @@ export interface EditScheduleScreenState {
     schedule?: ScheduleModel;
 }
 
-export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
+export default class ScheduleAlarmsScreen extends UIScreen<{}, EditScheduleScreenState> {
 
     public static navigationOptions = () => {
         return {
@@ -74,8 +74,8 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                     renderItem={({ item }) => (
                         <ListItem
                             onPress={this.onAlarmPressed.bind(this, item.key)}
-                            title={EditScheduleScreen.getAlarmTitle(item)}
-                            subtitle={EditScheduleScreen.getAlarmSubtitle(item)}
+                            title={ScheduleAlarmsScreen.getAlarmTitle(item)}
+                            subtitle={ScheduleAlarmsScreen.getAlarmSubtitle(item)}
                             rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                         />
                     )}
