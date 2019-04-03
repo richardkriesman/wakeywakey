@@ -4,19 +4,20 @@ import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
+import { UIScreen } from "../../utils/screen/UIScreen";
 
 // tslint:disable-next-line:no-empty-interface
-export interface ScheduleOptionsScreenProps {
+export interface ScheduleOptionsScreenState {
 
 }
 
-export class ScheduleOptionsScreen extends React.Component<NavigationScreenProps & ScheduleOptionsScreenProps> {
+export class ScheduleOptionsScreen extends UIScreen<{}, ScheduleOptionsScreenState> {
 
-    public constructor(props: NavigationScreenProps & ScheduleOptionsScreenProps) {
+    public constructor(props: NavigationScreenProps) {
         super(props);
     }
 
-    public render(): ReactNode {
+    public renderContent(): ReactNode {
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Options</Text>
