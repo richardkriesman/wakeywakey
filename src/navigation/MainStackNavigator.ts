@@ -1,4 +1,4 @@
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
 import HomeScreen from "../screens/HomeScreen";
 import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
@@ -13,6 +13,9 @@ export default createStackNavigator(
     // screen stack
     {
         Home: {
+            navigationOptions: {
+                title: "Home"
+            },
             screen: HomeScreen
         },
 
@@ -22,6 +25,9 @@ export default createStackNavigator(
         },
 
         EditSchedule: {
+            navigationOptions: ({ navigation }: NavigationScreenProps) => ({
+                title: navigation.getParam("title", "Edit Schedule")
+            }),
             screen: ScheduleDetailsNavigator
         },
 
