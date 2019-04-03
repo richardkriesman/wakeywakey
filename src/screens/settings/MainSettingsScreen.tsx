@@ -31,7 +31,7 @@ export interface SettingsListItemProps {
  * @author Shawn Lutch, Miika Raina
  */
 @HeaderButtonRight((screen) =>
-    <HeaderAddButton onPress={() => screen.present("EditSchedule", { title: "Add Schedule" })} />)
+    <HeaderAddButton onPress={() => screen.present("ScheduleAlarms", { title: "Add Schedule" })} />)
 export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
 
     public constructor(props: NavigationScreenProps) {
@@ -65,7 +65,7 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                 schedule: this.state.schedules[key],
                 title: this.state.schedules[key].name
             },
-            routeName: "EditSchedule"
+            routeName: "ScheduleAlarms"
         }));
     }
 
