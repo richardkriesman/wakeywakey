@@ -11,7 +11,7 @@
     "lint": "tslint --project .",
     "snapshot": "yarn test --updateSnapshot",
     "test": "node ./node_modules/jest/bin/jest.js",
-    "test:ci": "yarn build && yarn lint && yarn test",
+    "test:ci": "yarn build && yarn lint && yarn test --silent",
     "coverage": "yarn test --coverage",
     "tsc": "tsc",
     "watch": "yarn build -w"
