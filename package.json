@@ -4,7 +4,7 @@
     "android": "expo start --android",
     "build": "yarn clean && yarn tsc",
     "clean": "rimraf build",
-    "start": "concurrently \"expo start -c\" \"yarn watch\"",
+    "start": "concurrently --restart-tries 100 -i \"expo start -c\" \"yarn watch\"",
     "start:tunnel": "concurrently \"expo start --tunnel -c\" \"yarn watch\"",
     "eject": "expo eject",
     "ios": "expo start --ios",
