@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Icon, ListItem, Text } from "react-native-elements";
+import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps, StackActions } from "react-navigation";
 
 import Colors from "../../constants/Colors";
@@ -15,13 +15,6 @@ export interface EditScheduleScreenState {
 }
 
 export default class ScheduleAlarmsScreen extends UIScreen<{}, EditScheduleScreenState> {
-
-    public static navigationOptions = () => {
-        return {
-            tabBarIcon: () => <Icon type="font-awesome" name="clock-o"/>,
-            title: "Alarms"
-        };
-    }
 
     private static padTime(time: number): string {
         return ("0" + time).slice(-2);

@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { Icon, Text } from "react-native-elements";
+import { Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
@@ -11,12 +11,6 @@ export interface ScheduleOptionsScreenProps {
 }
 
 export class ScheduleOptionsScreen extends React.Component<NavigationScreenProps & ScheduleOptionsScreenProps> {
-    public static navigationOptions = () => {
-        return {
-            tabBarIcon: () => <Icon type="evilicon" name="gear"/>,
-            title: "Options"
-        };
-    }
 
     public constructor(props: NavigationScreenProps & ScheduleOptionsScreenProps) {
         super(props);

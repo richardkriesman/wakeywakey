@@ -1,26 +1,34 @@
-import { createBottomTabNavigator, NavigationScreenProps } from "react-navigation";
+import { BottomTabNavigatorConfig, createBottomTabNavigator } from "react-navigation";
+import Colors from "../constants/Colors";
 
 import ScheduleAlarmsScreen from "../screens/settings/ScheduleAlarmsScreen";
 import { ScheduleOptionsScreen } from "../screens/settings/ScheduleOptionsScreen";
 
+const tabBarOptions = {
+    activeTintColor: Colors.appleButtonBlue,
+    inactiveTintColor: "gray"
+};
+
 const ScheduleDetailScreens = {
-    EditSchedule: {
+    ScheduleAlarms: {
+        navigationOptions: {
+            tabBarOptions,
+            title: "Alarms"
+        },
         screen: ScheduleAlarmsScreen
     },
 
     ScheduleOptions: {
+        navigationOptions: {
+            tabBarOptions,
+            title: "Options"
+        },
         screen: ScheduleOptionsScreen
     }
 };
 
-const ScheduleDetailParams = {
-    initialRouteName: "EditSchedule"
+const ScheduleDetailParams: BottomTabNavigatorConfig = {
+    initialRouteName: "ScheduleAlarms"
 };
 
 export default createBottomTabNavigator(ScheduleDetailScreens, ScheduleDetailParams);
-
-export function ScheduleDetailsNavigationOptions({ navigation }: NavigationScreenProps): object {
-    return {
-        title: navigation.getParam("title", "Edit Schedule")
-    };
-}
