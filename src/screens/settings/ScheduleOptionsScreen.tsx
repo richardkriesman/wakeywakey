@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { Text } from "react-native-elements";
+import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
@@ -20,10 +20,17 @@ export class ScheduleOptionsScreen extends React.Component<NavigationScreenProps
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Options</Text>
+
+                <ListItem title="Color Scheme" subtitle="Summer" rightIcon={forwardIcon}/>
+                <ListItem title="Audio" rightIcon={forwardIcon}/>
+                <ListItem title="Snooze" rightIcon={forwardIcon}/>
+                <ListItem title="Clock Style" subtitle="Digital" rightIcon={forwardIcon}/>
             </View>
         );
     }
 }
+
+const forwardIcon = { name: "arrow-forward", type: "ionicons" };
 
 const styles = StyleSheet.create({
     textSectionHeader: {
