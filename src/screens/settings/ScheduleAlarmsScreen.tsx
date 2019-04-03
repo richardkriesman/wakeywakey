@@ -7,6 +7,7 @@ import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel } from "../../models/AlarmModel";
 import { ScheduleModel } from "../../models/ScheduleModel";
+import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
 export interface EditScheduleScreenState {
@@ -14,6 +15,7 @@ export interface EditScheduleScreenState {
     schedule?: ScheduleModel;
 }
 
+@BottomTabBarIcon("ios-alarm") @Title("Alarms")
 export default class ScheduleAlarmsScreen extends UIScreen<{}, EditScheduleScreenState> {
 
     private static padTime(time: number): string {

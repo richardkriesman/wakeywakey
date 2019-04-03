@@ -2,8 +2,10 @@ import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
+
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
+import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
 // tslint:disable-next-line:no-empty-interface
@@ -11,6 +13,7 @@ export interface ScheduleOptionsScreenState {
 
 }
 
+@BottomTabBarIcon("ios-cog") @Title("Options")
 export class ScheduleOptionsScreen extends UIScreen<{}, ScheduleOptionsScreenState> {
 
     public constructor(props: NavigationScreenProps) {
