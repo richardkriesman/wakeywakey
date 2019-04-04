@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, View, ViewStyle} from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 
 import { Text } from "react-native";
+import { AppTimer } from "../../utils/AppTimer";
 
 interface HomeScreenClockProps {
     wrapperStyle?: ViewStyle;
@@ -19,6 +20,22 @@ interface HomeScreenClockState {
  * @author Shawn Lutch
  */
 export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeScreenClockState> {
+
+    /**
+     * Pads a number out into a string with a minimum number of digits.
+     * e.g. `_pad(2, 2) => '02'`, `_pad(12, 1) => '12'`
+     *
+     * @param num The number to pad
+     * @param digits The minimum number of digits to pad to
+     */
+    private static pad(num: number, digits: number = 2): string {
+        let result = "" + num;
+        while (result.length < digits) {
+            result = "0" + result;
+        }
+        return result;
+    }
+
     public constructor(props: HomeScreenClockProps) {
         super(props);
 
@@ -27,10 +44,11 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
 
     /**
      * Runs just before render().
-     * Update internal date initially, then schedule another update every second.
+     * Update internal date initially, then register a {@link TimerHandler} to handle minute rollover
      */
     public componentWillMount(): void {
-        this.updateInternalDate();
+        this.updateInternalDate(new Date());
+        AppTimer.Instance.on("second", this.updateInternalDate.bind(this));
     }
 
     public render(): ReactNode {
@@ -46,19 +64,9 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
     }
 
     /**
-     * Schedules a clock update when the system time advances to the next second.
-     */
-    private scheduleClockUpdate(): void {
-        const msUntilNextSecond: number = 1000 - (new Date()).getMilliseconds();
-        setTimeout(this.updateInternalDate.bind(this), msUntilNextSecond);
-    }
-
-    /**
      * Update the state using a `new Date()` as `now`.
      */
-    private updateInternalDate(): void {
-        const now: Date = new Date();
-
+    private updateInternalDate(now: Date): void {
         let hours: number = now.getHours();
         hours = hours <= 12 ? hours : (hours % 12);
 
@@ -66,24 +74,9 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
 
         this.setState({
             am_pm: isPm ? "PM" : "AM",
-            hours: this.pad(hours, 1),
-            minutes: this.pad(now.getMinutes(), 2)
-        }, () => { // state has been updated, schedule an update for the next second
-            this.scheduleClockUpdate();
+            hours: HomeScreenClock.pad(hours, 1),
+            minutes: HomeScreenClock.pad(now.getMinutes(), 2)
         });
-    }
-
-    /**
-     * Pads a number out into a string with a minimum number of digits.
-     * e.g. `_pad(2, 2) => '02'`, `_pad(12, 1) => '12'`
-     *
-     * @param num The number to pad
-     * @param digits The minimum number of digits to pad to
-     */
-    private pad(num: number, digits: number = 2): string {
-        let result = "" + num;
-        while (result.length < digits) { result = "0" + result; }
-        return result;
     }
 }
 

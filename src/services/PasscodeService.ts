@@ -1,4 +1,4 @@
-import {Service} from "../utils/Service";
+import { Service } from "../utils/Service";
 
 const PREF_NAME = "passcode";
 
