@@ -2,27 +2,21 @@ import React, { ReactNode } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps, StackActions } from "react-navigation";
-import { HeaderBackButton } from "../../components/HeaderBackButton";
-
-import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
 
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel } from "../../models/AlarmModel";
 import { ScheduleModel } from "../../models/ScheduleModel";
-import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
-// tslint:disable-next-line:no-empty-interface
 export interface EditScheduleScreenState {
     headerTitle: string;
     schedule?: ScheduleModel;
 }
 
-@HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()} />)
-@HeaderButtonRight((screen) =>
-    <HeaderAddButton onPress={() => screen.present("EditAlarm", { title: "Add Alarm" })} />)
-export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
+@BottomTabBarIcon("ios-alarm") @Title("Alarms")
+export default class ScheduleAlarmsScreen extends UIScreen<{}, EditScheduleScreenState> {
 
     private static padTime(time: number): string {
         return ("0" + time).slice(-2);
@@ -76,8 +70,8 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                     renderItem={({ item }) => (
                         <ListItem
                             onPress={this.onAlarmPressed.bind(this, item.key)}
-                            title={EditScheduleScreen.getAlarmTitle(item)}
-                            subtitle={EditScheduleScreen.getAlarmSubtitle(item)}
+                            title={ScheduleAlarmsScreen.getAlarmTitle(item)}
+                            subtitle={ScheduleAlarmsScreen.getAlarmSubtitle(item)}
                             rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                         />
                     )}
@@ -89,10 +83,6 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
 }
 
 const styles = StyleSheet.create({
-    cancelButton: {
-        color: Colors.appleButtonRed,
-        marginLeft: 10
-    },
     daySelector: {
         flexDirection: "row",
         justifyContent: "space-around"
