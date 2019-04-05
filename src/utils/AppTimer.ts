@@ -12,8 +12,10 @@ export type TimerHandlerMap = Map<string, TimerHandler[]>;
  * Various timer-related events that can be listened for.
  */
 export enum TimerEvent {
-    SECOND = "second",
     START = "start",
+    SECOND = "second",
+    MINUTE = "minute",
+    HOUR = "hour",
     STOP = "stop"
 }
 
@@ -21,7 +23,7 @@ export enum TimerEvent {
  * String representation of TimerEvents. Too verbose?
  * Prevents attaching to events that will never be fired.
  */
-export type TimerEventStr = "start" | "second" | "stop";
+export type TimerEventStr = "start" | "second" | "minute" | "hour" | "stop";
 
 /**
  * Timer service: fires {@link TimerEvent}s when appropriate.
@@ -46,6 +48,13 @@ export class AppTimer {
      * Can be undefined if no {@link NodeJS.Timeout} is scheduled for this {@TimerService} instance.
      */
     private timeout?: number = undefined;
+
+    /**
+     * The {@link Date} object representing the last time a timer tick happened.
+     *
+     * Updated on each tick.
+     */
+    private lastTick?: Date = undefined;
 
     /**
      * Getter for {@link NodeJS.Timeout} ID.
@@ -79,7 +88,7 @@ export class AppTimer {
      * Start this {@link AppTimer} instance.
      */
     public start() {
-        console.log("starting Timer service");
+        console.log("starting AppTimer");
         this.fireAll(TimerEvent.START);
         this.step();
     }
@@ -88,7 +97,7 @@ export class AppTimer {
      * Stop this {@link AppTimer} instance and clear its {@link NodeJS.Timeout}, if defined.
      */
     public stop() {
-        console.log("stopping Timer service");
+        console.log("stopping AppTimer");
         if (this.timeout) {
             clearTimeout(this.timeout);
             this.timeout = undefined;
@@ -119,13 +128,25 @@ export class AppTimer {
      * Handles a tick and schedules the next one using {@link scheduleNext}.
      */
     private step(fire?: boolean): void {
-        if (fire) {
-            const now: Date = new Date();
+        const now: Date = new Date();
 
+        if (fire && this.lastTick) {
             // fire events for this second
             this.fireAll(TimerEvent.SECOND, now);
+
+            // fire minute event if minute has rolled over
+            if (now.getMinutes() !== this.lastTick.getMinutes()) {
+                this.fireAll(TimerEvent.MINUTE, now);
+            }
+
+            // fire hour event if hour has rolled over
+            if (now.getHours() !== this.lastTick.getHours()) {
+                this.fireAll(TimerEvent.HOUR, now);
+            }
         }
 
+        // update lastTick and schedule next step
+        this.lastTick = now;
         this.scheduleNext();
     }
 

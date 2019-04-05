@@ -3,13 +3,21 @@ import { AppTimer } from "../AppTimer";
 
 let timer: AppTimer;
 
+function walkForward(step: number, numSteps: number) {
+    for (let i: number = 0; i < numSteps; i++) {
+        // increase mocked time by one second and advance timers
+        MockDate.set((i + 1) * step);
+        jest.advanceTimersByTime(step);
+    }
+}
+
 describe("TimerService", () => {
 
     jest.useFakeTimers();
 
     beforeEach(() => {
         MockDate.set(0);
-        timer = AppTimer.Instance;
+        timer = new AppTimer(); // directly instantiate, rather than using instance
     });
 
     afterEach(() => {
@@ -27,25 +35,30 @@ describe("TimerService", () => {
         expect(setTimeout).toHaveBeenCalledTimes(1);
     });
 
-    it("fires an event every second for a minute", () => {
-        const numSeconds: number = 60;
+    it("fires events at the proper times for a week", () => {
+        const numDays = 7;
+        const numHours = numDays * 24;
+        const numMinutes = numHours * 60;
+        const numSeconds = numMinutes * 60;
 
+        const onHour = jest.fn();
+        const onMinute = jest.fn();
         const onSecond = jest.fn();
+
+        timer.on("hour", onHour);
+        timer.on("minute", onMinute);
         timer.on("second", onSecond);
 
         timer.start();
-
-        // no events should fire on Start except for START
+        expect(onHour).not.toHaveBeenCalled();
+        expect(onMinute).not.toHaveBeenCalled();
         expect(onSecond).not.toHaveBeenCalled();
 
         const step: number = 1000;
+        walkForward(step, numSeconds);
 
-        for (let i: number = 0; i < numSeconds; i++) {
-            // increase mocked time by one second and advance timers
-            MockDate.set((i + 1) * step);
-            jest.advanceTimersByTime(step);
-        }
-
+        expect(onHour).toHaveBeenCalledTimes(numHours);
+        expect(onMinute).toHaveBeenCalledTimes(numMinutes);
         expect(onSecond).toHaveBeenCalledTimes(numSeconds);
     });
 
