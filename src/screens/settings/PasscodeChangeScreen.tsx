@@ -50,12 +50,12 @@ export default class PasscodeChangeScreen extends UIScreen<{}, PasscodeChangeScr
         this.dismiss();
     }
 
-    public setPasscode(passcode: string): void {
-        this.keyboardDidHideListener.remove();
-        console.debug("passcode set");
-
-        // TODO: logic for saving passcode
-    }
+    // public setPasscode(passcode: string): void {
+    //     this.keyboardDidHideListener.remove();
+    //     console.debug("passcode set");
+    //
+    //     // TODO: logic for saving passcode
+    // }
 
     public handleChangeText(passcode: string): void {
         this.setState({ errorText: this.defaultErrorText });
@@ -65,7 +65,7 @@ export default class PasscodeChangeScreen extends UIScreen<{}, PasscodeChangeScr
 
             if (this.state.isConfirming) {
                 if (passcode === this.state.passcode) {
-                    this.setPasscode(passcode);
+                    // this.setPasscode(passcode);
                     // this.dismiss();
                     this.props.navigation.dispatch(StackActions.replace({
                         routeName: "SettingsMain"
