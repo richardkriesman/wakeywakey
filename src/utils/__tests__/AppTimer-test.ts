@@ -35,65 +35,30 @@ describe("TimerService", () => {
         expect(setTimeout).toHaveBeenCalledTimes(1);
     });
 
-    it("fires an event every second for a minute", () => {
-        const numSeconds: number = 60;
-
-        const onSecond = jest.fn();
-        timer.on("second", onSecond);
-
-        timer.start();
-
-        // no events should fire on Start except for START
-        expect(onSecond).not.toHaveBeenCalled();
-
-        const step: number = 1000;
-        walkForward(step, numSeconds);
-
-        expect(onSecond).toHaveBeenCalledTimes(numSeconds);
-    });
-
-    it("fires an event every minute for an hour", () => {
-        const numMinutes: number = 60;
-
-        const onMinute = jest.fn();
-        timer.on("minute", onMinute);
-
-        timer.start();
-        expect(onMinute).not.toHaveBeenCalled();
-
-        const step: number = 1000 * 60; // 60-second step
-        walkForward(step, numMinutes);
-
-        expect(onMinute).toHaveBeenCalledTimes(numMinutes);
-    });
-
-    it("fires an event every hour for a day", () => {
-        const numHours = 24;
+    it("fires events at the proper times for a week", () => {
+        const numDays = 7;
+        const numHours = numDays * 24;
+        const numMinutes = numHours * 60;
+        const numSeconds = numMinutes * 60;
 
         const onHour = jest.fn();
+        const onMinute = jest.fn();
+        const onSecond = jest.fn();
+
         timer.on("hour", onHour);
+        timer.on("minute", onMinute);
+        timer.on("second", onSecond);
 
         timer.start();
         expect(onHour).not.toHaveBeenCalled();
-
-        const step: number = 1000 * 60 * 60; // 60-minute step
-        walkForward(step, numHours);
-
-        expect(onHour).toHaveBeenCalledTimes(numHours);
-    });
-
-    it("fires an event every second for a day", () => {
-        const numSeconds = 60 * 60 * 24; // 60 minutes in an hour, 24 hours in a day
-
-        const onSecond = jest.fn();
-        timer.on("second", onSecond);
-
-        timer.start();
+        expect(onMinute).not.toHaveBeenCalled();
         expect(onSecond).not.toHaveBeenCalled();
 
         const step: number = 1000;
         walkForward(step, numSeconds);
 
+        expect(onHour).toHaveBeenCalledTimes(numHours);
+        expect(onMinute).toHaveBeenCalledTimes(numMinutes);
         expect(onSecond).toHaveBeenCalledTimes(numSeconds);
     });
 
