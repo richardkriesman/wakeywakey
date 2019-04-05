@@ -3,13 +3,21 @@ import { AppTimer } from "../AppTimer";
 
 let timer: AppTimer;
 
+function walkForward(step: number, numSteps: number) {
+    for (let i: number = 0; i < numSteps; i++) {
+        // increase mocked time by one second and advance timers
+        MockDate.set((i + 1) * step);
+        jest.advanceTimersByTime(step);
+    }
+}
+
 describe("TimerService", () => {
 
     jest.useFakeTimers();
 
     beforeEach(() => {
         MockDate.set(0);
-        timer = AppTimer.Instance;
+        timer = new AppTimer(); // directly instantiate, rather than using instance
     });
 
     afterEach(() => {
@@ -39,12 +47,52 @@ describe("TimerService", () => {
         expect(onSecond).not.toHaveBeenCalled();
 
         const step: number = 1000;
+        walkForward(step, numSeconds);
 
-        for (let i: number = 0; i < numSeconds; i++) {
-            // increase mocked time by one second and advance timers
-            MockDate.set((i + 1) * step);
-            jest.advanceTimersByTime(step);
-        }
+        expect(onSecond).toHaveBeenCalledTimes(numSeconds);
+    });
+
+    it("fires an event every minute for an hour", () => {
+        const numMinutes: number = 60;
+
+        const onMinute = jest.fn();
+        timer.on("minute", onMinute);
+
+        timer.start();
+        expect(onMinute).not.toHaveBeenCalled();
+
+        const step: number = 1000 * 60; // 60-second step
+        walkForward(step, numMinutes);
+
+        expect(onMinute).toHaveBeenCalledTimes(numMinutes);
+    });
+
+    it("fires an event every hour for a day", () => {
+        const numHours = 24;
+
+        const onHour = jest.fn();
+        timer.on("hour", onHour);
+
+        timer.start();
+        expect(onHour).not.toHaveBeenCalled();
+
+        const step: number = 1000 * 60 * 60; // 60-minute step
+        walkForward(step, numHours);
+
+        expect(onHour).toHaveBeenCalledTimes(numHours);
+    });
+
+    it("fires an event every second for a day", () => {
+        const numSeconds = 60 * 60 * 24; // 60 minutes in an hour, 24 hours in a day
+
+        const onSecond = jest.fn();
+        timer.on("second", onSecond);
+
+        timer.start();
+        expect(onSecond).not.toHaveBeenCalled();
+
+        const step: number = 1000;
+        walkForward(step, numSeconds);
 
         expect(onSecond).toHaveBeenCalledTimes(numSeconds);
     });
