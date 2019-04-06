@@ -38,5 +38,12 @@
     "babel.config.js",
     "coverage"
   ],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "typedocOptions": {
+    "exclude": [ "**/__tests__/*" ],
+    "excludeNotExported": true,
+    "mode": "modules",
+    "name": "WakeyWakey",
+    "out": "docs"
+  }
 }
