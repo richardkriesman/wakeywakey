@@ -36,7 +36,8 @@
     "jest.config.js",
     "App.js",
     "babel.config.js",
-    "coverage"
+    "coverage",
+    "docs"
   ],
   "compileOnSave": false,
   "typedocOptions": {
