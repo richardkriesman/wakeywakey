@@ -41,6 +41,7 @@
   ],
   "compileOnSave": false,
   "typedocOptions": {
+    "disableOutputCheck": true,
     "exclude": [ "**/__tests__/*" ],
     "excludeNotExported": true,
     "mode": "modules",

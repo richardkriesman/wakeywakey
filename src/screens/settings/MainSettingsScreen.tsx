@@ -1,3 +1,7 @@
+/**
+ * @module screens
+ */
+
 import React, { ReactNode } from "react";
 import { SectionList } from "react-native";
 import { NavigationScreenProps, StackActions } from "react-navigation";

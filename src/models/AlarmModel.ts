@@ -1,3 +1,7 @@
+/**
+ * @module models
+ */
+
 export enum DayOfWeek {
     Monday = "M",
     Tuesday = "Tu",

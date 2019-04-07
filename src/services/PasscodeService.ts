@@ -1,3 +1,7 @@
+/**
+ * @module services
+ */
+
 import { Service } from "../utils/Service";
 
 const PREF_NAME = "passcode";

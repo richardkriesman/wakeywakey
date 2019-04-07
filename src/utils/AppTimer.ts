@@ -1,4 +1,8 @@
 /**
+ * @module utils
+ */
+
+/**
  * A function to execute when a {@link TimerEvent} fires.
  */
 export type TimerHandler = (d?: Date) => void;

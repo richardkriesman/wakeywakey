@@ -1,5 +1,9 @@
-import React, {ReactNode} from "react";
-import {Animated, StyleSheet, TouchableWithoutFeedback, View} from "react-native";
+/**
+ * @module components
+ */
+
+import React, { ReactNode } from "react";
+import { Animated, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import Colors from "../constants/Colors";
 
 export interface ToggleButtonProps {

@@ -1,3 +1,7 @@
+/**
+ * @module components
+ */
+
 import React, { ReactNode } from "react";
 import { Icon, ListItem } from "react-native-elements";
 

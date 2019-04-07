@@ -1,11 +1,15 @@
-import React, {ReactNode} from "react";
-import {SafeAreaView, StyleSheet} from "react-native";
+/**
+ * @module utils
+ */
+
+import React, { ReactNode } from "react";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
 import { Service } from "../Service";
 
 export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & NavigationScreenProps, S> {
-    public static navigationOptions = ({navigation}: NavigationScreenProps) => ({
+    public static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
         title: navigation.getParam("title", "Untitled")
     })
 

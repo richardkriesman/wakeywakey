@@ -1,3 +1,7 @@
+/**
+ * @module models
+ */
+
 import { ScheduleListItem } from "../components/MainSettingsScreen/ScheduleListItem";
 import { AlarmModel } from "./AlarmModel";
 

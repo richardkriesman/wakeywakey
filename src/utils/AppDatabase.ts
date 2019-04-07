@@ -1,3 +1,7 @@
+/**
+ * @module utils
+ */
+
 import {FileSystem, SQLite} from "expo";
 
 const DATABASE_NAME: string = "app";

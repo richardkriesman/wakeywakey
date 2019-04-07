@@ -5,8 +5,6 @@
     "build": "yarn clean && yarn tsc",
     "build:docs": "typedoc ./src",
     "clean": "rimraf build",
-    "clean:docs": "rimraf docs",
-    "docs": "yarn run clean:docs && yarn run build:docs",
     "serve-docs": "python -m http.server 3000",
     "start": "concurrently --restart-tries 100 -i --default-input-target 0 \"expo start -c\" \"yarn watch\"",
     "start:tunnel": "concurrently \"expo start --tunnel -c\" \"yarn watch\"",
@@ -49,6 +47,7 @@
     "rimraf": "^2.6.3",
     "tslint": "^5.13.0",
     "typedoc": "^0.14.2",
+    "typedoc-plugin-external-module-name": "^2.0.0",
     "typescript": "^3.3.3333"
   },
   "private": true

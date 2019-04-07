@@ -1,3 +1,7 @@
+/**
+ * @module app
+ */
+
 import { AppLoading, Font } from "expo";
 import React, { ReactNode } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
