@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TabBarIcon matches snapshot focused 1`] = `<Text />`;
+
+exports[`TabBarIcon matches snapshot unfocused 1`] = `<Text />`;
