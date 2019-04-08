@@ -98,7 +98,7 @@ exports[`actions should toggle on 1`] = `
 </View>
 `;
 
-exports[`rendering initially off 1`] = `
+exports[`rendering should match snapshots matches, initially off 1`] = `
 <View
   style={
     Array [
@@ -147,7 +147,7 @@ exports[`rendering initially off 1`] = `
 </View>
 `;
 
-exports[`rendering initially on 1`] = `
+exports[`rendering should match snapshots matches, initially on 1`] = `
 <View
   style={
     Array [

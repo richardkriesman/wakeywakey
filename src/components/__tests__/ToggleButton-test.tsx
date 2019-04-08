@@ -2,25 +2,40 @@ import React from "react";
 import "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import renderer from "react-test-renderer";
-import { ToggleButton } from "../ToggleButton";
+import { ToggleButton, ToggleButtonProps } from "../ToggleButton";
 
-const buttonTitle: string = "OwO";
+const createTestProps = (isToggled: boolean) => ({ isToggled, title: "OwO" });
+const propsOn: ToggleButtonProps = createTestProps(true);
+const propsOff: ToggleButtonProps = createTestProps(false);
 
 describe("rendering", () => {
+
     it("should render the title", () => {
-        const tree = renderer.create(<ToggleButton title={buttonTitle}/>);
-        expect(tree.root.props.title).toBe(buttonTitle);
+        const tree = renderer.create(<ToggleButton {...propsOff} />);
+        expect(tree.root.props.title).toBe(propsOn.title);
         expect(tree.toJSON()).toMatchSnapshot();
     });
 
-    it("initially off", () => {
-        const tree = renderer.create(<ToggleButton title={buttonTitle}/>).toJSON();
-        expect(tree).toMatchSnapshot();
+    describe("should match snapshots", () => {
+        it("matches, initially on", () => {
+            const tree = renderer.create(<ToggleButton {...propsOn}/>);
+            expect(tree.toJSON()).toMatchSnapshot();
+        });
+
+        it("matches, initially off", () => {
+            const tree = renderer.create(<ToggleButton {...propsOff}/>);
+            expect(tree.toJSON()).toMatchSnapshot();
+        });
     });
 
-    it("initially on", () => {
-        const tree = renderer.create(<ToggleButton title={buttonTitle} isToggled/>).toJSON();
-        expect(tree).toMatchSnapshot();
+    describe("should have fields set correctly", () => {
+        it("sets isToggled properly", () => {
+            const buttonOn = new ToggleButton(propsOn);
+            expect(buttonOn.isToggled).toBe(true);
+
+            const buttonOff = new ToggleButton(propsOff);
+            expect(buttonOff.isToggled).toBe(false);
+        });
     });
 });
 
@@ -45,13 +60,13 @@ describe("actions", () => {
     });
 
     it("should toggle on", () => {
-        const tree = renderer.create(<ToggleButton title={buttonTitle}/>);
+        const tree = renderer.create(<ToggleButton {...propsOff}/>);
         tree.root.findByType(TouchableWithoutFeedback).props.onPress();
         expect(tree).toMatchSnapshot();
     });
 
     it("should toggle off", () => {
-        const tree = renderer.create(<ToggleButton title={buttonTitle} isToggled/>);
+        const tree = renderer.create(<ToggleButton {...propsOn}/>);
         tree.root.findByType(TouchableWithoutFeedback).props.onPress();
         expect(tree).toMatchSnapshot();
     });
