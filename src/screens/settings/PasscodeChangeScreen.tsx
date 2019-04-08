@@ -1,9 +1,13 @@
 import React, { ReactNode } from "react";
-import { Keyboard, StyleSheet, Text, TextInput, View } from "react-native";
-import { NavigationActions, NavigationScreenProps, StackActions } from "react-navigation";
+import { StyleSheet, View } from "react-native";
+import { NavigationScreenProps, StackActions } from "react-navigation";
 
 import { PasscodeInput } from "../../components/PasscodeInput";
+import { PasscodeService } from "../../services/PasscodeService";
+import * as Log from "../../utils/Log";
 import { NoHeader, UIScreen } from "../../utils/screen";
+
+const PASSCODE_LOG_TAG: string = "Security";
 
 @NoHeader
 export default class PasscodeChangeScreen extends UIScreen<{}, {}> {
@@ -14,8 +18,14 @@ export default class PasscodeChangeScreen extends UIScreen<{}, {}> {
 
     // handles passcodeinput success
     public handleSuccess(passcode: string): void {
-
-        // TODO: set passcode logic here
+        this.getService(PasscodeService).setPasscode(passcode) // set the passcode in the database
+            .then(() => { // passcode was set, dismiss the screen
+                this.dismiss();
+            })
+            .catch((err) => { // error occurred, log it
+                Log.error(PASSCODE_LOG_TAG, "Failed to update user passcode");
+                Log.error(PASSCODE_LOG_TAG, err);
+            });
 
         this.props.navigation.dispatch(StackActions.replace({
             routeName: "SettingsMain"
