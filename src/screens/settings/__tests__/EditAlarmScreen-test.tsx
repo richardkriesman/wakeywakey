@@ -1,6 +1,6 @@
 import * as React from "react";
 import renderer from "react-test-renderer";
-import { createNavigationMock } from "../../../utils/testUtils";
+import { createNavigationMock } from "../../../utils/TestUtils";
 import EditAlarmScreen from "../EditAlarmScreen";
 
 it("renders correctly", () => {
