@@ -1,3 +1,7 @@
+/**
+ * @module constants
+ */
+
 const tintColor = "#2f95dc";
 
 const appleButtonBlue = "#007aff";

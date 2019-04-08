@@ -1,4 +1,8 @@
-import React, {ReactNode} from "react";
+/**
+ * @module components
+ */
+
+import React, { ReactNode } from "react";
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
 

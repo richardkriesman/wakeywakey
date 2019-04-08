@@ -1,3 +1,7 @@
+/**
+ * @module screens
+ */
+
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";

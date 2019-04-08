@@ -1,3 +1,7 @@
+/**
+ * @module components
+ */
+
 import React, { ReactNode } from "react";
 import { StyleSheet } from "react-native";
 import { ListItem } from "react-native-elements";

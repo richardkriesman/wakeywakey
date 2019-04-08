@@ -1,6 +1,10 @@
+/**
+ * @module utils
+ */
+
 import * as React from "react";
 import { NavigationScreenProps } from "react-navigation";
-import TabBarIcon from "../../components/TabBarIcon";
+import { TabBarIcon } from "../../components";
 import { UIScreen } from "./UIScreen";
 
 declare type NavigationOptionSetter<T> = (screen: UIScreen) => T;

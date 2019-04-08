@@ -36,7 +36,16 @@
     "jest.config.js",
     "App.js",
     "babel.config.js",
-    "coverage"
+    "coverage",
+    "docs"
   ],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "typedocOptions": {
+    "disableOutputCheck": true,
+    "exclude": [ "**/__tests__/*" ],
+    "excludeNotExported": true,
+    "mode": "modules",
+    "name": "WakeyWakey",
+    "out": "docs"
+  }
 }

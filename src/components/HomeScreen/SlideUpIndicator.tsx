@@ -1,5 +1,9 @@
+/**
+ * @module components
+ */
+
 import React, { ReactNode } from "react";
-import { StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 import { Button, Icon } from "react-native-elements";
 

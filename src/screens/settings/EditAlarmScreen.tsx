@@ -1,7 +1,11 @@
+/**
+ * @module screens
+ */
+
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, ListItem, Text } from "react-native-elements";
-import { NavigationScreenProps} from "react-navigation";
+import { NavigationScreenProps } from "react-navigation";
 import { HeaderBackButton } from "../../components/HeaderBackButton";
 
 import { ToggleButton } from "../../components/ToggleButton";
@@ -16,9 +20,9 @@ export interface EditAlarmScreenState {
     alarm?: AlarmModel;
 }
 
-@HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()} />)
+@HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()}/>)
 @HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
-                                       onPress={() => screen.dismiss()} />)
+                                       onPress={() => screen.dismiss()}/>)
 export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
 
     public constructor(props: NavigationScreenProps) {

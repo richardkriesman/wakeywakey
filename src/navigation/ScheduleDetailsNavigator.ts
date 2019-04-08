@@ -1,3 +1,7 @@
+/**
+ * @module navigation
+ */
+
 import { BottomTabNavigatorConfig, createBottomTabNavigator } from "react-navigation";
 
 import ScheduleAlarmsScreen from "../screens/settings/ScheduleAlarmsScreen";

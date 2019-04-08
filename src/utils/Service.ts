@@ -1,4 +1,8 @@
-import {AppDatabase} from "./AppDatabase";
+/**
+ * @module services
+ */
+
+import { AppDatabase } from "./AppDatabase";
 
 export abstract class Service {
 

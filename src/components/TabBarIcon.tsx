@@ -1,3 +1,7 @@
+/**
+ * @module components
+ */
+
 import { Icon } from "expo";
 import React, { ReactNode } from "react";
 
@@ -8,7 +12,7 @@ export interface TabBarIconProps {
     focused: boolean;
 }
 
-export default class TabBarIcon extends React.Component<TabBarIconProps> {
+export class TabBarIcon extends React.Component<TabBarIconProps> {
     public render(): ReactNode {
         return (
             <Icon.Ionicons
