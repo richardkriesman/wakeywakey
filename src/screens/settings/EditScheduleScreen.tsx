@@ -2,8 +2,8 @@ import React, { ReactNode } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps, StackActions } from "react-navigation";
-import { HeaderBackButton } from "../../components/HeaderBackButton";
 
+import { HeaderBackButton } from "../../components/HeaderBackButton";
 import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
 
 import Colors from "../../constants/Colors";
@@ -13,7 +13,8 @@ import { ScheduleModel } from "../../models/ScheduleModel";
 import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
-// tslint:disable-next-line:no-empty-interface
+import AlarmUtils from "../../utils/AlarmUtils";
+
 export interface EditScheduleScreenState {
     headerTitle: string;
     schedule?: ScheduleModel;
@@ -23,26 +24,6 @@ export interface EditScheduleScreenState {
 @HeaderButtonRight((screen) =>
     <HeaderAddButton onPress={() => screen.present("EditAlarm", { title: "Add Alarm" })} />)
 export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
-
-    private static padTime(time: number): string {
-        return ("0" + time).slice(-2);
-    }
-
-    private static formatTime(date: Date): string {
-        return `${this.padTime(date.getHours())}:${this.padTime(date.getMinutes())}`;
-    }
-
-    // noinspection JSUnusedLocalSymbols
-    private static getAlarmTitle(alarm: AlarmModel): string {
-        const start = this.formatTime(alarm.sleepTime);
-        const end = this.formatTime(alarm.getUpTime);
-        return `${start} – ${end}`;
-    }
-
-    // noinspection JSUnusedLocalSymbols
-    private static getAlarmSubtitle(alarm: AlarmModel): string {
-        return alarm.days.join(", ");
-    }
 
     public constructor(props: NavigationScreenProps) {
         super(props);
@@ -76,8 +57,8 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                     renderItem={({ item }) => (
                         <ListItem
                             onPress={this.onAlarmPressed.bind(this, item.key)}
-                            title={EditScheduleScreen.getAlarmTitle(item)}
-                            subtitle={EditScheduleScreen.getAlarmSubtitle(item)}
+                            title={AlarmUtils.getAlarmTitle(item)}
+                            subtitle={AlarmUtils.getAlarmSubtitle(item)}
                             rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                         />
                     )}

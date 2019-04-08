@@ -1,11 +1,13 @@
-import {ReactTestInstance} from "react-test-renderer";
+import { ReactTestInstance } from "react-test-renderer";
 
 /**
  * Creates a new mock object for react-navigation's navigation object.
  */
 export function createNavigationMock(): any {
     return {
+        dispatch: jest.fn(),
         getParam: jest.fn(),
+        navigate: jest.fn(),
         navigation: jest.fn(),
         setParams: jest.fn()
     };
@@ -20,7 +22,7 @@ export function createNavigationMock(): any {
  * @param node The root node of the component tree
  * @param id The test ID to search for
  */
-export function findComponentWithTestId(node: ReactTestInstance, id: string): ReactTestInstance|null {
+export function findComponentWithTestId(node: ReactTestInstance, id: string): ReactTestInstance | null {
     if (node.props && node.props.testID === id) { // current node is the component we want
         return node;
     }
