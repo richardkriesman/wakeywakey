@@ -35,16 +35,16 @@ export interface SettingsListItemProps {
  * @author Shawn Lutch, Miika Raina
  */
 @HeaderButtonRight((screen) =>
-    <HeaderAddButton onPress={() => screen.present("EditSchedule", { title: "Add Schedule" })} />)
+    <HeaderAddButton onPress={() => screen.present("EditSchedule", { title: "Add Schedule" })}/>)
 export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
 
     public constructor(props: NavigationScreenProps) {
         super(props);
+        this.state = { schedules: testSchedulesList };
     }
 
     public componentWillMount(): void {
         // TODO properly load schedules from disk
-        this.setState({ schedules: testSchedulesList });
     }
 
     public onScheduleItemToggled(key: number, newEnabled: boolean): void {
@@ -55,7 +55,10 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
             newSchedules.forEach((s: ScheduleModel) => {
                 if (s.key !== key) {
                     s.enabled = false;
-                    s.listItemRef.forceEnabled(false);
+
+                    if (s.listItemRef) {
+                        s.listItemRef.forceEnabled(false);
+                    }
                 }
             });
         }
