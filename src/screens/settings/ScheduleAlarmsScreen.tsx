@@ -1,46 +1,29 @@
-/**
- * @module screens
- */
-
 import React, { ReactNode } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps, StackActions } from "react-navigation";
 
+import { HeaderBackButton } from "../../components/HeaderBackButton";
+import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
+
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel } from "../../models/AlarmModel";
 import { ScheduleModel } from "../../models/ScheduleModel";
-import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
+import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
+
+import AlarmUtils from "../../utils/AlarmUtils";
 
 export interface EditScheduleScreenState {
     headerTitle: string;
     schedule?: ScheduleModel;
 }
 
-@BottomTabBarIcon("ios-alarm") @Title("Alarms")
-export default class ScheduleAlarmsScreen extends UIScreen<{}, EditScheduleScreenState> {
-
-    private static padTime(time: number): string {
-        return ("0" + time).slice(-2);
-    }
-
-    private static formatTime(date: Date): string {
-        return `${this.padTime(date.getHours())}:${this.padTime(date.getMinutes())}`;
-    }
-
-    // noinspection JSUnusedLocalSymbols
-    private static getAlarmTitle(alarm: AlarmModel): string {
-        const start = this.formatTime(alarm.sleepTime);
-        const end = this.formatTime(alarm.getUpTime);
-        return `${start} – ${end}`;
-    }
-
-    // noinspection JSUnusedLocalSymbols
-    private static getAlarmSubtitle(alarm: AlarmModel): string {
-        return alarm.days.join(", ");
-    }
+@HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()} />)
+@HeaderButtonRight((screen) =>
+    <HeaderAddButton onPress={() => screen.present("EditAlarm", { title: "Add Alarm" })} />)
+export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
 
     public constructor(props: NavigationScreenProps) {
         super(props);
@@ -74,8 +57,8 @@ export default class ScheduleAlarmsScreen extends UIScreen<{}, EditScheduleScree
                     renderItem={({ item }) => (
                         <ListItem
                             onPress={this.onAlarmPressed.bind(this, item.key)}
-                            title={ScheduleAlarmsScreen.getAlarmTitle(item)}
-                            subtitle={ScheduleAlarmsScreen.getAlarmSubtitle(item)}
+                            title={AlarmUtils.getAlarmTitle(item)}
+                            subtitle={AlarmUtils.getAlarmSubtitle(item)}
                             rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                         />
                     )}
@@ -87,6 +70,10 @@ export default class ScheduleAlarmsScreen extends UIScreen<{}, EditScheduleScree
 }
 
 const styles = StyleSheet.create({
+    cancelButton: {
+        color: Colors.appleButtonRed,
+        marginLeft: 10
+    },
     daySelector: {
         flexDirection: "row",
         justifyContent: "space-around"

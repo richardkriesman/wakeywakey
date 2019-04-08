@@ -1,21 +1,14 @@
-/**
- * @module components
- */
-
 import React, { ReactNode } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
 import { Text } from "react-native";
-import { AppTimer } from "../../utils/AppTimer";
 
 interface HomeScreenClockProps {
     wrapperStyle?: ViewStyle;
 }
 
 interface HomeScreenClockState {
-    hours: string;
-    minutes: string;
-    am_pm: string;
+    date?: Date;
 }
 
 /**
@@ -26,8 +19,35 @@ interface HomeScreenClockState {
 export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeScreenClockState> {
 
     /**
+     * Get the number of hours past midnight
+     */
+    public get hours(): number {
+        return this.state.date.getHours();
+    }
+
+    /**
+     * Get the number of minutes since the last hour rollover
+     */
+    public get minutes(): number {
+        return this.state.date.getMinutes();
+    }
+
+    /**
+     * Get a 12-hour formatted time string - HH:mm xx
+     */
+    public get timeString(): string {
+        let hours = this.hours;
+        const ampm = this.hours >= 12 ? "pm" : "am";
+
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+
+        return `${HomeScreenClock.pad(hours)}:${HomeScreenClock.pad(this.minutes)} ${ampm}`;
+    }
+
+    /**
      * Pads a number out into a string with a minimum number of digits.
-     * e.g. `_pad(2, 2) => '02'`, `_pad(12, 1) => '12'`
+     * e.g. `pad(2, 2) => '02'`, `pad(12, 1) => '12'`
      *
      * @param num The number to pad
      * @param digits The minimum number of digits to pad to
@@ -39,28 +59,30 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
         }
         return result;
     }
-
     public constructor(props: HomeScreenClockProps) {
         super(props);
 
-        this.state = { hours: "", minutes: "", am_pm: "" };
+        this.state = { date: new Date() };
     }
 
     /**
      * Runs just before render().
-     * Update internal date initially, then register a {@link TimerHandler} to handle minute rollover
+     * Update internal date initially, then schedule another update every second.
      */
     public componentWillMount(): void {
-        this.updateInternalDate(new Date());
-        AppTimer.Instance.on("second", this.updateInternalDate.bind(this));
+        this.updateInternalDate();
     }
 
+    /**
+     * Rendering method.
+     * Runs initially after componentWillMount(), and then again anytime the state changes.
+     */
     public render(): ReactNode {
         return (
             <View style={this.props.wrapperStyle}>
                 <View style={styles.innerWrapper}>
                     <Text style={styles.clockText}>
-                        {this.state.hours}:{this.state.minutes} {this.state.am_pm}
+                        {this.timeString}
                     </Text>
                 </View>
             </View>
@@ -68,18 +90,32 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
     }
 
     /**
+     * Set the date displayed on the clock. Changes state, so render() will be called again as a result.
+     * @param date The date to display on the clock
+     * @param callback Callback passed to setState()
+     */
+    public setDate(date: Date, callback: () => void): void {
+        this.setState({ date }, callback);
+    }
+
+    /**
+     * Schedules a clock update when the system time advances to the next second.
+     * TODO will become obsolete once timer service is implemented -sL 3/26
+     */
+    private scheduleClockUpdate(): void {
+        const msUntilNextSecond: number = 1000 - (new Date()).getMilliseconds();
+        setTimeout(this.updateInternalDate.bind(this), msUntilNextSecond);
+    }
+
+    /**
      * Update the state using a `new Date()` as `now`.
      */
-    private updateInternalDate(now: Date): void {
-        let hours: number = now.getHours();
-        hours = hours <= 12 ? hours : (hours % 12);
+    private updateInternalDate(): void {
+        // TODO needs to come from timer service once that's implemented -sL 3/26
+        const now: Date = new Date();
 
-        const isPm: boolean = now.getHours() >= 12;
-
-        this.setState({
-            am_pm: isPm ? "PM" : "AM",
-            hours: HomeScreenClock.pad(hours, 1),
-            minutes: HomeScreenClock.pad(now.getMinutes(), 2)
+        this.setDate(now, () => {
+            this.scheduleClockUpdate();
         });
     }
 }
