@@ -49,7 +49,7 @@ exports[`HeaderBackButton renders correctly 1`] = `
           }
         }
       >
-        Back
+        Test Button
       </Text>
     </View>
   </View>

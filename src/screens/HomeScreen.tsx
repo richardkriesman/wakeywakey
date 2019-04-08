@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationScreenProps } from "react-navigation";
-import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
+import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -43,11 +43,11 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
             <View style={ExtraStyles.container}>
                 <View style={ExtraStyles.contentWrapper}>
                     <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
-                    <Clock wrapperStyle={ExtraStyles.clockWrapper} />
-                    <SnoozeButton onPress={this.onSnoozePressed.bind(this)} />
+                    <Clock wrapperStyle={ExtraStyles.clockWrapper}/>
+                    <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
                 </View>
                 <View style={ExtraStyles.bottom}>
-                    <SlideUpIndicator onPress={this.switchToSettings.bind(this)} />
+                    <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
                 </View>
             </View>
         );

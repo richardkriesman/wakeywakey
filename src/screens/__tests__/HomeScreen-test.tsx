@@ -52,7 +52,6 @@ describe("screen instance methods", () => {
 
         // check that everything was called correctly
         expect(setState).toBeCalled();
-        expect(instance.props.navigation.navigate).toBeCalledWith("SettingsMain");
     });
 
     it("snoozes the alarm", () => {

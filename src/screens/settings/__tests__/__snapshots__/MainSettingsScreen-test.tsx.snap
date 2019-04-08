@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders properly 1`] = `null`;
+exports[`renders properly 1`] = `
+<RCTSafeAreaView
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+/>
+`;
