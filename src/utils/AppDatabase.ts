@@ -3,8 +3,10 @@
  */
 
 import {FileSystem, SQLite} from "expo";
+import * as Log from "./Log";
 
 const DATABASE_NAME: string = "app";
+const DATABASE_LOG_TAG: string = "Database";
 
 export class AppDatabase {
 
@@ -34,7 +36,7 @@ export class AppDatabase {
 
     private constructor() {
         this.db = SQLite.openDatabase(DATABASE_NAME);
-        console.debug(`Opened database at ${FileSystem.documentDirectory}SQLite/${DATABASE_NAME}`);
+        Log.info(DATABASE_LOG_TAG, `Opened database at ${FileSystem.documentDirectory}SQLite/${DATABASE_NAME}`);
     }
 
     /**
@@ -67,7 +69,14 @@ export class AppDatabase {
             WHERE
                 name = ?
         `, [key]);
-        return result.rows.length > 0 ? result.rows.item(0).value : null;
+        if (result.rows.length > 0) {
+            const value: string = result.rows.item(0).value;
+            Log.info(DATABASE_LOG_TAG, `GET ${key}: ${value}`);
+            return value;
+        } else {
+            Log.info(DATABASE_LOG_TAG, `GET ${key}: (null)`);
+            return null;
+        }
     }
 
     /**
@@ -106,6 +115,7 @@ export class AppDatabase {
             VALUES
                 (?, ?);
         `, [key, value]);
+        Log.info(DATABASE_LOG_TAG, `SET ${key}: ${value}`);
     }
 
 }

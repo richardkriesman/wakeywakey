@@ -4,10 +4,11 @@
 
 import { AppLoading, Font } from "expo";
 import React, { ReactNode } from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
+import {ErrorHandlerCallback, Platform, StatusBar, StyleSheet, View} from "react-native";
 
 import AppNavigator from "./navigation/AppNavigator";
 import AppTimer from "./utils/AppTimer";
+import * as Log from "./utils/Log";
 
 export interface AppProps {
     skipLoadingScreen?: boolean;
@@ -30,6 +31,8 @@ export default class App extends React.Component<AppProps, AppState> {
         // reporting service, for example Sentry
         console.warn(error);
     }
+
+    private defaultErrorHandler: ErrorHandlerCallback;
 
     public constructor(props: AppProps) {
         super(props);
@@ -63,7 +66,22 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     private handleFinishLoading(): void {
+
+        // intercept global errors
+        this.defaultErrorHandler = ErrorUtils.getGlobalHandler();
+        ErrorUtils.setGlobalHandler(this.onGlobalError);
+
+        // loading is complete, render the main screen
         this.setState({ isLoadingComplete: true });
+    }
+
+    private onGlobalError(error: Error, isFatal: boolean): void {
+        if (isFatal) {
+            Log.critical("Global", error);
+        } else {
+            Log.error("Global", error);
+        }
+        this.defaultErrorHandler(error, isFatal);
     }
 }
 
