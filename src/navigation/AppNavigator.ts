@@ -2,6 +2,9 @@
  * @module navigation
  */
 
+// i give up. sL
+/* istanbul ignore file */
+
 import { createAppContainer } from "react-navigation";
 
 import MainStackNavigator from "./MainStackNavigator";
