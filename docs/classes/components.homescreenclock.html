@@ -38,8 +38,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -121,6 +119,14 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="components.homescreenclock.html#hours" class="tsd-kind-icon">hours</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="components.homescreenclock.html#minutes" class="tsd-kind-icon">minutes</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="components.homescreenclock.html#timestring" class="tsd-kind-icon">time<wbr>String</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="components.homescreenclock.html#unsafe_componentwillmount" class="tsd-kind-icon">UNSAFE_<wbr>component<wbr>Will<wbr>Mount</a></li>
@@ -136,6 +142,8 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="components.homescreenclock.html#forceupdate" class="tsd-kind-icon">force<wbr>Update</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="components.homescreenclock.html#getsnapshotbeforeupdate" class="tsd-kind-icon">get<wbr>Snapshot<wbr>Before<wbr>Update</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="components.homescreenclock.html#render" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="components.homescreenclock.html#scheduleclockupdate" class="tsd-kind-icon">schedule<wbr>Clock<wbr>Update</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="components.homescreenclock.html#setdate" class="tsd-kind-icon">set<wbr>Date</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited"><a href="components.homescreenclock.html#setstate" class="tsd-kind-icon">set<wbr>State</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="components.homescreenclock.html#shouldcomponentupdate" class="tsd-kind-icon">should<wbr>Component<wbr>Update</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="components.homescreenclock.html#updateinternaldate" class="tsd-kind-icon">update<wbr>Internal<wbr>Date</a></li>
@@ -158,7 +166,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Component.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/43062d5/src/components/HomeScreen/HomeScreenClock.tsx#L41">components/HomeScreen/HomeScreenClock.tsx:41</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L65">components/HomeScreen/HomeScreenClock.tsx:65</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -280,6 +288,75 @@ class Foo extends React.Component {
 							</dd>
 						</dl>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="hours" class="tsd-anchor"></a>
+					<h3>hours</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> hours<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L28">components/HomeScreen/HomeScreenClock.tsx:28</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the number of hours past midnight</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="minutes" class="tsd-anchor"></a>
+					<h3>minutes</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> minutes<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L35">components/HomeScreen/HomeScreenClock.tsx:35</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the number of minutes since the last hour rollover</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="timestring" class="tsd-anchor"></a>
+					<h3>time<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> timeString<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L42">components/HomeScreen/HomeScreenClock.tsx:42</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a 12-hour formatted time string - HH:mm xx</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -524,13 +601,13 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Overrides DeprecatedLifecycle.componentWillMount</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/43062d5/src/components/HomeScreen/HomeScreenClock.tsx#L53">components/HomeScreen/HomeScreenClock.tsx:53</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L76">components/HomeScreen/HomeScreenClock.tsx:76</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Runs just before render().
-									Update internal date initially, then register a <a href="../modules/utils.html#timerhandler">TimerHandler</a> to handle minute rollover</p>
+									Update internal date initially, then schedule another update every second.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -744,10 +821,88 @@ class Foo extends React.Component {
 							<aside class="tsd-sources">
 								<p>Overrides Component.render</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/43062d5/src/components/HomeScreen/HomeScreenClock.tsx#L58">components/HomeScreen/HomeScreenClock.tsx:58</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L84">components/HomeScreen/HomeScreenClock.tsx:84</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Rendering method.
+									Runs initially after componentWillMount(), and then again anytime the state changes.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReactNode</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="scheduleclockupdate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> schedule<wbr>Clock<wbr>Update</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">schedule<wbr>Clock<wbr>Update<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L109">components/HomeScreen/HomeScreenClock.tsx:109</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Schedules a clock update when the system time advances to the next second.
+									TODO will become obsolete once timer service is implemented -sL 3/26</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setdate" class="tsd-anchor"></a>
+					<h3>set<wbr>Date</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Date<span class="tsd-signature-symbol">(</span>date<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L101">components/HomeScreen/HomeScreenClock.tsx:101</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set the date displayed on the clock. Changes state, so render() will be called again as a result.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>date: <span class="tsd-signature-type">Date</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The date to display on the clock</p>
+									</div>
+								</li>
+								<li>
+									<h5>callback: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Callback passed to setState()</p>
+									</div>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -840,13 +995,13 @@ class Foo extends React.Component {
 					<a name="updateinternaldate" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> update<wbr>Internal<wbr>Date</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>Internal<wbr>Date<span class="tsd-signature-symbol">(</span>now<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Internal<wbr>Date<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/43062d5/src/components/HomeScreen/HomeScreenClock.tsx#L73">components/HomeScreen/HomeScreenClock.tsx:73</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L117">components/HomeScreen/HomeScreenClock.tsx:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -854,12 +1009,6 @@ class Foo extends React.Component {
 									<p>Update the state using a <code>new Date()</code> as <code>now</code>.</p>
 								</div>
 							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>now: <span class="tsd-signature-type">Date</span></h5>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -874,13 +1023,13 @@ class Foo extends React.Component {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/43062d5/src/components/HomeScreen/HomeScreenClock.tsx#L35">components/HomeScreen/HomeScreenClock.tsx:35</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/components/HomeScreen/HomeScreenClock.tsx#L59">components/HomeScreen/HomeScreenClock.tsx:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Pads a number out into a string with a minimum number of digits.
-									e.g. <code>_pad(2, 2) =&gt; &#39;02&#39;</code>, <code>_pad(12, 1) =&gt; &#39;12&#39;</code></p>
+									e.g. <code>pad(2, 2) =&gt; &#39;02&#39;</code>, <code>pad(12, 1) =&gt; &#39;12&#39;</code></p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -923,9 +1072,6 @@ class Foo extends React.Component {
 						<a href="../modules/models.html">models</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/navigation.html">navigation</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/screens.html">screens</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -939,10 +1085,10 @@ class Foo extends React.Component {
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="components.headeraddbutton.html" class="tsd-kind-icon">Header<wbr>Add<wbr>Button</a>
+						<a href="components.headerbackbutton.html" class="tsd-kind-icon">Header<wbr>Back<wbr>Button</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="components.headerbackbutton.html" class="tsd-kind-icon">Header<wbr>Back<wbr>Button</a>
+						<a href="components.headericonbutton.html" class="tsd-kind-icon">Header<wbr>Icon<wbr>Button</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -966,6 +1112,15 @@ class Foo extends React.Component {
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 								<a href="components.homescreenclock.html#contexttype" class="tsd-kind-icon">context<wbr>Type</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="components.homescreenclock.html#hours" class="tsd-kind-icon">hours</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="components.homescreenclock.html#minutes" class="tsd-kind-icon">minutes</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="components.homescreenclock.html#timestring" class="tsd-kind-icon">time<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="components.homescreenclock.html#unsafe_componentwillmount" class="tsd-kind-icon">UNSAFE_<wbr>component<wbr>Will<wbr>Mount</a>
@@ -1006,6 +1161,12 @@ class Foo extends React.Component {
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="components.homescreenclock.html#render" class="tsd-kind-icon">render</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="components.homescreenclock.html#scheduleclockupdate" class="tsd-kind-icon">schedule<wbr>Clock<wbr>Update</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="components.homescreenclock.html#setdate" class="tsd-kind-icon">set<wbr>Date</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
 								<a href="components.homescreenclock.html#setstate" class="tsd-kind-icon">set<wbr>State</a>
 							</li>
@@ -1023,10 +1184,10 @@ class Foo extends React.Component {
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="components.homescreenmessage.html" class="tsd-kind-icon">Home<wbr>Screen<wbr>Message</a>
+						<a href="components.monotext.html" class="tsd-kind-icon">Mono<wbr>Text</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="components.monotext.html" class="tsd-kind-icon">Mono<wbr>Text</a>
+						<a href="components.passcodeinput.html" class="tsd-kind-icon">Passcode<wbr>Input</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="components.schedulelistheader.html" class="tsd-kind-icon">Schedule<wbr>List<wbr>Header</a>
@@ -1047,16 +1208,19 @@ class Foo extends React.Component {
 						<a href="components.togglebutton.html" class="tsd-kind-icon">Toggle<wbr>Button</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/components.headeraddbuttonprops.html" class="tsd-kind-icon">Header<wbr>Add<wbr>Button<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/components.headerbackbuttonprops.html" class="tsd-kind-icon">Header<wbr>Back<wbr>Button<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/components.homescreenmessageprops.html" class="tsd-kind-icon">Home<wbr>Screen<wbr>Message<wbr>Props</a>
+						<a href="../interfaces/components.headerbuttonprops.html" class="tsd-kind-icon">Header<wbr>Button<wbr>Props</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/components.monotextprops.html" class="tsd-kind-icon">Mono<wbr>Text<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/components.passcodeinputprops.html" class="tsd-kind-icon">Passcode<wbr>Input<wbr>Props</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/components.passcodeinputstate.html" class="tsd-kind-icon">Passcode<wbr>Input<wbr>State</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/components.schedulelistheaderprops.html" class="tsd-kind-icon">Schedule<wbr>List<wbr>Header<wbr>Props</a>
