@@ -3,7 +3,7 @@
   "scripts": {
     "android": "expo start --android",
     "build": "yarn clean && yarn tsc",
-    "build:docs": "typedoc ./src",
+    "build:docs": "typedoc src --options typedoc.js",
     "clean": "rimraf build",
     "serve-docs": "python -m http.server 3000",
     "start": "concurrently --restart-tries 100 -i --default-input-target 0 \"expo start -c\" \"yarn watch\"",

@@ -41,13 +41,5 @@
     "**/__tests__",
     "**/__mocks__"
   ],
-  "compileOnSave": false,
-  "typedocOptions": {
-    "disableOutputCheck": true,
-    "exclude": [ "**/__tests__/*" ],
-    "excludeNotExported": true,
-    "mode": "modules",
-    "name": "WakeyWakey",
-    "out": "docs"
-  }
+  "compileOnSave": false
 }
