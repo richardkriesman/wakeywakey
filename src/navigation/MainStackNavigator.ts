@@ -2,6 +2,8 @@
  * @module navigation
  */
 
+/* istanbul ignore file */
+
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
 import HomeScreen from "../screens/HomeScreen";

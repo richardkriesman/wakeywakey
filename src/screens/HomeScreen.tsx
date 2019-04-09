@@ -1,11 +1,8 @@
-/**
- * @module screens
- */
-
 import React, { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+
 import { NavigationScreenProps } from "react-navigation";
-import { Clock, Message, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
+import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -45,23 +42,24 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         return (
             <View style={ExtraStyles.container}>
                 <View style={ExtraStyles.contentWrapper}>
-                    <Message text={this.state.messageText} />
-                    <Clock wrapperStyle={ExtraStyles.clockWrapper} />
-                    <SnoozeButton onPress={this.onSnoozePressed.bind(this)} />
+                    <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
+                    <Clock wrapperStyle={ExtraStyles.clockWrapper}/>
+                    <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
                 </View>
                 <View style={ExtraStyles.bottom}>
-                    <SlideUpIndicator onPress={this.switchToSettings.bind(this)} />
+                    <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
                 </View>
             </View>
         );
     }
 
-    private switchToSettings(): void {
+    public switchToSettings(): void {
+        // TODO
         this.setState({ messageText: "Switch to settings!" });
         this.present("SettingsMain");
     }
 
-    private onSnoozePressed(): void {
+    public onSnoozePressed(): void {
         // TODO
         this.setState({ messageText: "Alarm snoozed!" });
     }
@@ -89,5 +87,9 @@ const ExtraStyles = StyleSheet.create({
         flexBasis: "100%",
         justifyContent: "center",
         width: "85%"
+    },
+    message: {
+        fontSize: 30,
+        textAlign: "center"
     }
 });

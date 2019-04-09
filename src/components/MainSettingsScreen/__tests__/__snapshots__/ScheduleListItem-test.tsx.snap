@@ -154,7 +154,7 @@ exports[`renders title correctly 1`] = `
 </View>
 `;
 
-exports[`sets the toggle switch with props correctly 1`] = `
+exports[`sets the toggle switch with props correctly disabled 1`] = `
 <View
   accessible={true}
   isTVSelectable={true}
@@ -308,7 +308,7 @@ exports[`sets the toggle switch with props correctly 1`] = `
 </View>
 `;
 
-exports[`sets the toggle switch with props correctly 2`] = `
+exports[`sets the toggle switch with props correctly enabled 1`] = `
 <View
   accessible={true}
   isTVSelectable={true}

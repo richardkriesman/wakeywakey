@@ -1,7 +1,3 @@
-/**
- * @module utils
- */
-
 import { ReactTestInstance } from "react-test-renderer";
 
 /**
@@ -9,7 +5,9 @@ import { ReactTestInstance } from "react-test-renderer";
  */
 export function createNavigationMock(): any {
     return {
+        dispatch: jest.fn(),
         getParam: jest.fn(),
+        navigate: jest.fn(),
         navigation: jest.fn(),
         setParams: jest.fn()
     };

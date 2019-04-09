@@ -3,18 +3,17 @@
   "scripts": {
     "android": "expo start --android",
     "build": "yarn clean && yarn tsc",
-    "build:docs": "typedoc ./src",
     "clean": "rimraf build",
-    "serve-docs": "python -m http.server 3000",
-    "start": "concurrently --restart-tries 100 -i --default-input-target 0 \"expo start -c\" \"yarn watch\"",
+    "start": "concurrently \"expo start -c\" \"yarn watch\"",
     "start:tunnel": "concurrently \"expo start --tunnel -c\" \"yarn watch\"",
     "eject": "expo eject",
     "ios": "expo start --ios",
     "lint": "tslint --project .",
     "snapshot": "yarn test --updateSnapshot",
     "test": "node ./node_modules/jest/bin/jest.js --silent",
-    "test:ci": "yarn build && yarn lint && yarn test",
+    "test:ci": "yarn build && yarn lint && yarn test --coverage",
     "coverage": "yarn test --coverage",
+    "coveralls": "coveralls < coverage/lcov.info",
     "tsc": "tsc",
     "watch": "yarn build -w"
   },
@@ -27,8 +26,6 @@
     "react-navigation": "^3.0.9"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-typescript": "^7.3.3",
     "@types/expo": "^32.0.3",
     "@types/jest": "^24.0.9",
     "@types/mockdate": "^2.0.0",
@@ -39,6 +36,7 @@
     "@types/react-test-renderer": "^16.8.1",
     "babel-preset-expo": "^5.0.0",
     "concurrently": "^4.1.0",
+    "coveralls": "^3.0.3",
     "expo-cli": "^2.11.9",
     "jest": "^24.1.0",
     "jest-expo": "^32.0.0",
@@ -46,8 +44,6 @@
     "react-test-renderer": "^16.8.3",
     "rimraf": "^2.6.3",
     "tslint": "^5.13.0",
-    "typedoc": "^0.14.2",
-    "typedoc-plugin-external-module-name": "^2.0.0",
     "typescript": "^3.3.3333"
   },
   "private": true
