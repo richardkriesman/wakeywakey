@@ -10,6 +10,7 @@ before_script:
 script:
   - yarn test:ci
 after_success:
+  - yarn run build:docs
   - wget wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh success $WEBHOOK_URL
