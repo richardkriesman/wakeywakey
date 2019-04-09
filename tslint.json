@@ -4,6 +4,7 @@
     "interface-name": false,
     "no-console": false,
     "only-arrow-functions": false,
-    "trailing-comma": [true, {"multiline": "never", "singleline": "never" }]
+    "trailing-comma": [true, {"multiline": "never", "singleline": "never" }],
+    "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"]
   }
 }

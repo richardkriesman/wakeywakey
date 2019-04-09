@@ -10,6 +10,10 @@ const DATABASE_LOG_TAG: string = "Database";
 
 export class AppDatabase {
 
+    public static get initCount(): number {
+        return this._initCount;
+    }
+
     /**
      * Creates and opens a connection to the app's SQLite database, creating any tables that don't exist.
      */
@@ -29,8 +33,15 @@ export class AppDatabase {
             `);
         }
 
+        AppDatabase._initCount++;
         return appDb;
     }
+
+    /**
+     * Tracks the number of database initializations. Used to catch accidental re-initializations when the connection
+     * is not properly passed between screens.
+     */
+    private static _initCount: number = 0;
 
     private db: Database;
 

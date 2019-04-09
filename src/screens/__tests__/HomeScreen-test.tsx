@@ -3,7 +3,7 @@ import React from "react";
 import "react-native";
 import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import renderer, { ReactTestInstance } from "react-test-renderer";
-import { createNavigationMock } from "../../utils/TestUtils";
+import { TestEnvironment } from "../../utils/TestUtils";
 import HomeScreen from "../HomeScreen";
 
 const fakeDateMillis = 1551896555862;
@@ -11,6 +11,16 @@ const initialMessageText: string = "Lorem ipsum dolar sit amet";
 
 describe("App snapshot", () => {
     jest.useFakeTimers();
+
+    let env: TestEnvironment;
+    beforeEach((done) => {
+        TestEnvironment.init()
+            .then((newEnv) => {
+                env = newEnv;
+                env.date = fakeDateMillis;
+                done();
+            });
+    });
 
     beforeEach(() => {
         NavigationTestUtils.resetInternalState();
@@ -24,7 +34,7 @@ describe("App snapshot", () => {
 
     it("renders the screen", async () => {
         const tree = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} navigation={createNavigationMock()}/>
+            <HomeScreen initialMessageText={initialMessageText} navigation={env.navigationProp} />
         ).toJSON();
         expect(tree).toMatchSnapshot();
     });
@@ -34,10 +44,9 @@ describe("App snapshot", () => {
 describe("screen instance methods", () => {
 
     it("switches to settings", () => {
-        // mock navigation and component
-        const navigation = createNavigationMock();
+        // mock component
         const component = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} navigation={navigation}/>
+            <HomeScreen initialMessageText={initialMessageText} navigation={env.navigationProp}/>
         );
 
         // get instance
@@ -55,10 +64,9 @@ describe("screen instance methods", () => {
     });
 
     it("snoozes the alarm", () => {
-        // mock navigation and component
-        const navigation = createNavigationMock();
+        // mock component
         const component = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} navigation={navigation}/>
+            <HomeScreen initialMessageText={initialMessageText} navigation={env.navigationProp}/>
         );
 
         // get instance

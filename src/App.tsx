@@ -7,6 +7,7 @@ import React, { ReactNode } from "react";
 import {ErrorHandlerCallback, Platform, StatusBar, StyleSheet, View} from "react-native";
 
 import AppNavigator from "./navigation/AppNavigator";
+import {AppDatabase} from "./utils/AppDatabase";
 import AppTimer from "./utils/AppTimer";
 import * as Log from "./utils/Log";
 
@@ -29,7 +30,7 @@ export default class App extends React.Component<AppProps, AppState> {
     private static handleLoadingError(error: Error): void {
         // In this case, you might want to report the error to your error
         // reporting service, for example Sentry
-        console.warn(error);
+        Log.critical("Global", error);
     }
 
     private defaultErrorHandler: ErrorHandlerCallback;
@@ -69,7 +70,7 @@ export default class App extends React.Component<AppProps, AppState> {
 
         // intercept global errors
         this.defaultErrorHandler = ErrorUtils.getGlobalHandler();
-        ErrorUtils.setGlobalHandler(this.onGlobalError);
+        ErrorUtils.setGlobalHandler(this.onGlobalError.bind(this));
 
         // loading is complete, render the main screen
         this.setState({ isLoadingComplete: true });

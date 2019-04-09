@@ -16,20 +16,15 @@ export default class PasscodeChangeScreen extends UIScreen<{}, {}> {
         super(props);
     }
 
-    // handles passcodeinput success
-    public handleSuccess(passcode: string): void {
-        this.getService(PasscodeService).setPasscode(passcode) // set the passcode in the database
-            .then(() => { // passcode was set, dismiss the screen
-                this.dismiss();
-            })
-            .catch((err) => { // error occurred, log it
-                Log.error(PASSCODE_LOG_TAG, "Failed to update user passcode");
-                Log.error(PASSCODE_LOG_TAG, err);
-            });
-
-        this.props.navigation.dispatch(StackActions.replace({
-            routeName: "SettingsMain"
-        }));
+    // handles passcodeinput success8
+    public async handleSuccess(passcode: string): Promise<void> {
+        try {
+            await this.getService(PasscodeService).setPasscode(passcode); // set the passcode in the database
+        } catch (err) {
+            Log.error(PASSCODE_LOG_TAG, "Failed to update user passcode");
+            Log.error(PASSCODE_LOG_TAG, err);
+        }
+        this.dismiss();
     }
 
     public renderContent(): ReactNode {
