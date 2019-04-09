@@ -1,3 +1,7 @@
+/**
+ * @module components
+ */
+
 import { AntDesign } from "@expo/vector-icons";
 import React, { ReactNode } from "react";
 import ReactNative, { StyleSheet, View } from "react-native";

@@ -1,7 +1,3 @@
-/**
- * @module navigation
- */
-
 // i give up. sL
 /* istanbul ignore file */
 

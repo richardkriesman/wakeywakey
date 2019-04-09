@@ -1,3 +1,7 @@
+/**
+ * @module utils
+ */
+
 import { AlarmModel } from "../models/AlarmModel";
 
 export function getAlarmTitle(alarm: AlarmModel): string {

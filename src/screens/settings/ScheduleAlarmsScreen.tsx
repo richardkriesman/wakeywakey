@@ -1,3 +1,7 @@
+/**
+ * @module screens
+ */
+
 import React, { ReactNode } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";

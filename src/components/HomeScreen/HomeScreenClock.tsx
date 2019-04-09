@@ -1,3 +1,7 @@
+/**
+ * @module components
+ */
+
 import React, { ReactNode } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 

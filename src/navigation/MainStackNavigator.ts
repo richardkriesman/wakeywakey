@@ -1,7 +1,3 @@
-/**
- * @module navigation
- */
-
 /* istanbul ignore file */
 
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
