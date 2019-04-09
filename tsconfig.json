@@ -39,7 +39,8 @@
     "coverage",
     "docs",
     "**/__tests__",
-    "**/__mocks__"
+    "**/__mocks__",
+    "typedoc.js"
   ],
   "compileOnSave": false
 }
