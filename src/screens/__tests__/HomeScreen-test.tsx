@@ -1,7 +1,5 @@
-import MockDate from "mockdate";
 import React from "react";
 import "react-native";
-import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import renderer, { ReactTestInstance } from "react-test-renderer";
 import { TestEnvironment } from "../../utils/TestUtils";
 import HomeScreen from "../HomeScreen";
@@ -9,23 +7,18 @@ import HomeScreen from "../HomeScreen";
 const fakeDateMillis = 1551896555862;
 const initialMessageText: string = "Lorem ipsum dolar sit amet";
 
+let env: TestEnvironment;
+beforeEach((done) => {
+    TestEnvironment.init()
+        .then((newEnv) => {
+            env = newEnv;
+            env.date = fakeDateMillis;
+            done();
+        });
+});
+
 describe("App snapshot", () => {
     jest.useFakeTimers();
-
-    let env: TestEnvironment;
-    beforeEach((done) => {
-        TestEnvironment.init()
-            .then((newEnv) => {
-                env = newEnv;
-                env.date = fakeDateMillis;
-                done();
-            });
-    });
-
-    beforeEach(() => {
-        NavigationTestUtils.resetInternalState();
-        MockDate.set(fakeDateMillis);
-    });
 
     it("correctly fakes Date.now", async () => {
         const fakeNow = Date.now();

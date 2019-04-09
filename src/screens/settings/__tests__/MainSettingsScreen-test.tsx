@@ -1,16 +1,25 @@
 import * as React from "react";
 import Renderer from "react-test-renderer";
-import { createNavigationMock } from "../../../utils/TestUtils";
+import { TestEnvironment } from "../../../utils/TestUtils";
 import MainSettingsScreen from "../MainSettingsScreen";
 
+let env: TestEnvironment;
+beforeEach((done) => {
+    TestEnvironment.init()
+        .then((newEnv) => {
+            env = newEnv;
+            done();
+        });
+});
+
 it("renders properly", () => {
-    const tree = Renderer.create(<MainSettingsScreen navigation={createNavigationMock()}/>);
+    const tree = Renderer.create(<MainSettingsScreen navigation={env.navigationProp}/>);
     expect(tree.toJSON()).toMatchSnapshot();
 });
 
 describe("toggles", () => {
     it("handles toggling", () => {
-        const screen = new MainSettingsScreen({ navigation: createNavigationMock() });
+        const screen = new MainSettingsScreen({ navigation: env.navigationProp });
 
         screen.componentWillMount();
         screen.render();

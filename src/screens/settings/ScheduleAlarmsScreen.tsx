@@ -3,8 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps, StackActions } from "react-navigation";
 
-import { HeaderBackButton } from "../../components/HeaderBackButton";
-import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
+import { HeaderBackButton, HeaderIconButton } from "../../components";
 
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
@@ -22,7 +21,9 @@ export interface EditScheduleScreenState {
 
 @HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()} />)
 @HeaderButtonRight((screen) =>
-    <HeaderAddButton onPress={() => screen.present("EditAlarm", { title: "Add Alarm" })} />)
+    <HeaderIconButton
+        icon="add"
+        onPress={() => screen.present("EditAlarm", { title: "Add Alarm" })} />)
 export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
 
     public constructor(props: NavigationScreenProps) {

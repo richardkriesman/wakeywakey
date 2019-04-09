@@ -37,7 +37,9 @@
     "App.js",
     "babel.config.js",
     "coverage",
-    "docs"
+    "docs",
+    "**/__tests__",
+    "**/__mocks__"
   ],
   "compileOnSave": false,
   "typedocOptions": {
