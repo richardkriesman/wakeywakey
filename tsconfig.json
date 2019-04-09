@@ -37,15 +37,10 @@
     "App.js",
     "babel.config.js",
     "coverage",
-    "docs"
+    "docs",
+    "**/__tests__",
+    "**/__mocks__",
+    "typedoc.js"
   ],
-  "compileOnSave": false,
-  "typedocOptions": {
-    "disableOutputCheck": true,
-    "exclude": [ "**/__tests__/*" ],
-    "excludeNotExported": true,
-    "mode": "modules",
-    "name": "WakeyWakey",
-    "out": "docs"
-  }
+  "compileOnSave": false
 }

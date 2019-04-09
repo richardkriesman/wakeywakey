@@ -3,10 +3,16 @@
  */
 
 import {FileSystem, SQLite} from "expo";
+import * as Log from "./Log";
 
 const DATABASE_NAME: string = "app";
+const DATABASE_LOG_TAG: string = "Database";
 
 export class AppDatabase {
+
+    public static get initCount(): number {
+        return this._initCount;
+    }
 
     /**
      * Creates and opens a connection to the app's SQLite database, creating any tables that don't exist.
@@ -27,14 +33,21 @@ export class AppDatabase {
             `);
         }
 
+        AppDatabase._initCount++;
         return appDb;
     }
+
+    /**
+     * Tracks the number of database initializations. Used to catch accidental re-initializations when the connection
+     * is not properly passed between screens.
+     */
+    private static _initCount: number = 0;
 
     private db: Database;
 
     private constructor() {
         this.db = SQLite.openDatabase(DATABASE_NAME);
-        console.debug(`Opened database at ${FileSystem.documentDirectory}SQLite/${DATABASE_NAME}`);
+        Log.info(DATABASE_LOG_TAG, `Opened database at ${FileSystem.documentDirectory}SQLite/${DATABASE_NAME}`);
     }
 
     /**
@@ -67,7 +80,14 @@ export class AppDatabase {
             WHERE
                 name = ?
         `, [key]);
-        return result.rows.length > 0 ? result.rows.item(0).value : null;
+        if (result.rows.length > 0) {
+            const value: string = result.rows.item(0).value;
+            Log.info(DATABASE_LOG_TAG, `GET ${key}: ${value}`);
+            return value;
+        } else {
+            Log.info(DATABASE_LOG_TAG, `GET ${key}: (null)`);
+            return null;
+        }
     }
 
     /**
@@ -106,6 +126,7 @@ export class AppDatabase {
             VALUES
                 (?, ?);
         `, [key, value]);
+        Log.info(DATABASE_LOG_TAG, `SET ${key}: ${value}`);
     }
 
 }

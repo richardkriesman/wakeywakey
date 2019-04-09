@@ -6,9 +6,12 @@ import React, { ReactNode } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
+import * as Log from "../Log";
 import { Service } from "../Service";
 
 export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & NavigationScreenProps, S> {
+
+    // noinspection UnterminatedStatementJS - keeps WebStorm from giving a suggestion that conflicts with TSLint
     public static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
         title: navigation.getParam("title", "Untitled")
     })
@@ -19,10 +22,15 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
         super(props);
 
         // extract the database from the navigation props
-        this.db = this.props.navigation.getParam("database");
+        this.db = this.props.navigation.getParam("db");
         if (this.db) {
-            delete this.props.navigation.state.params.database;
+            delete this.props.navigation.state.params.db;
         } else { // database has not yet been opened, initialize it
+            if (AppDatabase.initCount > 0) {
+                Log.warning("UIScreen",
+                    `Database was not passed to route ${this.props.navigation.state.routeName}! ` +
+                    `Did you use UIScreen.present()?`);
+            }
             AppDatabase.init()
                 .then((db) => {
                     this.db = db;
@@ -61,6 +69,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     public present(routeName: string, params?: NavigationParams): void {
         this.props.navigation.dispatch(StackActions.push({
             params: {
+                db: this.db,
                 ...params
             },
             routeName

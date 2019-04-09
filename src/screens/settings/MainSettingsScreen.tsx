@@ -3,12 +3,10 @@
  */
 
 import React, { ReactNode } from "react";
-import { SectionList } from "react-native";
+import { SectionList, StyleSheet, View } from "react-native";
 import { NavigationScreenProps, StackActions } from "react-navigation";
 
-import { HeaderAddButton } from "../../components/MainSettingsScreen/HeaderAddButton";
-import { ScheduleListHeader } from "../../components/MainSettingsScreen/ScheduleListHeader";
-import { ScheduleListItem } from "../../components/MainSettingsScreen/ScheduleListItem";
+import { HeaderIconButton, ScheduleListHeader, ScheduleListItem } from "../../components";
 import { TestAlarms } from "../../models/AlarmModel";
 import { ScheduleModel } from "../../models/ScheduleModel";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
@@ -35,7 +33,14 @@ export interface SettingsListItemProps {
  * @author Shawn Lutch, Miika Raina
  */
 @HeaderButtonRight((screen) =>
-    <HeaderAddButton onPress={() => screen.present("EditSchedule", { title: "Add Schedule" })}/>)
+    <View style={styles.header}>
+        <HeaderIconButton
+            icon="lock"
+            onPress={() => screen.present("PasscodeChange")} />
+        <HeaderIconButton
+            icon="add"
+            onPress={() => screen.present("EditSchedule", { title: "Add Schedule" })} />
+    </View>)
 export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
 
     public constructor(props: NavigationScreenProps) {
@@ -96,6 +101,12 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
         );
     }
 }
+
+const styles = StyleSheet.create({
+    header: {
+        flexDirection: "row"
+    }
+});
 
 // TODO save and load schedules
 const testSchedulesList: ScheduleModel[] = [

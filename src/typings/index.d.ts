@@ -23,3 +23,6 @@ declare module "@expo/samples" {
     declare class ExpoLinksView extends React.Component {}
     declare class ExpoConfigView extends React.Component {}
 }
+
+// getting an error on my end. hoping to clear it up. sL
+declare module "@expo/vector-icons";

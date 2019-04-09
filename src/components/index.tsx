@@ -6,8 +6,9 @@
  */
 
 export { Clock, SlideUpIndicator, SnoozeButton } from "./HomeScreen";
-export { HeaderAddButton, ScheduleListHeader, ScheduleListItem } from "./MainSettingsScreen";
+export { ScheduleListHeader, ScheduleListItem } from "./MainSettingsScreen";
 
+export { HeaderIconButton } from "./HeaderIconButton";
 export { HeaderBackButton } from "./HeaderBackButton";
 export { TabBarIcon } from "./TabBarIcon";
 export { ToggleButton } from "./ToggleButton";

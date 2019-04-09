@@ -1,20 +1,24 @@
 import React from "react";
 import "react-native";
-import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import renderer from "react-test-renderer";
-import {createNavigationMock} from "../../utils/TestUtils";
+import {TestEnvironment} from "../../utils/TestUtils";
 import MainSettingsScreen from "../settings/MainSettingsScreen";
 
 describe("App snapshot", () => {
     jest.useFakeTimers();
 
-    beforeEach(() => {
-        NavigationTestUtils.resetInternalState();
+    let env: TestEnvironment;
+    beforeEach((done) => {
+        TestEnvironment.init()
+            .then((newEnv) => {
+                env = newEnv;
+                done();
+            });
     });
 
     it("renders the screen", async () => {
         const tree = renderer.create(
-            <MainSettingsScreen navigation={createNavigationMock()} />
+            <MainSettingsScreen navigation={env.navigationProp} />
         ).toJSON();
         expect(tree).toMatchSnapshot();
     });

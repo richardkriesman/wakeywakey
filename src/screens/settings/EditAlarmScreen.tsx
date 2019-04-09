@@ -66,7 +66,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private daysContains(specificDay: DayOfWeek): boolean {
-        return this.state.alarm && this.state.alarm.days.indexOf(specificDay) > -1;
+        return this.state.alarm && this.state.alarm.days && this.state.alarm.days.indexOf(specificDay) > -1;
     }
 }
 

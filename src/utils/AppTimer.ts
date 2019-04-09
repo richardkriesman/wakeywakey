@@ -1,6 +1,9 @@
 /**
  * @module utils
  */
+import * as Log from "./Log";
+
+const TIMER_LOG_TAG: string = "AppTimer";
 
 /**
  * A function to execute when a {@link TimerEvent} fires.
@@ -92,7 +95,7 @@ export class AppTimer {
      * Start this {@link AppTimer} instance.
      */
     public start() {
-        console.log("starting AppTimer");
+        Log.info(TIMER_LOG_TAG, "Starting AppTimer");
         this.fireAll(TimerEvent.START);
         this.step();
     }
@@ -101,7 +104,7 @@ export class AppTimer {
      * Stop this {@link AppTimer} instance and clear its {@link NodeJS.Timeout}, if defined.
      */
     public stop() {
-        console.log("stopping AppTimer");
+        Log.info(TIMER_LOG_TAG, "Stopping AppTimer");
         if (this.timeout) {
             clearTimeout(this.timeout);
             this.timeout = undefined;
