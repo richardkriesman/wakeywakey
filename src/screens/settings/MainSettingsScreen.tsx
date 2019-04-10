@@ -10,7 +10,6 @@ import { HeaderIconButton, ScheduleListHeader, ScheduleListItem } from "../../co
 import { SnoozeButton } from "../../components/HomeScreen/SnoozeButton";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
-import * as Log from "../../utils/Log";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
@@ -106,9 +105,7 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                     onPress={() => this.getService(ScheduleService).create("Test schedule")} />
                 <SectionList
                     keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
-                    renderItem={({ item }) => {
-                        Log.debug("Why", `${item.schedule.id}: ${item.schedule.isEnabled}`);
-                        return (
+                    renderItem={({ item }) => (
                             <ScheduleListItem
                                 ref={(me: ScheduleListItem) => {
                                     item.listItemRef = me;
@@ -118,8 +115,7 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                                 title={item.schedule.name}
                                 enabled={item.schedule.isEnabled}
                             />
-                        );
-                    }
+                        )
                     }
                     renderSectionHeader={({ section }) => <ScheduleListHeader title={section.title}/>}
                     sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
