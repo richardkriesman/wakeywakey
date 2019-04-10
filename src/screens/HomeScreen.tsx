@@ -2,6 +2,7 @@
  * @module screens
  */
 
+import { KeepAwake } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -45,6 +46,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     public renderContent(): ReactNode {
         return (
             <View style={ExtraStyles.container}>
+                <KeepAwake />
                 <View style={ExtraStyles.contentWrapper}>
                     <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
                     <Clock wrapperStyle={ExtraStyles.clockWrapper}/>
