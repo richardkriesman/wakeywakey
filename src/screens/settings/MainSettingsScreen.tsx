@@ -106,7 +106,9 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                     onPress={() => this.getService(ScheduleService).create("Test schedule")} />
                 <SectionList
                     keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
-                    renderItem={({ item }) => (
+                    renderItem={({ item }) => {
+                        Log.debug("Why", `${item.schedule.id}: ${item.schedule.isEnabled}`);
+                        return (
                             <ScheduleListItem
                                 ref={(me: ScheduleListItem) => {
                                     item.listItemRef = me;
@@ -116,7 +118,8 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                                 title={item.schedule.name}
                                 enabled={item.schedule.isEnabled}
                             />
-                        )
+                        );
+                    }
                     }
                     renderSectionHeader={({ section }) => <ScheduleListHeader title={section.title}/>}
                     sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}

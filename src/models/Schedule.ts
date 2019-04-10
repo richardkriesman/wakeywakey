@@ -23,9 +23,9 @@ export class Schedule extends Model {
         // insert the schedule into the database
         const result: SQLResultSet = await db.execute(`
             INSERT INTO schedule
-                (name)
+                (name, isEnabled)
             VALUES
-                (?)
+                (?, 0)
         `, [name]);
 
         // build the resulting model

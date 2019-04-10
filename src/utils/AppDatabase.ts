@@ -44,7 +44,7 @@ export class AppDatabase {
                         constraint schedule_pk
                             primary key autoincrement,
                     name VARCHAR(50) not null,
-                    isEnabled BOOLEAN default FALSE not null
+                    isEnabled BOOLEAN default 0 not null
                 )
             `);
         }
