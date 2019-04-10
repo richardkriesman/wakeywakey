@@ -1,8 +1,9 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "build": "yarn clean && yarn tsc",
+    "build": "yarn tsc",
     "build:android": "yarn build && yarn expo build:android --release-channel dev",
+    "build:clean": "yarn clean && yarn tsc",
     "build:docs": "typedoc src --options typedoc.js",
     "build:ios": "yarn build && yarn expo build:ios --release-channel dev",
     "clean": "rimraf build",
@@ -17,7 +18,7 @@
     "release:ios": "yarn build && yarn expo build:ios",
     "snapshot": "yarn test --updateSnapshot",
     "test": "node ./node_modules/jest/bin/jest.js --silent",
-    "test:ci": "yarn build && yarn lint && yarn test --coverage",
+    "test:ci": "yarn build:clean && yarn lint && yarn test --coverage",
     "coverage": "yarn test --coverage",
     "coveralls": "coveralls < coverage/lcov.info",
     "tsc": "tsc",
@@ -55,7 +56,7 @@
     "tslint": "^5.13.0",
     "typedoc": "^0.14.2",
     "typedoc-plugin-external-module-name": "^2.0.0",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.4.3"
   },
   "private": true
 }
