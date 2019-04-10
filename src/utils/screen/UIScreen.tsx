@@ -51,12 +51,12 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     }
 
     /**
-     * Instantiates a new instance of a {@link Service}.
+     * Gets a {@link Service}. Service instances persist for the life of the {@link AppDatabase}.
      *
      * @param service The {@link Service} class to retrieve.
      */
     public getService<T extends Service>(service: new(db: AppDatabase) => T): T {
-        return new service(this.db);
+        return this.db.getService(service);
     }
 
     /**

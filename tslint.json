@@ -5,6 +5,7 @@
     "no-console": false,
     "only-arrow-functions": false,
     "trailing-comma": [true, {"multiline": "never", "singleline": "never" }],
-    "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"]
+    "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
+    "no-trailing-whitespace": false
   }
 }

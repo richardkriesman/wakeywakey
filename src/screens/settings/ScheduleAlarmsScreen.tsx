@@ -6,21 +6,18 @@ import React, { ReactNode } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps, StackActions } from "react-navigation";
-
 import { HeaderBackButton, HeaderIconButton } from "../../components";
-
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
+import { Schedule } from "../../models";
 import { AlarmModel } from "../../models/AlarmModel";
-import { ScheduleModel } from "../../models/ScheduleModel";
+import AlarmUtils from "../../utils/AlarmUtils";
 import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
-import AlarmUtils from "../../utils/AlarmUtils";
-
 export interface EditScheduleScreenState {
     headerTitle: string;
-    schedule?: ScheduleModel;
+    schedule?: Schedule;
 }
 
 @HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()} />)
@@ -42,13 +39,10 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     }
 
     public onAlarmPressed(key: number): void {
-        this.props.navigation.dispatch(StackActions.push({
-            params: {
-                alarm: this.state.schedule.alarms[key],
-                title: this.state.headerTitle
-            },
-            routeName: "EditAlarm"
-        }));
+        this.present("EditAlarm", {
+            alarm: null, // this.state.schedule.alarms[key],
+            title: this.state.headerTitle
+        });
     }
 
     public renderContent(): ReactNode {
@@ -57,7 +51,7 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                 <Text style={styles.textSectionHeader}>Alarms</Text>
 
                 <FlatList
-                    data={this.state.schedule ? this.state.schedule.alarms : []}
+                    data={this.state.schedule ? /*this.state.schedule.alarms */ [] : []}
                     keyExtractor={(item: AlarmModel): string => String(item.key)}
                     renderItem={({ item }) => (
                         <ListItem

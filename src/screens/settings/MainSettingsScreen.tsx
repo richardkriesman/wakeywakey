@@ -4,28 +4,32 @@
 
 import React, { ReactNode } from "react";
 import { SectionList, StyleSheet, View } from "react-native";
-import { NavigationScreenProps, StackActions } from "react-navigation";
+import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton, ScheduleListHeader, ScheduleListItem } from "../../components";
-import { TestAlarms } from "../../models/AlarmModel";
-import { ScheduleModel } from "../../models/ScheduleModel";
+import { SnoozeButton } from "../../components/HomeScreen/SnoozeButton";
+import { Schedule } from "../../models";
+import { ScheduleService } from "../../services";
+import * as Log from "../../utils/Log";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
+import { Watcher } from "../../utils/watcher";
 
 /**
  * Main settings screen state. Includes schedule states.
  * @author Shawn Lutch
  */
 export interface MainSettingsScreenState {
-    schedules: ScheduleModel[];
+    schedules: Map<number, ScheduleListItemData>;
 }
 
 /**
- * Properties of each list item.
- * @author Shawn Lutch
+ * Data associated with each list item
+ * @author Richard Kriesman
  */
-export interface SettingsListItemProps {
-    title: string;
+export interface ScheduleListItemData {
+    schedule: Schedule;
+    listItemRef?: ScheduleListItem;
 }
 
 /**
@@ -43,61 +47,81 @@ export interface SettingsListItemProps {
     </View>)
 export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
 
+    private dataSetChangedHandler: (data: Schedule[]) => void;
+    private watcher: Watcher<Schedule[]> = this.getService(ScheduleService).watchAll();
+
     public constructor(props: NavigationScreenProps) {
         super(props);
-        this.state = { schedules: testSchedulesList };
+        this.state = {
+            schedules: new Map()
+        };
     }
 
     public componentWillMount(): void {
-        // TODO properly load schedules from disk
+        this.dataSetChangedHandler = this.onDataSetChanged.bind(this);
+        this.watcher.on(this.dataSetChangedHandler);
     }
 
-    public onScheduleItemToggled(key: number, newEnabled: boolean): void {
-        const newSchedules: ScheduleModel[] = this.state.schedules;
-        newSchedules[key].enabled = newEnabled;
+    public componentWillUnmount(): void {
+        this.watcher.off(this.dataSetChangedHandler);
+    }
 
-        if (newEnabled) {
-            newSchedules.forEach((s: ScheduleModel) => {
-                if (s.key !== key) {
-                    s.enabled = false;
+    public onDataSetChanged(schedules: Schedule[]): void {
+        for (const schedule of schedules) {
+            if (this.state.schedules.has(schedule.id)) {
+                this.state.schedules.get(schedule.id).schedule = schedule;
+            } else {
+                this.state.schedules.set(schedule.id, {
+                    schedule
+                });
+            }
+        }
+        this.forceUpdate();
+    }
 
-                    if (s.listItemRef) {
-                        s.listItemRef.forceEnabled(false);
+    public onScheduleItemToggled(schedule: Schedule, isEnabled: boolean): void {
+        this.getService(ScheduleService).setIsEnabled(schedule.id, isEnabled)
+            .then(() => {
+                for (const item of this.state.schedules.values()) {
+                    if (item.schedule.id === schedule.id) {
+                        item.listItemRef.forceEnabled(isEnabled);
+                    } else {
+                        item.listItemRef.forceEnabled(false);
                     }
                 }
             });
-        }
-
-        this.setState({ schedules: newSchedules });
     }
 
-    public onScheduleItemPressed(key: number): void {
-        this.props.navigation.dispatch(StackActions.push({
-            params: {
-                schedule: this.state.schedules[key],
-                title: this.state.schedules[key].name
-            },
-            routeName: "EditSchedule"
-        }));
+    public onScheduleItemPressed(schedule: Schedule): void {
+        this.present("EditSchedule", {
+            schedule,
+            title: schedule.name
+        });
     }
 
     public renderContent(): ReactNode {
         return (
-            <SectionList
-                renderItem={({ item }) => (
-                    <ScheduleListItem
-                        ref={(me: ScheduleListItem) => {
-                            this.state.schedules[item.key].listItemRef = me;
-                        }}
-                        onPress={this.onScheduleItemPressed.bind(this, item.key)}
-                        onSwitchToggled={this.onScheduleItemToggled.bind(this, item.key)}
-                        title={item.name}
-                        enabled={item.enabled}
-                    />
-                )}
-                renderSectionHeader={({ section }) => <ScheduleListHeader title={section.title}/>}
-                sections={[{ data: this.state.schedules, title: "Schedules" }]}
-            />
+            <View>
+                <SnoozeButton
+                    onPress={() => this.getService(ScheduleService).create("Test schedule")} />
+                <SectionList
+                    keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
+                    renderItem={({ item }) => (
+                            <ScheduleListItem
+                                ref={(me: ScheduleListItem) => {
+                                    item.listItemRef = me;
+                                }}
+                                onPress={this.onScheduleItemPressed.bind(this, item.schedule)}
+                                onSwitchToggled={this.onScheduleItemToggled.bind(this, item.schedule)}
+                                title={item.schedule.name}
+                                enabled={item.schedule.isEnabled}
+                            />
+                        )
+                    }
+                    renderSectionHeader={({ section }) => <ScheduleListHeader title={section.title}/>}
+                    sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
+                />
+            </View>
         );
     }
 }
@@ -107,19 +131,3 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     }
 });
-
-// TODO save and load schedules
-const testSchedulesList: ScheduleModel[] = [
-    {
-        alarms: TestAlarms,
-        enabled: true,
-        key: 0,
-        name: "Test Schedule 1"
-    },
-    {
-        alarms: TestAlarms,
-        enabled: false,
-        key: 1,
-        name: "Test Schedule 2"
-    }
-];
