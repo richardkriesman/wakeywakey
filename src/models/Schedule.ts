@@ -10,6 +10,8 @@ import { Model } from "../utils/Model";
  */
 export class Schedule extends Model {
 
+    public static readonly NAME_MAX_LENGTH: number = 30;
+
     /**
      * Creates a new Schedule.
      *
@@ -48,8 +50,7 @@ export class Schedule extends Model {
         // get all rows in ascending order
         const result: SQLResultSet = await db.execute(`
             SELECT *
-            FROM schedule
-            ORDER BY name ASC;        
+            FROM schedule;     
         `);
 
         // build models from results

@@ -11,6 +11,7 @@ const headerBackground = "#fff";
 const subheaderColor = "#5e5e5e";
 
 export default {
+    alertFooterSeparator: "#d9d9d9",
     appleButtonBlue,
     appleButtonRed,
     black: "#000000",

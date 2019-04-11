@@ -7,9 +7,10 @@ import { SectionList, StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton, ScheduleListHeader, ScheduleListItem } from "../../components";
-import { SnoozeButton } from "../../components/HomeScreen/SnoozeButton";
+import { TextInputModal } from "../../components/TextInputModal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
+import * as Log from "../../utils/Log";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
@@ -19,6 +20,7 @@ import { Watcher } from "../../utils/watcher";
  * @author Shawn Lutch
  */
 export interface MainSettingsScreenState {
+    isCreateModalVisible: boolean;
     schedules: Map<number, ScheduleListItemData>;
 }
 
@@ -42,7 +44,9 @@ export interface ScheduleListItemData {
             onPress={() => screen.present("PasscodeChange")} />
         <HeaderIconButton
             icon="add"
-            onPress={() => screen.present("EditSchedule", { title: "Add Schedule" })} />
+            onPress={() => screen.setState({
+                isCreateModalVisible: true
+            })} />
     </View>)
 export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
 
@@ -52,6 +56,7 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
     public constructor(props: NavigationScreenProps) {
         super(props);
         this.state = {
+            isCreateModalVisible: false,
             schedules: new Map()
         };
     }
@@ -101,8 +106,13 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
     public renderContent(): ReactNode {
         return (
             <View>
-                <SnoozeButton
-                    onPress={() => this.getService(ScheduleService).create("Test schedule")} />
+                <TextInputModal
+                    isVisible={this.state.isCreateModalVisible}
+                    maxLength={Schedule.NAME_MAX_LENGTH}
+                    title="Create schedule"
+                    text="Type a name for the new schedule:"
+                    onCancelled={this.onModalCancelled.bind(this)}
+                    onCompleted={this.onModalCompleted.bind(this)} />
                 <SectionList
                     keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
                     renderItem={({ item }) => (
@@ -122,6 +132,26 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                 />
             </View>
         );
+    }
+
+    private onModalCancelled(): void {
+        this.setState({
+            isCreateModalVisible: false
+        });
+    }
+
+    private onModalCompleted(text: string): void {
+        this.setState({
+            isCreateModalVisible: false
+        }, () => {
+            let schedule: Schedule;
+            this.getService(ScheduleService).create(text)
+                .then((newSchedule) => {
+                    schedule = newSchedule;
+                    this.onScheduleItemToggled(schedule, true);
+                    this.onScheduleItemPressed(schedule);
+                });
+        });
     }
 }
 

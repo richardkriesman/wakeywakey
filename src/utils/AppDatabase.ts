@@ -43,7 +43,7 @@ export class AppDatabase {
                     id INTEGER not null
                         constraint schedule_pk
                             primary key autoincrement,
-                    name VARCHAR(50) not null,
+                    name VARCHAR(30) not null,
                     isEnabled BOOLEAN default 0 not null
                 )
             `);
@@ -136,7 +136,7 @@ export class AppDatabase {
                     for (const arg of args) {
                         query = query.replace("?", arg);
                     }
-                    Log.info(DATABASE_LOG_TAG, `Query: ${query}`);
+                    Log.debug(DATABASE_LOG_TAG, `Query: ${query}`);
 
                     // resolve the promise
                     resolve(resultSet);
