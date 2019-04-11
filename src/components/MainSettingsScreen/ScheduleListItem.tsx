@@ -28,12 +28,17 @@ export class ScheduleListItem extends React.Component<ScheduleListItemProps, Sch
     }
 
     public onSwitchValueChanged(isEnabledNow: boolean) {
-        this.forceEnabled(isEnabledNow);
-        this.props.onSwitchToggled(isEnabledNow);
+        this.forceEnabled(isEnabledNow).then(() => {
+            this.props.onSwitchToggled(isEnabledNow);
+        });
     }
 
-    public forceEnabled(e: boolean) {
-        this.setState({ enabled: e });
+    public forceEnabled(e: boolean): Promise<void> {
+        return new Promise<void>((resolve) => {
+            this.setState({ enabled: e }, () => {
+                resolve();
+            });
+        });
     }
 
     public render(): ReactNode {

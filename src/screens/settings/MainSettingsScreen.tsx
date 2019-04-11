@@ -92,15 +92,20 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
     }
 
     public onScheduleItemToggled(schedule: Schedule, isEnabled: boolean): void {
-        this.getService(ScheduleService).setIsEnabled(schedule.id, isEnabled)
+
+        // toggle the switch on all list items
+        const promises: Array<Promise<void>> = [];
+        for (const item of this.state.schedules.values()) {
+            if (item.schedule.id === schedule.id) {
+                promises.push(item.listItemRef.forceEnabled(isEnabled));
+            } else {
+                promises.push(item.listItemRef.forceEnabled(false));
+            }
+        }
+
+        Promise.all(promises)
             .then(() => {
-                for (const item of this.state.schedules.values()) {
-                    if (item.schedule.id === schedule.id) {
-                        item.listItemRef.forceEnabled(isEnabled);
-                    } else {
-                        item.listItemRef.forceEnabled(false);
-                    }
-                }
+                this.getService(ScheduleService).setIsEnabled(schedule.id, isEnabled);
             });
     }
 
@@ -152,11 +157,8 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
         this.setState({
             isCreateModalVisible: false
         }, () => {
-            let schedule: Schedule;
             this.getService(ScheduleService).create(text)
-                .then((newSchedule) => {
-                    schedule = newSchedule;
-                    this.onScheduleItemToggled(schedule, true);
+                .then((schedule) => {
                     this.onScheduleItemPressed(schedule);
                 });
         });
