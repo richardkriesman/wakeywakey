@@ -8,6 +8,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationScreenProps } from "react-navigation";
 import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
+import { InactivityDimmer } from "../components/InactivityDimmer";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -45,17 +46,23 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public renderContent(): ReactNode {
         return (
-            <View style={ExtraStyles.container}>
-                <KeepAwake />
-                <View style={ExtraStyles.contentWrapper}>
-                    <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
-                    <Clock wrapperStyle={ExtraStyles.clockWrapper}/>
-                    <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
+            <InactivityDimmer
+                // TODO: defaultBrightness = insert initial screen brightness here
+                idleTime={15000} // 15 seconds
+                navigation={this.props.navigation}
+            >
+            <KeepAwake />
+                <View style={ExtraStyles.container}>
+                    <View style={ExtraStyles.contentWrapper}>
+                        <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
+                        <Clock wrapperStyle={ExtraStyles.clockWrapper}/>
+                        <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
+                    </View>
+                    <View style={ExtraStyles.bottom}>
+                        <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
+                    </View>
                 </View>
-                <View style={ExtraStyles.bottom}>
-                    <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
-                </View>
-            </View>
+            </InactivityDimmer>
         );
     }
 
@@ -69,7 +76,6 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         // TODO
         this.setState({ messageText: "Alarm snoozed!" });
     }
-
 }
 
 const ExtraStyles = StyleSheet.create({
