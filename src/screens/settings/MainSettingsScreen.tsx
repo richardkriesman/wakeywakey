@@ -7,10 +7,9 @@ import { SectionList, StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton, ScheduleListHeader, ScheduleListItem } from "../../components";
-import { TextInputModal } from "../../components/TextInputModal";
+import { TextInputModal } from "../../components/model";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
-import * as Log from "../../utils/Log";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
@@ -71,16 +70,25 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
     }
 
     public onDataSetChanged(schedules: Schedule[]): void {
+
+        // build a new map of schedules
+        const scheduleItems: Map<number, ScheduleListItemData> = new Map();
         for (const schedule of schedules) {
-            if (this.state.schedules.has(schedule.id)) {
-                this.state.schedules.get(schedule.id).schedule = schedule;
+            let scheduleItem: ScheduleListItemData|undefined = this.state.schedules.get(schedule.id);
+            if (scheduleItem) {
+                scheduleItem.schedule = schedule;
             } else {
-                this.state.schedules.set(schedule.id, {
+                scheduleItem = {
                     schedule
-                });
+                };
             }
+            scheduleItems.set(schedule.id, scheduleItem);
         }
-        this.forceUpdate();
+
+        // replace the existing schedule map
+        this.setState({
+            schedules: scheduleItems
+        });
     }
 
     public onScheduleItemToggled(schedule: Schedule, isEnabled: boolean): void {

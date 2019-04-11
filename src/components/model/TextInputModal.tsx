@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet} from "react-native";
 import { Button, Input } from "react-native-elements";
-import Modal from "react-native-modal";
-import Colors from "../constants/Colors";
+import Colors from "../../constants/Colors";
+import { Modal } from "./Modal";
 
 export interface TextInputModalProps {
     isVisible: boolean;
@@ -31,37 +31,30 @@ export class TextInputModal extends React.Component<TextInputModalProps, TextInp
     public render(): ReactNode {
         return (
             <Modal
-                avoidKeyboard={true}
-                backdropOpacity={0.4}
+                buttons={[
+                    <Button
+                        key={0}
+                        onPress={this.onCancelled.bind(this)}
+                        title="Cancel"
+                        type="clear" />,
+                    <Button
+                        key={1}
+                        onPress={this.onCompleted.bind(this)}
+                        title="OK"
+                        type="clear" />
+                ]}
                 isVisible={this.props.isVisible}
-                useNativeDriver={true}>
-                <View style={style.container}>
-                    <View style={style.panel}>
-                        <View style={style.content}>
-                            <Text style={style.title}>{this.props.title}</Text>
-                            <Text style={style.text}>{this.props.text}</Text>
-                            <Input
-                                containerStyle={style.input}
-                                inputContainerStyle={style.inputContainer}
-                                onChangeText={this.onChangeText.bind(this)}
-                                placeholder={this.props.placeholder}
-                                maxLength={this.props.maxLength}
-                                shake={true}
-                                value={this.state.value}
-                            />
-                        </View>
-                        <View style={style.footer}>
-                            <Button
-                                onPress={this.onCancelled.bind(this)}
-                                title="Cancel"
-                                type="clear" />
-                            <Button
-                                onPress={this.onCompleted.bind(this)}
-                                title="OK"
-                                type="clear" />
-                        </View>
-                    </View>
-                </View>
+                title={this.props.title}
+                text={this.props.text}>
+                <Input
+                    containerStyle={style.input}
+                    inputContainerStyle={style.inputContainer}
+                    onChangeText={this.onChangeText.bind(this)}
+                    placeholder={this.props.placeholder}
+                    maxLength={this.props.maxLength}
+                    shake={true}
+                    value={this.state.value}
+                />
             </Modal>
          );
     }

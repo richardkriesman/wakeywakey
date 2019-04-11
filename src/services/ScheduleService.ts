@@ -18,6 +18,17 @@ export class ScheduleService extends Service {
     }
 
     /**
+     * Deletes a {@link Schedule}. All associated alarms and options will also be deleted.
+     *
+     * @param schedule Schedule to be deleted
+     */
+    public async delete(schedule: Schedule): Promise<void> {
+        // noinspection TypeScriptValidateJSTypes - WebStorm thinks this is an invalid type for some reason?
+        await Schedule.delete(this.db, schedule);
+        this.updateEmitters();
+    }
+
+    /**
      * Gets all {@link Schedule}s.
      */
     public getAll(): Promise<Schedule[]> {

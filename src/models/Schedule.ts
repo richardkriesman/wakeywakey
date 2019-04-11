@@ -39,6 +39,22 @@ export class Schedule extends Model {
     }
 
     /**
+     * Deletes a Schedule.
+     *
+     * For internal use only. Use {@link ScheduleService} to delete a schedule from the UI.
+     *
+     * @param db Database connection
+     * @param schedule Schedule to be deleted
+     */
+    public static async delete(db: AppDatabase, schedule: Schedule): Promise<void> {
+        await db.execute(`
+            DELETE FROM schedule
+            WHERE
+                id = ?
+        `, [schedule.id]);
+    }
+
+    /**
      * Gets all Schedules.
      *
      * For internal use only. Use {@link ScheduleService} to get all Schedules from the UI.
