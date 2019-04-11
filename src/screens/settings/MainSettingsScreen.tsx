@@ -110,8 +110,15 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
     }
 
     public onScheduleItemPressed(schedule: Schedule): void {
+        /*
+         * Okay, explanation as to why `screen` is being passed in here:
+         * EditSchedule is a bottom tab navigator, which isn't a UIScreen. However, it needs a UIScreen object so it can
+         * call `present` when the "add alarm" button is pressed. This is a horrible hack, but I don't have a better
+         * solution at this precise moment in time.
+         */
         this.present("EditSchedule", {
             schedule,
+            screen: this,
             title: schedule.name
         });
     }
