@@ -12,5 +12,5 @@ export { HeaderBackButton } from "./HeaderBackButton";
 export { InactivityHandler } from "./InactivityHandler";
 export { PasscodeInput } from "./PasscodeInput";
 export { TabBarIcon } from "./TabBarIcon";
-export { TextInputModal } from "./TextInputModal";
+export { TextInputModal } from "./modal/TextInputModal";
 export { ToggleButton } from "./ToggleButton";

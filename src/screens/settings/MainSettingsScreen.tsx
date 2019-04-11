@@ -50,7 +50,7 @@ export interface ScheduleListItemData {
 export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
 
     private dataSetChangedHandler: (data: Schedule[]) => void;
-    private watcher: Watcher<Schedule[]> = this.getService(ScheduleService).watchAll();
+    private watcher: Watcher<Schedule> = this.getService(ScheduleService).watchAll();
 
     public constructor(props: NavigationScreenProps) {
         super(props);

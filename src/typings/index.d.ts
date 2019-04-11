@@ -26,3 +26,6 @@ declare module "@expo/samples" {
 
 // getting an error on my end. hoping to clear it up. sL
 declare module "@expo/vector-icons";
+
+declare type InstanceType<T extends new(...args: any[]) => any> =
+    T extends new(...args: any[]) => infer R ? R : any;

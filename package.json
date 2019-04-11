@@ -45,6 +45,7 @@
     "@types/react-native": "^0.57.38",
     "@types/react-navigation": "^3.0.4",
     "@types/react-test-renderer": "^16.8.1",
+    "@types/typescript": "^2.0.0",
     "babel-preset-expo": "^5.0.0",
     "concurrently": "^4.1.0",
     "coveralls": "^3.0.3",

@@ -8,6 +8,6 @@
  * should only use a Watcher instance on a single screen.
  */
 export interface Watcher<T> {
-    on(fn: (data: T) => void): void;
-    off(fn: (data: T) => void): void;
+    on(fn: (data: T[]) => void): void;
+    off(fn: (data: T[]) => void): void;
 }

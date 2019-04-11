@@ -83,7 +83,6 @@ export class Alarm extends Model {
      */
     public readonly schedule: Schedule;
 
-    private _id: number;
     private _sleepTime: number;
     private _wakeTime: number;
     private _getUpTime: number;
@@ -91,13 +90,6 @@ export class Alarm extends Model {
     private constructor(db: AppDatabase, schedule: Schedule) {
         super(db);
         this.schedule = schedule;
-    }
-
-    /**
-     * A unique ID
-     */
-    public get id(): number {
-        return this._id;
     }
 
     /**

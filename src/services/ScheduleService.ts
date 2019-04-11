@@ -1,10 +1,8 @@
 import { Schedule } from "../models";
 import { Service } from "../utils/Service";
-import { Emitter, EmitterSet, Watcher } from "../utils/watcher";
+import { Emitter, Watcher } from "../utils/watcher";
 
 export class ScheduleService extends Service {
-
-    private emitters: EmitterSet<Schedule[]> = new EmitterSet<Schedule[]>(); // emitters to be updated on changes
 
     /**
      * Creates a new {@link Schedule}.
@@ -57,13 +55,11 @@ export class ScheduleService extends Service {
     /**
      * Returns a {@link Watcher} for all schedules.
      */
-    public watchAll(): Watcher<Schedule[]> {
-        const emitter = new Emitter<Schedule[]>();
-        emitter.onDealloc(() => this.emitters.remove(emitter));
+    public watchAll(): Watcher<Schedule> {
+        const emitter: Emitter<Schedule> = this.db.getEmitterSet<Schedule>(Schedule.name).create();
         this.getAll() // get an initial data set
             .then((schedules: Schedule[]) => {
-                emitter.update(schedules);
-                this.emitters.add(emitter);
+                emitter.updateInitialSet(schedules);
             });
         return emitter;
     }
@@ -72,7 +68,8 @@ export class ScheduleService extends Service {
      * Updates the data set for all emitters.
      */
     private updateEmitters(): void {
-        this.getAll().then((schedules: Schedule[]) => this.emitters.update(schedules));
+        this.getAll().then((schedules: Schedule[]) =>
+            this.db.getEmitterSet<Schedule>(Schedule.name).update(schedules));
     }
 
 }

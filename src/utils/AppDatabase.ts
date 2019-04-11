@@ -4,7 +4,9 @@
 
 import {FileSystem, SQLite} from "expo";
 import * as Log from "./Log";
+import { Model } from "./Model";
 import { Service } from "./Service";
+import { EmitterSet } from "./watcher/EmitterSet";
 
 const DATABASE_NAME: string = "app";
 const DATABASE_LOG_TAG: string = "Database";
@@ -93,8 +95,8 @@ export class AppDatabase {
     private static _initCount: number = 0;
 
     private db: Database;
-
     private services: Map<string, Service> = new Map();
+    private emitters: Map<string, EmitterSet<any>> = new Map();
 
     private constructor() {
         this.db = SQLite.openDatabase(DATABASE_NAME);
@@ -114,6 +116,21 @@ export class AppDatabase {
                 tbl_name = ?
         `, [name]);
         return result.rows.length > 0;
+    }
+
+    /**
+     * Gets an {@link EmitterSet} for the specified {@link Model} class. The EmitterSet persists for the life of the
+     * {@link AppDatabase}.
+     *
+     * @param name Name of the EmitterSet
+     */
+    public getEmitterSet<T extends Model>(name: string): EmitterSet<T> {
+        let emitters: EmitterSet<T>|undefined = this.emitters.get(name);
+        if (!emitters) {
+            emitters = new EmitterSet<T>();
+            this.emitters.set(name, emitters);
+        }
+        return emitters;
     }
 
     /**

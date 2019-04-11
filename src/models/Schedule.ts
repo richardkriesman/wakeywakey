@@ -92,16 +92,8 @@ export class Schedule extends Model {
         return model;
     }
 
-    private _id: number;
     private _name: string;
     private _isEnabled: boolean;
-
-    /**
-     * A unique ID
-     */
-    public get id(): number {
-        return this._id;
-    }
 
     /**
      * A non-unique, user-friendly name

@@ -6,11 +6,11 @@ import { Watcher } from "./Watcher";
  */
 export class Emitter<T> implements Watcher<T> {
 
-    private data?: T;
+    private data?: T[];
     private readonly deallocHandlers: Array<() => void> = [];
-    private readonly handlers: Array<(data: T) => void> = [];
+    private readonly handlers: Array<(data: T[]) => void> = [];
 
-    public on(fn: (data: T) => void): void {
+    public on(fn: (data: T[]) => void): void {
         this.handlers.push(fn);
         if (this.data) {
             fn(this.data);
@@ -21,7 +21,7 @@ export class Emitter<T> implements Watcher<T> {
         this.deallocHandlers.push(fn);
     }
 
-    public off(fn: (data: T) => void): void {
+    public off(fn: (data: T[]) => void): void {
         const index: number = this.handlers.indexOf(fn);
         if (index >= 0) {
             this.handlers.slice(index, 1);
@@ -31,9 +31,29 @@ export class Emitter<T> implements Watcher<T> {
         }
     }
 
-    public update(data: T): void {
+    /**
+     * Updates the {@link Emitter}'s data set, notifying each handler of the change.
+     *
+     * @param data New data set
+     */
+    public update(data: T[]): void {
         this.data = data;
         this.handlers.forEach((h) => h(this.data));
+    }
+
+    /**
+     * Updates the {@link Emitter}'s data set, notifying each handler of the change.
+     *
+     * Unlike `update()`, the data set will be updated ONLY if this is the initial data set. If `update()` has already
+     * been called, this data set will be discarded.
+     *
+     * @param data Initial data set
+     */
+    public updateInitialSet(data: T[]): void {
+        if (!this.data) {
+            this.data = data;
+            this.handlers.forEach((h) => h(this.data));
+        }
     }
 
 }

@@ -42,6 +42,10 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     }
 
     public renderContent(): ReactNode {
+
+        // render an empty message if there's no alarms
+
+
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Alarms</Text>

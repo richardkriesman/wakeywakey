@@ -11,8 +11,11 @@ export class EmitterSet<T> {
         this.emitters = emitters;
     }
 
-    public add(emitter: Emitter<T>): void {
+    public create(): Emitter<T> {
+        const emitter = new Emitter<T>();
+        emitter.onDealloc(() => this.remove(emitter));
         this.emitters.push(emitter);
+        return emitter;
     }
 
     public remove(emitter: Emitter<T>): void {
@@ -22,7 +25,7 @@ export class EmitterSet<T> {
         }
     }
 
-    public update(data: T): void {
+    public update(data: T[]): void {
         this.emitters.forEach((emitter) => emitter.update(data));
     }
 
