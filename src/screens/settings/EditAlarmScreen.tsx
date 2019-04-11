@@ -6,20 +6,18 @@ import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
-import { HeaderBackButton } from "../../components/HeaderBackButton";
 
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
 import { UIScreen } from "../../utils/screen";
-import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 
 export interface EditAlarmScreenState {
     alarm?: AlarmModel;
 }
 
-@HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()}/>)
 @HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
                                        onPress={() => screen.dismiss()}/>)
 export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
@@ -35,6 +33,17 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     public renderContent(): ReactNode {
+
+        // render delete button if the alarm already exists
+        let deleteButton: ReactNode|undefined;
+        if (this.state.alarm) {
+            deleteButton = <Button
+                buttonStyle={styles.deleteButton}
+                containerStyle={styles.deleteButtonContainer}
+                titleStyle={styles.deleteButtonTitle}
+                title="Delete Alarm" />;
+        }
+
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Days</Text>
@@ -59,8 +68,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
                 <Divider style={styles.divider}/>
 
-                <Button buttonStyle={styles.deleteButton} containerStyle={styles.deleteButtonContainer}
-                        titleStyle={styles.deleteButtonTitle} title="Delete Alarm"/>
+                {deleteButton}
             </View>
         );
     }

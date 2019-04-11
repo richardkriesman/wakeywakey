@@ -49,6 +49,25 @@ export class AppDatabase {
             `);
         }
 
+        // create alarm table
+        if (!(await appDb.doesTableExist("alarm"))) {
+            await appDb.execute(`
+                CREATE TABLE alarm
+                (
+                    id INTEGER not null
+                        constraint alarm_pk
+                            primary key autoincrement,
+                    scheduleId INTEGER not null
+                        constraint alarm_schedule_id_fk
+                            references schedule
+                                on update cascade on delete cascade,
+                    sleepTime UNSIGNED INTEGER not null,
+                    wakeTime UNSIGNED INTEGER not null,
+                    getUpTime UNSIGNED INTEGER not null
+                );
+            `);
+        }
+
         AppDatabase._initCount++;
         return appDb;
     }

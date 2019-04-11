@@ -8,7 +8,7 @@ import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
 import { DestructiveButton } from "../../components/DestructiveButton";
-import { ConfirmationModal } from "../../components/model/ConfirmationModal";
+import { ConfirmationModal } from "../../components/modal/ConfirmationModal";
 import Colors from "../../constants/Colors";
 import { Schedule } from "../../models/Schedule";
 import { ScheduleService } from "../../services/ScheduleService";

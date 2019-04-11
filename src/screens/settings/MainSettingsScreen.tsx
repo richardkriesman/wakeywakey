@@ -7,7 +7,7 @@ import { SectionList, StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton, ScheduleListHeader, ScheduleListItem } from "../../components";
-import { TextInputModal } from "../../components/model";
+import { TextInputModal } from "../../components/modal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
