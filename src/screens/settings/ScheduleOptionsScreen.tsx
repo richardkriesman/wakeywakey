@@ -19,7 +19,8 @@ export interface ScheduleOptionsScreenState {
     isDeleteModalVisible: boolean;
 }
 
-@BottomTabBarIcon("ios-cog") @Title("Options")
+@BottomTabBarIcon("ios-cog")
+@Title("Options")
 export class ScheduleOptionsScreen extends UIScreen<{}, ScheduleOptionsScreenState> {
 
     private readonly schedule: Schedule;

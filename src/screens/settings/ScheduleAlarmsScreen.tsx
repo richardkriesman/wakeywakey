@@ -5,14 +5,14 @@
 import React, { ReactNode } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
-import { NavigationScreenProps, StackActions } from "react-navigation";
+import { NavigationScreenProps } from "react-navigation";
 import { HeaderBackButton, HeaderIconButton } from "../../components";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { Schedule } from "../../models";
 import { AlarmModel } from "../../models/AlarmModel";
 import AlarmUtils from "../../utils/AlarmUtils";
-import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { BottomTabBarIcon, HeaderButtonLeft, HeaderButtonRight, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
 export interface EditScheduleScreenState {
@@ -25,6 +25,8 @@ export interface EditScheduleScreenState {
     <HeaderIconButton
         icon="add"
         onPress={() => screen.present("EditAlarm", { title: "Add Alarm" })} />)
+@Title("Alarms")
+@BottomTabBarIcon("ios-alarm")
 export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
 
     public constructor(props: NavigationScreenProps) {
