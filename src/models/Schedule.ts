@@ -1,5 +1,6 @@
 import { AppDatabase } from "../utils/AppDatabase";
 import { Model } from "../utils/Model";
+import { Alarm } from "./Alarm";
 
 /**
  * A Schedule represents a weekly alarm schedule, such as "School Nights" for weeks when a child has to get up earlier
@@ -114,6 +115,17 @@ export class Schedule extends Model {
      */
     public get isEnabled(): boolean {
         return this._isEnabled;
+    }
+
+    /**
+     * Creates a new {@link Alarm} attached to this Schedule.
+     *
+     * @param sleepTime Time the child should go to sleep
+     * @param wakeTime Time the child should wake up
+     * @param getUpTime Time the child is allowed to get up
+     */
+    public createAlarm(sleepTime: number, wakeTime: number, getUpTime: number): Promise<Alarm> {
+        return Alarm.create(this.db, this, sleepTime, wakeTime, getUpTime, []);
     }
 
 }

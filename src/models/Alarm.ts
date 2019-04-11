@@ -2,6 +2,16 @@ import { AppDatabase } from "../utils/AppDatabase";
 import { Model } from "../utils/Model";
 import { Schedule } from "./Schedule";
 
+export enum AlarmDay {
+    Monday = 0,
+    Tuesday = 1,
+    Wednesday = 2,
+    Thursday = 3,
+    Friday = 4,
+    Saturday = 5,
+    Sunday = 6
+}
+
 /**
  * An Alarm specifies the times go to bed or get up. It can be repeated over a specified number of days.
  *
@@ -27,9 +37,10 @@ export class Alarm extends Model {
      * @param sleepTime Time the child should go to sleep
      * @param wakeTime Time the child should wake up
      * @param getUpTime Time the child is allowed to get up
+     * @param days Days of the week the Alarm is active for
      */
     public static async create(db: AppDatabase, schedule: Schedule, sleepTime: number, wakeTime: number,
-                               getUpTime: number): Promise<Alarm> {
+                               getUpTime: number, days: AlarmDay[]): Promise<Alarm> {
 
         // insert the alarm into the database
         const result: SQLResultSet = await db.execute(`
@@ -38,6 +49,8 @@ export class Alarm extends Model {
             VALUES
                 (?, ?, ?, ?)
         `, [schedule.id, sleepTime, wakeTime, getUpTime]);
+
+        // TODO: Add days of week
 
         // build the resulting model
         return Alarm.load(db, schedule, {

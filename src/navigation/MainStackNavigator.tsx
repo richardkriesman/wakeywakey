@@ -4,6 +4,7 @@ import React from "react";
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton } from "../components/HeaderIconButton";
+import { Schedule } from "../models/Schedule";
 import HomeScreen from "../screens/HomeScreen";
 import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
 import MainSettingsScreen from "../screens/settings/MainSettingsScreen";
@@ -50,9 +51,13 @@ export default createStackNavigator(
                          * presenting it. How fun!
                          */
                         const screen: UIScreen = navigation.getParam("screen");
+                        const schedule: Schedule = navigation.getParam("schedule");
 
                         // present the edit alarm screen
-                        screen.present("EditAlarm", { title: "Add Alarm" });
+                        screen.present("EditAlarm", {
+                            schedule,
+                            title: "Add Alarm"
+                        });
 
                     }} />,
                 title: navigation.getParam("title", "Edit Schedule")

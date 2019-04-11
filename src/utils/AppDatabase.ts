@@ -68,6 +68,20 @@ export class AppDatabase {
             `);
         }
 
+        // create alarm => days mapping table
+        if (!(await appDb.doesTableExist("alarm_days"))) {
+            await appDb.execute(`
+                create table alarm_days
+                (
+                    alarmId INTEGER not null
+                        constraint alarm_days_alarm_id_fk
+                            references alarm
+                                on update cascade on delete cascade,
+                    day UNSIGNED INTEGER not null
+                );
+            `);
+        }
+
         AppDatabase._initCount++;
         return appDb;
     }

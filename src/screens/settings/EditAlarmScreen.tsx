@@ -11,15 +11,17 @@ import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
+import { Schedule } from "../../models/Schedule";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 
 export interface EditAlarmScreenState {
     alarm?: AlarmModel;
+    schedule: Schedule;
 }
 
 @HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
-                                       onPress={() => screen.dismiss()}/>)
+                                       onPress={() => (screen as EditAlarmScreen).onSavePress()} />)
 export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
 
     public constructor(props: NavigationScreenProps) {
@@ -28,7 +30,8 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
     public componentWillMount(): void {
         this.setState({
-            alarm: this.props.navigation.getParam("alarm")
+            alarm: this.props.navigation.getParam("alarm"),
+            schedule: this.props.navigation.getParam("schedule")
         });
     }
 
@@ -75,6 +78,18 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
     private daysContains(specificDay: DayOfWeek): boolean {
         return this.state.alarm && this.state.alarm.days && this.state.alarm.days.indexOf(specificDay) > -1;
+    }
+
+    private onSavePress(): void {
+        if (!this.state.alarm) { // new alarm
+            // TODO: actually get times from the UI
+            this.state.schedule.createAlarm(72000, 21600, 25200)
+                .then(() => {
+                    this.dismiss();
+                });
+        } else {
+            // TODO: update existing alarm
+        }
     }
 }
 
