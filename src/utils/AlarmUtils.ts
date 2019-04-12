@@ -2,19 +2,30 @@
  * @module utils
  */
 
-import { AlarmModel } from "../models/AlarmModel";
+import { Alarm } from "../models/Alarm";
 
-export function getAlarmTitle(alarm: AlarmModel): string {
+export function getAlarmTitle(alarm: Alarm): string {
     const start = formatTime(alarm.sleepTime);
     const end = formatTime(alarm.getUpTime);
     return `${start} - ${end}`;
 }
 
-export function getAlarmSubtitle(alarm: AlarmModel): string {
-    return alarm.days.join(", ");
+export function getAlarmSubtitle(alarm: Alarm): string {
+    // TODO: Get the days here
+    return "TBI :)";
 }
 
-export function formatTime(date: Date): string {
+export function formatTime(time: number): string {
+
+    // build a Date representing the next time this alarm will sound.
+    const date: Date = new Date();
+    date.setHours(0, 0, 0, 0); // set date to midnight today
+    date.setTime(date.getTime() + time * 1000); // add alarm seconds to get the correct time
+    if (date.getTime() < (new Date()).getTime()) { // date has already passed, set to tomorrow
+        date.setDate(date.getDate() + 1);
+    }
+
+    // format the date for display
     return `${padTime(date.getHours())}:${padTime(date.getMinutes())}`;
 }
 

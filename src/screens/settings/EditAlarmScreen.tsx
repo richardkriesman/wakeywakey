@@ -10,13 +10,14 @@ import { NavigationScreenProps } from "react-navigation";
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
-import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
+import { DayOfWeek } from "../../models/AlarmModel";
 import { Schedule } from "../../models/Schedule";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { Alarm } from "../../models/Alarm";
 
 export interface EditAlarmScreenState {
-    alarm?: AlarmModel;
+    alarm?: Alarm;
     schedule: Schedule;
 }
 
@@ -43,6 +44,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             deleteButton = <Button
                 buttonStyle={styles.deleteButton}
                 containerStyle={styles.deleteButtonContainer}
+                onPress={this.onDeletePress.bind(this)}
                 titleStyle={styles.deleteButtonTitle}
                 title="Delete Alarm" />;
         }
@@ -77,7 +79,14 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private daysContains(specificDay: DayOfWeek): boolean {
-        return this.state.alarm && this.state.alarm.days && this.state.alarm.days.indexOf(specificDay) > -1;
+        // FIXME: Add alarm days
+        // return this.state.alarm && this.state.alarm.days && this.state.alarm.days.indexOf(specificDay) > -1;
+        return false;
+    }
+
+    private onDeletePress(): void {
+        this.state.alarm.delete()
+            .then(() => this.dismiss());
     }
 
     private onSavePress(): void {
@@ -89,6 +98,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 });
         } else {
             // TODO: update existing alarm
+            this.dismiss();
         }
     }
 }

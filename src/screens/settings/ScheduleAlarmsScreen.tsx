@@ -9,12 +9,15 @@ import { NavigationScreenProps } from "react-navigation";
 import Colors from "../../constants/Colors";
 import Layout from "../../constants/Layout";
 import { Schedule } from "../../models";
-import { AlarmModel } from "../../models/AlarmModel";
+import { Alarm } from "../../models/Alarm";
 import AlarmUtils from "../../utils/AlarmUtils";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
+import { Watcher } from "../../utils/watcher/Watcher";
+import { ScheduleListItemData } from "./MainSettingsScreen";
 
 export interface EditScheduleScreenState {
+    alarms: Map<number, Alarm>;
     headerTitle: string;
     schedule?: Schedule;
 }
@@ -23,39 +26,44 @@ export interface EditScheduleScreenState {
 @BottomTabBarIcon("ios-alarm")
 export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
 
+    private dataSetChangedHandler: (alarms: Alarm[]) => void;
+    private watcher: Watcher<Alarm>;
+
     public constructor(props: NavigationScreenProps) {
         super(props);
     }
 
     public componentWillMount(): void {
         this.setState({
+            alarms: new Map(),
             headerTitle: this.props.navigation.getParam("title"),
             schedule: this.props.navigation.getParam("schedule") || null
+        }, () => { // got the schedule, watch for alarms
+            this.watcher = this.state.schedule.watchAlarms();
+            this.dataSetChangedHandler = this.onDataSetChanged.bind(this);
+            this.watcher.on(this.dataSetChangedHandler);
         });
     }
 
     public onAlarmPressed(key: number): void {
+        this.watcher.off(this.dataSetChangedHandler);
         this.present("EditAlarm", {
-            alarm: null, // this.state.schedule.alarms[key],
+            alarm: this.state.alarms.get(key),
             title: this.state.headerTitle
         });
     }
 
     public renderContent(): ReactNode {
-
-        // render an empty message if there's no alarms
-
-
         return (
             <View style={styles.viewScroller}>
                 <Text style={styles.textSectionHeader}>Alarms</Text>
 
                 <FlatList
-                    data={this.state.schedule ? /*this.state.schedule.alarms */ [] : []}
-                    keyExtractor={(item: AlarmModel): string => String(item.key)}
+                    data={Array.from(this.state.alarms.values())}
+                    keyExtractor={(item: Alarm): string => item.id.toString()}
                     renderItem={({ item }) => (
                         <ListItem
-                            onPress={this.onAlarmPressed.bind(this, item.key)}
+                            onPress={this.onAlarmPressed.bind(this, item.id)}
                             title={AlarmUtils.getAlarmTitle(item)}
                             subtitle={AlarmUtils.getAlarmSubtitle(item)}
                             rightIcon={{ name: "arrow-forward", type: "ionicons" }}
@@ -66,6 +74,21 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
             </View>
         );
     }
+
+    private onDataSetChanged(alarms: Alarm[]): void {
+
+        // build a new map of alarms
+        const alarmItems: Map<number, Alarm> = new Map();
+        for (const alarm of alarms) {
+            alarmItems.set(alarm.id, alarm);
+        }
+
+        // replace the existing alarm map
+        this.setState({
+            alarms: alarmItems
+        });
+    }
+
 }
 
 const styles = StyleSheet.create({

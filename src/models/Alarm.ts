@@ -33,13 +33,13 @@ export class Alarm extends Model {
      * For internal use only. Use a {@link Schedule} to create a new alarm from the UI.
      *
      * @param db Database connection
-     * @param schedule Schedule by which this alarm is attached
+     * @param scheduleId ID of the Schedule to which this alarm is attached
      * @param sleepTime Time the child should go to sleep
      * @param wakeTime Time the child should wake up
      * @param getUpTime Time the child is allowed to get up
      * @param days Days of the week the Alarm is active for
      */
-    public static async create(db: AppDatabase, schedule: Schedule, sleepTime: number, wakeTime: number,
+    public static async create(db: AppDatabase, scheduleId: number, sleepTime: number, wakeTime: number,
                                getUpTime: number, days: AlarmDay[]): Promise<Alarm> {
 
         // insert the alarm into the database
@@ -48,29 +48,90 @@ export class Alarm extends Model {
                 (scheduleId, sleepTime, wakeTime, getUpTime)
             VALUES
                 (?, ?, ?, ?)
-        `, [schedule.id, sleepTime, wakeTime, getUpTime]);
+        `, [scheduleId, sleepTime, wakeTime, getUpTime]);
 
         // TODO: Add days of week
 
+        // update the watchers
+        db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(db));
+
         // build the resulting model
-        return Alarm.load(db, schedule, {
+        return Alarm.load(db, {
             getUpTime,
             id: result.insertId,
-            scheduleId: schedule.id,
+            scheduleId,
             sleepTime,
             wakeTime
         });
     }
 
     /**
+     * Gets all {@link Alarm}s.
+     *
+     * For internal use only.
+     *
+     * @param db Database connection
+     */
+    public static async getAll(db: AppDatabase): Promise<Alarm[]> {
+        const result: SQLResultSet = await db.execute(`
+            SELECT *
+            FROM alarm;
+        `);
+        const alarms: Alarm[] = [];
+        for (let i = 0; i < result.rows.length; i++) {
+            alarms.push(Alarm.load(db, result.rows.item(i)));
+        }
+        return alarms;
+    }
+
+    /**
+     * Gets an {@link Alarm} by its ID.
+     *
+     * For internal use only.
+     *
+     * @param db Database connection
+     * @param id ID of the Alarm to retrieve
+     */
+    public static async getById(db: AppDatabase, id: number): Promise<Alarm|undefined> {
+        const result: SQLResultSet = await db.execute(`
+            SELECT *
+            FROM alarm
+            WHERE
+                id = ?
+        `, [id]);
+        return result.rows.length > 0 ? Alarm.load(db, result.rows.item(0)) : undefined;
+    }
+
+    /**
+     * Gets an {@link Alarm} by its {@link Schedule}'s ID.
+     *
+     * For internal use only.
+     *
+     * @param db Database connection
+     * @param scheduleId ID of the Schedule to which the Alarms are attached
+     */
+    public static async getByScheduleId(db: AppDatabase, scheduleId: number): Promise<Alarm[]> {
+        const result: SQLResultSet = await db.execute(`
+            SELECT *
+            FROM alarm
+            WHERE
+                scheduleId = ?
+        `, [scheduleId]);
+        const alarms: Alarm[] = [];
+        for (let i = 0; i < result.rows.length; i++) {
+            alarms.push(Alarm.load(db, result.rows.item(i)));
+        }
+        return alarms;
+    }
+
+    /**
      * Generates a model given a row from the database.
      *
      * @param db Database connection
-     * @param schedule Schedule to which this Alarm is attached
      * @param row Row from the database
      */
-    private static load(db: AppDatabase, schedule: Schedule, row: any): Alarm {
-        const model = new Alarm(db, schedule);
+    private static load(db: AppDatabase, row: any): Alarm {
+        const model = new Alarm(db, row.scheduleId);
         model._id = row.id;
         model._sleepTime = row.sleepTime;
         model._wakeTime = row.wakeTime;
@@ -79,17 +140,17 @@ export class Alarm extends Model {
     }
 
     /**
-     * A {@link Schedule} to which this Alarm is attached.
+     * ID of the {@link Schedule} to which this Alarm is attached.
      */
-    public readonly schedule: Schedule;
+    public readonly scheduleId: number;
 
     private _sleepTime: number;
     private _wakeTime: number;
     private _getUpTime: number;
 
-    private constructor(db: AppDatabase, schedule: Schedule) {
+    private constructor(db: AppDatabase, scheduleId: number) {
         super(db);
-        this.schedule = schedule;
+        this.scheduleId = scheduleId;
     }
 
     /**
@@ -124,6 +185,7 @@ export class Alarm extends Model {
             WHERE
                 id = ?
         `, [this.id]);
+        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
     }
 
 }

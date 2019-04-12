@@ -1,6 +1,8 @@
 import { AppDatabase } from "../utils/AppDatabase";
 import { Model } from "../utils/Model";
 import { Alarm } from "./Alarm";
+import { Watcher } from "../utils/watcher/Watcher";
+import { Emitter } from "../utils/watcher/Emitter";
 
 /**
  * A Schedule represents a weekly alarm schedule, such as "School Nights" for weeks when a child has to get up earlier
@@ -117,7 +119,33 @@ export class Schedule extends Model {
      * @param getUpTime Time the child is allowed to get up
      */
     public createAlarm(sleepTime: number, wakeTime: number, getUpTime: number): Promise<Alarm> {
-        return Alarm.create(this.db, this, sleepTime, wakeTime, getUpTime, []);
+        return Alarm.create(this.db, this.id, sleepTime, wakeTime, getUpTime, []);
+    }
+
+    /**
+     * Returns a {@link Watcher} that updates with this {@link Schedule}'s set of {@link Alarm}s.
+     */
+    public watchAlarms(): Watcher<Alarm> {
+        const emitter: Emitter<Alarm> = this.db.getEmitterSet<Alarm>(Alarm.name).create();
+
+        // configure filter
+        emitter.onFilter((alarms: Alarm[]) => {
+            const newAlarms: Alarm[] = [];
+            for (const alarm of alarms) {
+                if (alarm.scheduleId === this.id) {
+                    newAlarms.push(alarm);
+                }
+            }
+            return newAlarms;
+        });
+
+        // get initial data set
+        Alarm.getByScheduleId(this.db, this.id)
+            .then((alarms: Alarm[]) => {
+                emitter.updateInitialSet(alarms);
+            });
+
+        return emitter;
     }
 
 }

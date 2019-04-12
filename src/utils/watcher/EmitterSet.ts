@@ -26,7 +26,7 @@ export class EmitterSet<T> {
     }
 
     public update(data: T[]): void {
-        this.emitters.forEach((emitter) => emitter.update(data));
+        this.emitters.forEach((emitter) => emitter.update(data.slice(0)));
     }
 
 }

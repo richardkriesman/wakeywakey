@@ -7,6 +7,7 @@ import { Watcher } from "./Watcher";
 export class Emitter<T> implements Watcher<T> {
 
     private data?: T[];
+    private readonly filterHandlers: Array<(data: T[]) => T[]> = [];
     private readonly deallocHandlers: Array<() => void> = [];
     private readonly handlers: Array<(data: T[]) => void> = [];
 
@@ -19,6 +20,10 @@ export class Emitter<T> implements Watcher<T> {
 
     public onDealloc(fn: () => void): void {
         this.deallocHandlers.push(fn);
+    }
+
+    public onFilter(fn: (data: T[]) => T[]): void {
+        this.filterHandlers.push(fn);
     }
 
     public off(fn: (data: T[]) => void): void {
@@ -38,6 +43,9 @@ export class Emitter<T> implements Watcher<T> {
      */
     public update(data: T[]): void {
         this.data = data;
+        for (const filter of this.filterHandlers) {
+            this.data = filter(this.data);
+        }
         this.handlers.forEach((h) => h(this.data));
     }
 
@@ -51,8 +59,7 @@ export class Emitter<T> implements Watcher<T> {
      */
     public updateInitialSet(data: T[]): void {
         if (!this.data) {
-            this.data = data;
-            this.handlers.forEach((h) => h(this.data));
+            this.update(data);
         }
     }
 
