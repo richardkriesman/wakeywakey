@@ -4,28 +4,36 @@
 
 import { Brightness } from "expo";
 import React, { ReactNode } from "react";
-import ReactNative, { PanResponder, PanResponderInstance, TouchableWithoutFeedback, View } from "react-native";
+import ReactNative, {
+    AppState, PanResponder, PanResponderInstance, TouchableWithoutFeedback, View
+} from "react-native";
 import { NavigationEvents } from "react-navigation";
 
 const DEFAULT_BRIGHTNESS = .8;
 const DEFAULT_DIM_BRIGHTNESS = 0;
 const DEFAULT_IDLE_TIME = 2000; // 2 seconds
 
-export interface InactivityDimmerProps {
+export interface InactivityHandlerProps {
     dimBrightness: number; // optional
     idleTime: number;
     navigation: any; // required for detecting focus/blur
 }
 
-export interface InactivityDimmerState {
+export interface InactivityHandlerState {
     active: boolean;
+    currentState: string; // AppState
 }
 
 /**
+ * InactivityHandler
+ *
  * This component dims the screen when inactive.
- * If screen is unfocused, the timer stops until refocused.
+ *   If screen is unfocused, the timer stops until refocused.
+ *
+ * This component routes to top of stack (HomeScreen) when the app becomes
+ *   active after being inactive.
  */
-export class InactivityDimmer extends React.Component<InactivityDimmerProps, InactivityDimmerState> {
+export class InactivityHandler extends React.Component<InactivityHandlerProps, InactivityHandlerState> {
     public static defaultProps = {
         dimBrightness: DEFAULT_DIM_BRIGHTNESS,
         idleTime: DEFAULT_IDLE_TIME
@@ -34,15 +42,17 @@ export class InactivityDimmer extends React.Component<InactivityDimmerProps, Ina
     private _panResponder: PanResponderInstance;
     private idleTimer: any;
 
-    public constructor(props: InactivityDimmerProps) {
+    public constructor(props: InactivityHandlerProps) {
         super(props);
     }
 
     public componentWillMount(): void {
-        this.setState({ active: true });
+        this.setState({ active: true, currentState: "" });
 
         this.props.navigation.addListener("didFocus", () => this.componentDidFocus());
         this.props.navigation.addListener("didBlur", () => this.componentDidBlur());
+
+        AppState.addEventListener("change", this.handleAppStateChange.bind(this));
 
         this._panResponder = PanResponder.create({
             onMoveShouldSetPanResponder: () => false,
@@ -51,6 +61,10 @@ export class InactivityDimmer extends React.Component<InactivityDimmerProps, Ina
             onMoveShouldSetPanResponderCapture: this.handlePanResponderCapture.bind(this),
             onStartShouldSetPanResponderCapture: this.handlePanResponderCapture.bind(this)
         });
+    }
+
+    public componentWillUnmount(): void {
+        AppState.removeEventListener("change", this.handleAppStateChange.bind(this));
     }
 
     public render(): ReactNode {
@@ -126,5 +140,16 @@ export class InactivityDimmer extends React.Component<InactivityDimmerProps, Ina
         } else { // inactive
             Brightness.setBrightnessAsync(this.props.dimBrightness);
         }
+    }
+
+    /**
+     * handles AppState state change
+     * If coming back to active, route back to top of stack.
+     */
+    public handleAppStateChange(nextState: string) {
+        if (this.state.currentState === "background" && nextState === "active") {
+            this.props.navigation.popToTop();
+        }
+        this.setState({ currentState: nextState });
     }
 }

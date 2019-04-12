@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`InactivityDimmer renders correctly 1`] = `
+exports[`InactivityHandler renders correctly 1`] = `
 <View
   onMoveShouldSetResponder={[Function]}
   onMoveShouldSetResponderCapture={[Function]}

@@ -8,7 +8,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationScreenProps } from "react-navigation";
 import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
-import { InactivityDimmer } from "../components/InactivityDimmer";
+import { InactivityHandler } from "../components/InactivityHandler";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -46,11 +46,11 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public renderContent(): ReactNode {
         return (
-            <InactivityDimmer
-                idleTime={15000} // 15 seconds
+            <InactivityHandler
+                idleTime={15000}
                 navigation={this.props.navigation}
             >
-            <KeepAwake />
+                <KeepAwake/>
                 <View style={ExtraStyles.container}>
                     <View style={ExtraStyles.contentWrapper}>
                         <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
@@ -61,7 +61,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
                         <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
                     </View>
                 </View>
-            </InactivityDimmer>
+            </InactivityHandler>
         );
     }
 
