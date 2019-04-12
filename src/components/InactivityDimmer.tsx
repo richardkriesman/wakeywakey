@@ -8,12 +8,11 @@ import ReactNative, { PanResponder, PanResponderInstance, TouchableWithoutFeedba
 import { NavigationEvents } from "react-navigation";
 
 const DEFAULT_BRIGHTNESS = .8;
-const DEFAULT_DIM_BRIGHTNESS = .1;
+const DEFAULT_DIM_BRIGHTNESS = 0;
 const DEFAULT_IDLE_TIME = 2000; // 2 seconds
 
 export interface InactivityDimmerProps {
-    defaultBrightness: number;
-    dimBrightness: number;
+    dimBrightness: number; // optional
     idleTime: number;
     navigation: any; // required for detecting focus/blur
 }
@@ -28,7 +27,6 @@ export interface InactivityDimmerState {
  */
 export class InactivityDimmer extends React.Component<InactivityDimmerProps, InactivityDimmerState> {
     public static defaultProps = {
-        defaultBrightness: DEFAULT_BRIGHTNESS,
         dimBrightness: DEFAULT_DIM_BRIGHTNESS,
         idleTime: DEFAULT_IDLE_TIME
     };
@@ -112,11 +110,19 @@ export class InactivityDimmer extends React.Component<InactivityDimmerProps, Ina
     }
 
     /**
-     * Called to handle active change. If inactive, dim brightness.
+     * Called to handle active change.
+     * If active, set brightness to system brightness.
+     * If inactive, dim brightness to 0.
      */
     public onActiveChange(active: boolean): void {
         if (active) {
-            Brightness.setBrightnessAsync(this.props.defaultBrightness);
+            Brightness.getSystemBrightnessAsync()
+                .then((res) => { // set to system brightness
+                    Brightness.setBrightnessAsync(res);
+                })
+                .catch(() => { // otherwise, set to default brightness
+                    Brightness.setBrightnessAsync(DEFAULT_BRIGHTNESS);
+                });
         } else { // inactive
             Brightness.setBrightnessAsync(this.props.dimBrightness);
         }

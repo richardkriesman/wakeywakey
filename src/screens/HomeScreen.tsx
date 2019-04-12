@@ -47,7 +47,6 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     public renderContent(): ReactNode {
         return (
             <InactivityDimmer
-                // TODO: defaultBrightness = insert initial screen brightness here
                 idleTime={15000} // 15 seconds
                 navigation={this.props.navigation}
             >
