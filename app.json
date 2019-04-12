@@ -24,9 +24,14 @@
     ],
     "ios": {
       "bundleIdentifier": "com.teamcoredump.wakeywakey",
+      "icon": "./assets/images/icon-ios.png",
       "supportsTablet": true
     },
     "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/images/icon-android-adaptive.png"
+      },
       "package": "com.teamcoredump.wakeywakey"
     }
   }
