@@ -22,6 +22,19 @@ describe("InactivityDimmer", () => {
         expect(tree).toMatchSnapshot();
     });
 
+    it("correctly handles pan response", () => {
+        const component = renderer.create(<InactivityDimmer {...props} />).getInstance();
+        component.setState({ active: false });
+
+        const onActiveChange = jest.spyOn(component, "onActiveChange");
+        const setIdleTimer = jest.spyOn(component, "setIdleTimer");
+
+        expect(component.handlePanResponderCapture()).toBe(false);
+
+        expect(onActiveChange).toBeCalled();
+        expect(setIdleTimer).toBeCalled();
+    });
+
     it("change function called after inactivity", () => {
         const component = renderer.create(<InactivityDimmer {...props} />).getInstance();
         const onActiveChange = jest.spyOn(component, "onActiveChange");
@@ -29,6 +42,20 @@ describe("InactivityDimmer", () => {
         component.setIdleTimer();
         expect(onActiveChange).not.toBeCalled();
         jest.advanceTimersByTime(15000);
+        expect(onActiveChange).toBeCalled();
+    });
+
+    it("correctly handles on focus", () => {
+        const component = renderer.create(<InactivityDimmer {...props} />).getInstance();
+        const setIdleTimer = jest.spyOn(component, "setIdleTimer");
+        component.componentDidFocus();
+        expect(setIdleTimer).toBeCalled();
+    });
+
+    it("correctly handles on blur", () => {
+        const component = renderer.create(<InactivityDimmer {...props} />).getInstance();
+        const onActiveChange = jest.spyOn(component, "onActiveChange");
+        component.componentDidBlur();
         expect(onActiveChange).toBeCalled();
     });
 });
