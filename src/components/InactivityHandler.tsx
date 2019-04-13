@@ -30,8 +30,8 @@ export interface InactivityHandlerState {
  * This component dims the screen when inactive.
  *   If screen is unfocused, the timer stops until refocused.
  *
- * This component routes to top of stack (HomeScreen) when the app becomes
- *   active after being inactive.
+ * This component routes to top of stack (HomeScreen) when the app state
+ *   changes from "background" to "active."
  */
 export class InactivityHandler extends React.Component<InactivityHandlerProps, InactivityHandlerState> {
     public static defaultProps = {
@@ -41,6 +41,7 @@ export class InactivityHandler extends React.Component<InactivityHandlerProps, I
 
     private _panResponder: PanResponderInstance;
     private idleTimer: any;
+    private initialBrightness: number = .8;
 
     public constructor(props: InactivityHandlerProps) {
         super(props);
@@ -48,6 +49,9 @@ export class InactivityHandler extends React.Component<InactivityHandlerProps, I
 
     public componentWillMount(): void {
         this.setState({ active: true, currentState: "" });
+        Brightness.getSystemBrightnessAsync().then((res) => {
+            this.initialBrightness = res;
+        });
 
         this.props.navigation.addListener("didFocus", () => this.componentDidFocus());
         this.props.navigation.addListener("didBlur", () => this.componentDidBlur());
@@ -125,18 +129,12 @@ export class InactivityHandler extends React.Component<InactivityHandlerProps, I
 
     /**
      * Called to handle active change.
-     * If active, set brightness to system brightness.
+     * If active, set brightness to initial brightness.
      * If inactive, dim brightness to 0.
      */
     public onActiveChange(active: boolean): void {
         if (active) {
-            Brightness.getSystemBrightnessAsync()
-                .then((res) => { // set to system brightness
-                    Brightness.setBrightnessAsync(res);
-                })
-                .catch(() => { // otherwise, set to default brightness
-                    Brightness.setBrightnessAsync(DEFAULT_BRIGHTNESS);
-                });
+            Brightness.setBrightnessAsync(this.initialBrightness);
         } else { // inactive
             Brightness.setBrightnessAsync(this.props.dimBrightness);
         }
