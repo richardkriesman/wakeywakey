@@ -6,13 +6,13 @@ import React, { ReactNode } from "react";
 import { StyleSheet } from "react-native";
 import { ListItem } from "react-native-elements";
 
-export interface ScheduleListHeaderProps {
+export interface ListHeaderProps {
     title: string;
 }
 
-export class ScheduleListHeader extends React.Component<ScheduleListHeaderProps> {
+export class ListHeader extends React.Component<ListHeaderProps> {
 
-    public constructor(props: ScheduleListHeaderProps) {
+    public constructor(props: ListHeaderProps) {
         super(props);
     }
 

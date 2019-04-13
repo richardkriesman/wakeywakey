@@ -3,7 +3,7 @@
  */
 
 import React, { ReactNode } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import {FlatList, SectionList, StyleSheet, View} from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 import Colors from "../../constants/Colors";
@@ -15,6 +15,7 @@ import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher/Watcher";
 import {EmptyView} from "../../components/EmptyView";
+import {ListHeader} from "../../components/ListHeader";
 
 export interface EditScheduleScreenState {
     alarms: Map<number, Alarm>;
@@ -57,9 +58,7 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
         if (this.state.alarms.size > 0) { // alarms exist, render the list
             return (
                 <View style={styles.viewScroller}>
-                    <Text style={styles.textSectionHeader}>Alarms</Text>
-                    <FlatList
-                        data={Array.from(this.state.alarms.values())}
+                    <SectionList
                         keyExtractor={(item: Alarm): string => item.id.toString()}
                         renderItem={({ item }) => (
                             <ListItem
@@ -69,6 +68,8 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                                 rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                             />
                         )}
+                        renderSectionHeader={({ section }) => <ListHeader title={section.title}/>}
+                        sections={[ { data: Array.from(this.state.alarms.values()), title: "Alarms"} ]}
                     />
                 </View>
             );
@@ -125,12 +126,6 @@ const styles = StyleSheet.create({
         color: Colors.appleButtonBlue,
         fontWeight: "500",
         marginRight: 10
-    },
-    textSectionHeader: {
-        color: Colors.subheaderColor,
-        fontSize: 17,
-        fontWeight: "600",
-        marginBottom: 10
     },
     viewScroller: {
         flex: 1

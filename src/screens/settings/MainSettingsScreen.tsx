@@ -6,14 +6,15 @@ import React, { ReactNode } from "react";
 import { SectionList, StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
-import { HeaderIconButton, ScheduleListHeader, ScheduleListItem } from "../../components";
+import { HeaderIconButton, ScheduleListItem } from "../../components";
 import { TextInputModal } from "../../components/modal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
-import {EmptyView} from "../../components/EmptyView";
+import { EmptyView } from "../../components/EmptyView";
+import { ListHeader } from "../../components/ListHeader";
 
 /**
  * Main settings screen state. Includes schedule states.
@@ -142,9 +143,8 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                             title={item.schedule.name}
                             enabled={item.schedule.isEnabled}
                         />
-                    )
-                    }
-                    renderSectionHeader={({ section }) => <ScheduleListHeader title={section.title}/>}
+                    )}
+                    renderSectionHeader={({ section }) => <ListHeader title={section.title}/>}
                     sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
                 />
             );
