@@ -13,6 +13,7 @@ import { ScheduleService } from "../../services";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
+import {EmptyView} from "../../components/EmptyView";
 
 /**
  * Main settings screen state. Includes schedule states.
@@ -124,8 +125,40 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
     }
 
     public renderContent(): ReactNode {
+
+        // render main content
+        let content: ReactNode;
+        if (this.state.schedules.size > 0) { // schedules exist, render the list
+            content = (
+                <SectionList
+                    keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
+                    renderItem={({ item }) => (
+                        <ScheduleListItem
+                            ref={(me: ScheduleListItem) => {
+                                item.listItemRef = me;
+                            }}
+                            onPress={this.onScheduleItemPressed.bind(this, item.schedule)}
+                            onSwitchToggled={this.onScheduleItemToggled.bind(this, item.schedule)}
+                            title={item.schedule.name}
+                            enabled={item.schedule.isEnabled}
+                        />
+                    )
+                    }
+                    renderSectionHeader={({ section }) => <ScheduleListHeader title={section.title}/>}
+                    sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
+                />
+            );
+        } else { // schedules do not exist, render empty message
+            content = (
+                <EmptyView
+                    icon="ios-calendar"
+                    title="No schedules yet"
+                    subtitle="Create a schedule to set alarms" />
+            );
+        }
+
         return (
-            <View>
+            <View style={styles.container}>
                 <TextInputModal
                     isVisible={this.state.isCreateModalVisible}
                     maxLength={Schedule.NAME_MAX_LENGTH}
@@ -133,23 +166,7 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                     text="Type a name for the new schedule:"
                     onCancelled={this.onModalCancelled.bind(this)}
                     onCompleted={this.onModalCompleted.bind(this)} />
-                <SectionList
-                    keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
-                    renderItem={({ item }) => (
-                            <ScheduleListItem
-                                ref={(me: ScheduleListItem) => {
-                                    item.listItemRef = me;
-                                }}
-                                onPress={this.onScheduleItemPressed.bind(this, item.schedule)}
-                                onSwitchToggled={this.onScheduleItemToggled.bind(this, item.schedule)}
-                                title={item.schedule.name}
-                                enabled={item.schedule.isEnabled}
-                            />
-                        )
-                    }
-                    renderSectionHeader={({ section }) => <ScheduleListHeader title={section.title}/>}
-                    sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
-                />
+                {content}
             </View>
         );
     }
@@ -173,6 +190,9 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     header: {
         flexDirection: "row"
     }

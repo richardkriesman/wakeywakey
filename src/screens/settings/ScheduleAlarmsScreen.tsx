@@ -14,7 +14,7 @@ import AlarmUtils from "../../utils/AlarmUtils";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher/Watcher";
-import { ScheduleListItemData } from "./MainSettingsScreen";
+import {EmptyView} from "../../components/EmptyView";
 
 export interface EditScheduleScreenState {
     alarms: Map<number, Alarm>;
@@ -54,25 +54,32 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     }
 
     public renderContent(): ReactNode {
-        return (
-            <View style={styles.viewScroller}>
-                <Text style={styles.textSectionHeader}>Alarms</Text>
-
-                <FlatList
-                    data={Array.from(this.state.alarms.values())}
-                    keyExtractor={(item: Alarm): string => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <ListItem
-                            onPress={this.onAlarmPressed.bind(this, item.id)}
-                            title={AlarmUtils.getAlarmTitle(item)}
-                            subtitle={AlarmUtils.getAlarmSubtitle(item)}
-                            rightIcon={{ name: "arrow-forward", type: "ionicons" }}
-                        />
-                    )}
-                />
-
-            </View>
-        );
+        if (this.state.alarms.size > 0) { // alarms exist, render the list
+            return (
+                <View style={styles.viewScroller}>
+                    <Text style={styles.textSectionHeader}>Alarms</Text>
+                    <FlatList
+                        data={Array.from(this.state.alarms.values())}
+                        keyExtractor={(item: Alarm): string => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <ListItem
+                                onPress={this.onAlarmPressed.bind(this, item.id)}
+                                title={AlarmUtils.getAlarmTitle(item)}
+                                subtitle={AlarmUtils.getAlarmSubtitle(item)}
+                                rightIcon={{ name: "arrow-forward", type: "ionicons" }}
+                            />
+                        )}
+                    />
+                </View>
+            );
+        } else { // no alarms, render an empty state
+            return (
+                <EmptyView
+                    icon="ios-alarm"
+                    title="No alarms yet"
+                    subtitle="Create an alarm to set your child's bedtime" />
+            );
+        }
     }
 
     private onDataSetChanged(alarms: Alarm[]): void {
@@ -126,7 +133,6 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     viewScroller: {
-        height: Layout.window.height,
-        padding: 20
+        flex: 1
     }
 });
