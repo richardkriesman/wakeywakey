@@ -1,6 +1,8 @@
 import { AppDatabase } from "../utils/AppDatabase";
 import { Model } from "../utils/Model";
 import { Schedule } from "./Schedule";
+import {Time} from "../utils/Time";
+import {totalmem} from "os";
 
 export enum AlarmDay {
     Monday = 0,
@@ -39,8 +41,8 @@ export class Alarm extends Model {
      * @param getUpTime Time the child is allowed to get up
      * @param days Days of the week the Alarm is active for
      */
-    public static async create(db: AppDatabase, scheduleId: number, sleepTime: number, wakeTime: number,
-                               getUpTime: number, days: AlarmDay[]): Promise<Alarm> {
+    public static async create(db: AppDatabase, scheduleId: number, sleepTime: Time, wakeTime: Time,
+                               getUpTime: Time, days: AlarmDay[]): Promise<Alarm> {
 
         // insert the alarm into the database
         const result: SQLResultSet = await db.execute(`
@@ -48,7 +50,7 @@ export class Alarm extends Model {
                 (scheduleId, sleepTime, wakeTime, getUpTime)
             VALUES
                 (?, ?, ?, ?)
-        `, [scheduleId, sleepTime, wakeTime, getUpTime]);
+        `, [scheduleId, sleepTime.totalSeconds, wakeTime.totalSeconds, getUpTime.totalSeconds]);
 
         // TODO: Add days of week
 
@@ -57,11 +59,11 @@ export class Alarm extends Model {
 
         // build the resulting model
         return Alarm.load(db, {
-            getUpTime,
+            getUpTime: getUpTime.totalSeconds,
             id: result.insertId,
             scheduleId,
-            sleepTime,
-            wakeTime
+            sleepTime: sleepTime.totalSeconds,
+            wakeTime: wakeTime.totalSeconds
         });
     }
 
@@ -156,22 +158,28 @@ export class Alarm extends Model {
     /**
      * Time the child should go to sleep as the number of seconds from the start of the day.
      */
-    public get sleepTime(): number {
-        return this._sleepTime;
+    public get sleepTime(): Time {
+        const time = new Time();
+        time.totalSeconds = this._sleepTime;
+        return time;
     }
 
     /**
      * Time the child should wake up as the number of seconds from the start of the day.
      */
-    public get wakeTime(): number {
-        return this._wakeTime;
+    public get wakeTime(): Time {
+        const time = new Time();
+        time.totalSeconds = this._wakeTime;
+        return time;
     }
 
     /**
      * Time the child is allowed to get up as the number of seconds from the start of the day.
      */
-    public get getUpTime(): number {
-        return this._getUpTime;
+    public get getUpTime(): Time {
+        const time = new Time();
+        time.totalSeconds = this._getUpTime;
+        return time;
     }
 
     /**

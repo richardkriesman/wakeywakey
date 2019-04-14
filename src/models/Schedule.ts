@@ -3,6 +3,7 @@ import { Model } from "../utils/Model";
 import { Alarm } from "./Alarm";
 import { Watcher } from "../utils/watcher/Watcher";
 import { Emitter } from "../utils/watcher/Emitter";
+import {Time} from "../utils/Time";
 
 /**
  * A Schedule represents a weekly alarm schedule, such as "School Nights" for weeks when a child has to get up earlier
@@ -118,7 +119,7 @@ export class Schedule extends Model {
      * @param wakeTime Time the child should wake up
      * @param getUpTime Time the child is allowed to get up
      */
-    public createAlarm(sleepTime: number, wakeTime: number, getUpTime: number): Promise<Alarm> {
+    public createAlarm(sleepTime: Time, wakeTime: Time, getUpTime: Time): Promise<Alarm> {
         return Alarm.create(this.db, this.id, sleepTime, wakeTime, getUpTime, []);
     }
 

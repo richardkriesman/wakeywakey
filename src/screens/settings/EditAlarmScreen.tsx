@@ -4,36 +4,47 @@
 
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Divider, ListItem, Text } from "react-native-elements";
+import { Button, Divider, ListItem } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
-import Layout from "../../constants/Layout";
 import { DayOfWeek } from "../../models/AlarmModel";
 import { Schedule } from "../../models/Schedule";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { Alarm } from "../../models/Alarm";
+import { TimePicker } from "../../components/TimePicker";
+import * as AlarmUtils from "../../utils/AlarmUtils";
+import { ListHeader } from "../../components/ListHeader";
+import { Time } from "../../utils/Time";
 
 export interface EditAlarmScreenState {
     alarm?: Alarm;
     schedule: Schedule;
+    sleepTime: Time;
+    wakeTime: Time;
+    getUpTime: Time;
 }
 
 @HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
                                        onPress={() => (screen as EditAlarmScreen).onSavePress()} />)
 export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
 
+    private timePicker: TimePicker;
+
     public constructor(props: NavigationScreenProps) {
         super(props);
-    }
 
-    public componentWillMount(): void {
-        this.setState({
-            alarm: this.props.navigation.getParam("alarm"),
-            schedule: this.props.navigation.getParam("schedule")
-        });
+        // build initial state
+        const alarm: Alarm|undefined = this.props.navigation.getParam("alarm");
+        this.state = {
+            alarm: alarm,
+            getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
+            schedule: this.props.navigation.getParam("schedule"),
+            sleepTime: alarm ? alarm.sleepTime : Time.createFromTotalSeconds(72000), // 8:00 PM
+            wakeTime: alarm ? alarm.wakeTime : Time.createFromTotalSeconds(21600) // 6:00 AM
+        }
     }
 
     public renderContent(): ReactNode {
@@ -51,9 +62,10 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
         return (
             <View style={styles.viewScroller}>
-                <Text style={styles.textSectionHeader}>Days</Text>
+                <TimePicker ref={(ref) => this.timePicker = ref}/>
 
-                { /* TODO use a map here? wow this looks bad */}
+                <ListHeader title="Days" />
+                <Divider style={styles.divider}/>
                 <View style={styles.daySelector}>
                     <ToggleButton title="M" isToggled={this.daysContains(DayOfWeek.Monday)}/>
                     <ToggleButton title="Tu" isToggled={this.daysContains(DayOfWeek.Tuesday)}/>
@@ -66,12 +78,22 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
                 <Divider style={styles.divider}/>
 
-                <Text style={styles.textSectionHeader}>Alarm Times</Text>
-                <ListItem key={0} title="Sleep" subtitle="8:00 PM" rightIcon={{ name: "arrow-forward" }}/>
-                <ListItem key={1} title="Wake up" subtitle="6:00 AM" rightIcon={{ name: "arrow-forward" }}/>
-                <ListItem key={2} title="Get up" subtitle="7:00 AM" rightIcon={{ name: "arrow-forward" }}/>
-
-                <Divider style={styles.divider}/>
+                <ListHeader title="Alarm times" />
+                <ListItem key={0}
+                          title="Sleep"
+                          subtitle={AlarmUtils.formatTime(this.state.sleepTime.totalSeconds)}
+                          rightIcon={{ name: "arrow-forward" }}
+                          onPress={this.onTimeSleepPress.bind(this)} />
+                <ListItem key={1}
+                          title="Wake up"
+                          subtitle={AlarmUtils.formatTime(this.state.wakeTime.totalSeconds)}
+                          rightIcon={{ name: "arrow-forward" }}
+                          onPress={this.onTimeWakePress.bind(this)} />
+                <ListItem key={2}
+                          title="Get up"
+                          subtitle={AlarmUtils.formatTime(this.state.getUpTime.totalSeconds)}
+                          rightIcon={{ name: "arrow-forward" }}
+                          onPress={this.onTimeGetUpPress.bind(this)} />
 
                 {deleteButton}
             </View>
@@ -92,7 +114,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     private onSavePress(): void {
         if (!this.state.alarm) { // new alarm
             // TODO: actually get times from the UI
-            this.state.schedule.createAlarm(72000, 21600, 25200)
+            this.state.schedule.createAlarm(this.state.sleepTime, this.state.wakeTime, this.state.getUpTime)
                 .then(() => {
                     this.dismiss();
                 });
@@ -101,12 +123,47 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             this.dismiss();
         }
     }
+
+    private onTimeGetUpPress(): void {
+        this.timePicker.present(this.state.getUpTime)
+            .then((time: Time|undefined) => {
+                if (time) {
+                    this.setState({
+                        getUpTime: time
+                    });
+                }
+            });
+    }
+
+    private onTimeSleepPress(): void {
+        this.timePicker.present(this.state.sleepTime)
+            .then((time: Time|undefined) => {
+                if (time) {
+                    this.setState({
+                        sleepTime: time
+                    });
+                }
+            });
+    }
+
+    private onTimeWakePress(): void {
+        this.timePicker.present(this.state.getUpTime)
+            .then((time: Time|undefined) => {
+                if (time) {
+                    this.setState({
+                        wakeTime: time
+                    });
+                }
+            });
+    }
+
 }
 
 const styles = StyleSheet.create({
     daySelector: {
         flexDirection: "row",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
+        paddingHorizontal: 20
     },
     deleteButton: {
         backgroundColor: Colors.appleButtonRed
@@ -134,7 +191,6 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     viewScroller: {
-        height: Layout.window.height,
-        padding: 20
+        flex: 1
     }
 });

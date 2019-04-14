@@ -5,8 +5,8 @@
 import { Alarm } from "../models/Alarm";
 
 export function getAlarmTitle(alarm: Alarm): string {
-    const start = formatTime(alarm.sleepTime);
-    const end = formatTime(alarm.getUpTime);
+    const start = formatTime(alarm.sleepTime.totalSeconds);
+    const end = formatTime(alarm.getUpTime.totalSeconds);
     return `${start} - ${end}`;
 }
 
