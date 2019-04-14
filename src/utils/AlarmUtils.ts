@@ -2,31 +2,43 @@
  * @module utils
  */
 
-import { Alarm } from "../models/Alarm";
+import {Alarm, AlarmDay} from "../models/Alarm";
+import {Time} from "./Time";
 
 export function getAlarmTitle(alarm: Alarm): string {
-    const start = formatTime(alarm.sleepTime.totalSeconds);
-    const end = formatTime(alarm.getUpTime.totalSeconds);
+    const start = formatTime(alarm.sleepTime);
+    const end = formatTime(alarm.getUpTime);
     return `${start} - ${end}`;
 }
 
 export function getAlarmSubtitle(alarm: Alarm): string {
-    // TODO: Get the days here
-    return "TBI :)";
+    const displayDays: string[] = [];
+    if (alarm.isDayActive(AlarmDay.Monday)) {
+        displayDays.push("M");
+    }
+    if (alarm.isDayActive(AlarmDay.Tuesday)) {
+        displayDays.push("Tu");
+    }
+    if (alarm.isDayActive(AlarmDay.Wednesday)) {
+        displayDays.push("W");
+    }
+    if (alarm.isDayActive(AlarmDay.Thursday)) {
+        displayDays.push("Th");
+    }
+    if (alarm.isDayActive(AlarmDay.Friday)) {
+        displayDays.push("F");
+    }
+    if (alarm.isDayActive(AlarmDay.Saturday)) {
+        displayDays.push("Sa");
+    }
+    if (alarm.isDayActive(AlarmDay.Sunday)) {
+        displayDays.push("Su");
+    }
+    return displayDays.join(", ");
 }
 
-export function formatTime(time: number): string {
-
-    // build a Date representing the next time this alarm will sound.
-    const date: Date = new Date();
-    date.setHours(0, 0, 0, 0); // set date to midnight today
-    date.setTime(date.getTime() + time * 1000); // add alarm seconds to get the correct time
-    if (date.getTime() < (new Date()).getTime()) { // date has already passed, set to tomorrow
-        date.setDate(date.getDate() + 1);
-    }
-
-    // format the date for display
-    return `${padTime(date.getHours())}:${padTime(date.getMinutes())}`;
+export function formatTime(time: Time): string {
+    return `${padTime(time.hour)}:${padTime(time.minute)}`;
 }
 
 export function padTime(time: number): string {

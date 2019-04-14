@@ -9,11 +9,10 @@ import { NavigationScreenProps } from "react-navigation";
 
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
-import { DayOfWeek } from "../../models/AlarmModel";
 import { Schedule } from "../../models/Schedule";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
-import { Alarm } from "../../models/Alarm";
+import {Alarm, AlarmDay} from "../../models/Alarm";
 import { TimePicker } from "../../components/TimePicker";
 import * as AlarmUtils from "../../utils/AlarmUtils";
 import { ListHeader } from "../../components/ListHeader";
@@ -21,6 +20,7 @@ import { Time } from "../../utils/Time";
 
 export interface EditAlarmScreenState {
     alarm?: Alarm;
+    days: number;
     schedule: Schedule;
     sleepTime: Time;
     wakeTime: Time;
@@ -40,6 +40,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
         const alarm: Alarm|undefined = this.props.navigation.getParam("alarm");
         this.state = {
             alarm: alarm,
+            days: alarm ? alarm.days : 0,
             getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
             schedule: this.props.navigation.getParam("schedule"),
             sleepTime: alarm ? alarm.sleepTime : Time.createFromTotalSeconds(72000), // 8:00 PM
@@ -67,13 +68,34 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 <ListHeader title="Days" />
                 <Divider style={styles.divider}/>
                 <View style={styles.daySelector}>
-                    <ToggleButton title="M" isToggled={this.daysContains(DayOfWeek.Monday)}/>
-                    <ToggleButton title="Tu" isToggled={this.daysContains(DayOfWeek.Tuesday)}/>
-                    <ToggleButton title="W" isToggled={this.daysContains(DayOfWeek.Wednesday)}/>
-                    <ToggleButton title="Th" isToggled={this.daysContains(DayOfWeek.Thursday)}/>
-                    <ToggleButton title="F" isToggled={this.daysContains(DayOfWeek.Friday)}/>
-                    <ToggleButton title="Sa" isToggled={this.daysContains(DayOfWeek.Saturday)}/>
-                    <ToggleButton title="Su" isToggled={this.daysContains(DayOfWeek.Sunday)}/>
+                    <ToggleButton
+                        title="M"
+                        isToggled={this.isDayToggled(AlarmDay.Monday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Monday)} />
+                    <ToggleButton
+                        title="Tu"
+                        isToggled={this.isDayToggled(AlarmDay.Tuesday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Tuesday)} />
+                    <ToggleButton
+                        title="W"
+                        isToggled={this.isDayToggled(AlarmDay.Wednesday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Wednesday)} />
+                    <ToggleButton
+                        title="Th"
+                        isToggled={this.isDayToggled(AlarmDay.Thursday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Thursday)} />
+                    <ToggleButton
+                        title="F"
+                        isToggled={this.isDayToggled(AlarmDay.Friday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Friday)} />
+                    <ToggleButton
+                        title="Sa"
+                        isToggled={this.isDayToggled(AlarmDay.Saturday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Saturday)} />
+                    <ToggleButton
+                        title="Su"
+                        isToggled={this.isDayToggled(AlarmDay.Sunday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Sunday)} />
                 </View>
 
                 <Divider style={styles.divider}/>
@@ -81,17 +103,17 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 <ListHeader title="Alarm times" />
                 <ListItem key={0}
                           title="Sleep"
-                          subtitle={AlarmUtils.formatTime(this.state.sleepTime.totalSeconds)}
+                          subtitle={AlarmUtils.formatTime(this.state.sleepTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeSleepPress.bind(this)} />
                 <ListItem key={1}
                           title="Wake up"
-                          subtitle={AlarmUtils.formatTime(this.state.wakeTime.totalSeconds)}
+                          subtitle={AlarmUtils.formatTime(this.state.wakeTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeWakePress.bind(this)} />
                 <ListItem key={2}
                           title="Get up"
-                          subtitle={AlarmUtils.formatTime(this.state.getUpTime.totalSeconds)}
+                          subtitle={AlarmUtils.formatTime(this.state.getUpTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeGetUpPress.bind(this)} />
 
@@ -100,10 +122,14 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
         );
     }
 
-    private daysContains(specificDay: DayOfWeek): boolean {
-        // FIXME: Add alarm days
-        // return this.state.alarm && this.state.alarm.days && this.state.alarm.days.indexOf(specificDay) > -1;
-        return false;
+    private isDayToggled(day: AlarmDay): boolean {
+        return (this.state.days & day) !== 0;
+    }
+
+    private onDayToggle(day: AlarmDay, isToggled: boolean): void {
+        this.setState({
+            days: isToggled ? (this.state.days | day) : (this.state.days & ~day)
+        });
     }
 
     private onDeletePress(): void {
@@ -111,9 +137,11 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             .then(() => this.dismiss());
     }
 
+    // noinspection JSUnusedLocalSymbols - this method is used, just in a decorator
     private onSavePress(): void {
         if (!this.state.alarm) { // new alarm
-            this.state.schedule.createAlarm(this.state.sleepTime, this.state.wakeTime, this.state.getUpTime)
+            this.state.schedule.createAlarm(this.state.sleepTime, this.state.wakeTime, this.state.getUpTime,
+                    this.state.days)
                 .then(() => {
                     this.dismiss();
                 });
@@ -127,6 +155,9 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             }
             if (!this.state.alarm.getUpTime.equals(this.state.getUpTime)) {
                 promises.push(this.state.alarm.setGetUpTime(this.state.getUpTime));
+            }
+            if (this.state.alarm.days !== this.state.days) {
+                promises.push(this.state.alarm.setDays(this.state.days));
             }
             Promise.all(promises)
                 .then(() => {

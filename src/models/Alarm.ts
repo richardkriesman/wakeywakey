@@ -4,13 +4,13 @@ import { Schedule } from "./Schedule";
 import { Time } from "../utils/Time";
 
 export enum AlarmDay {
-    Monday = 0,
-    Tuesday = 1,
-    Wednesday = 2,
-    Thursday = 3,
-    Friday = 4,
-    Saturday = 5,
-    Sunday = 6
+    Monday = 1,
+    Tuesday = 2,
+    Wednesday = 4,
+    Thursday = 8,
+    Friday = 16,
+    Saturday = 32,
+    Sunday = 64
 }
 
 /**
@@ -31,6 +31,9 @@ export class Alarm extends Model {
     /**
      * Creates a new Alarm.
      *
+     * Days are selected by using the bitwise OR operation like so:
+     *     `AlarmDays.Monday | AlarmDays.Tuesday`
+     *
      * For internal use only. Use a {@link Schedule} to create a new alarm from the UI.
      *
      * @param db Database connection
@@ -38,20 +41,18 @@ export class Alarm extends Model {
      * @param sleepTime Time the child should go to sleep
      * @param wakeTime Time the child should wake up
      * @param getUpTime Time the child is allowed to get up
-     * @param days Days of the week the Alarm is active for
+     * @param days Days of the week the Alarm is active for as an integer
      */
     public static async create(db: AppDatabase, scheduleId: number, sleepTime: Time, wakeTime: Time,
-                               getUpTime: Time, days: AlarmDay[]): Promise<Alarm> {
+                               getUpTime: Time, days: number): Promise<Alarm> {
 
         // insert the alarm into the database
         const result: SQLResultSet = await db.execute(`
             INSERT INTO alarm
-                (scheduleId, sleepTime, wakeTime, getUpTime)
+                (scheduleId, days, sleepTime, wakeTime, getUpTime)
             VALUES
-                (?, ?, ?, ?)
-        `, [scheduleId, sleepTime.totalSeconds, wakeTime.totalSeconds, getUpTime.totalSeconds]);
-
-        // TODO: Add days of week
+                (?, ?, ?, ?, ?)
+        `, [scheduleId, days, sleepTime.totalSeconds, wakeTime.totalSeconds, getUpTime.totalSeconds]);
 
         // update the watchers
         db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(db));
@@ -134,6 +135,7 @@ export class Alarm extends Model {
     private static load(db: AppDatabase, row: any): Alarm {
         const model = new Alarm(db, row.scheduleId);
         model._id = row.id;
+        model._days = row.days;
         model._sleepTime = Time.createFromTotalSeconds(row.sleepTime);
         model._wakeTime = Time.createFromTotalSeconds(row.wakeTime);
         model._getUpTime = Time.createFromTotalSeconds(row.getUpTime);
@@ -145,6 +147,7 @@ export class Alarm extends Model {
      */
     public readonly scheduleId: number;
 
+    private _days: number;
     private _sleepTime: Time;
     private _wakeTime: Time;
     private _getUpTime: Time;
@@ -155,21 +158,28 @@ export class Alarm extends Model {
     }
 
     /**
-     * Time the child should go to sleep as the number of seconds from the start of the day.
+     * Days set as a bitwise ORed integer
+     */
+    public get days(): number {
+        return this._days;
+    }
+
+    /**
+     * Time the child should go to sleep
      */
     public get sleepTime(): Time {
         return this._sleepTime;
     }
 
     /**
-     * Time the child should wake up as the number of seconds from the start of the day.
+     * Time the child should wake up
      */
     public get wakeTime(): Time {
         return this._wakeTime
     }
 
     /**
-     * Time the child is allowed to get up as the number of seconds from the start of the day.
+     * Time the child is allowed to get up
      */
     public get getUpTime(): Time {
         return this._getUpTime;
@@ -189,6 +199,35 @@ export class Alarm extends Model {
         await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
     }
 
+    /**
+     * Determines whether the Alarm is active for a given {@link AlarmDay}.
+     *
+     * @param day The day to test
+     */
+    public isDayActive(day: AlarmDay): boolean {
+        return (this.days & day) !== 0;
+    }
+
+    /**
+     * Sets the days the Alarm is active to the given days, represented as a bitwise ORed integer.
+     *
+     * @param days Days the alarm is active
+     */
+    public async setDays(days: number): Promise<void> {
+        await this.db.execute(`
+            UPDATE alarm
+            SET
+                days = ?
+        `, [days]);
+        this._days = days;
+        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
+    }
+
+    /**
+     * Sets the sleep time to a given time
+     *
+     * @param time The time to set
+     */
     public async setSleepTime(time: Time): Promise<void> {
         await this.db.execute(`
             UPDATE alarm
@@ -199,6 +238,11 @@ export class Alarm extends Model {
         await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
     }
 
+    /**
+     * Sets the wake time to a given time
+     *
+     * @param time The time to set
+     */
     public async setWakeTime(time: Time): Promise<void> {
         await this.db.execute(`
             UPDATE alarm
@@ -208,6 +252,11 @@ export class Alarm extends Model {
         await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
     }
 
+    /**
+     * Sets the get up time to a given time
+     *
+     * @param time The time to set
+     */
     public async setGetUpTime(time: Time): Promise<void> {
         await this.db.execute(`
             UPDATE alarm

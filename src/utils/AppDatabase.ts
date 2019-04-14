@@ -63,23 +63,10 @@ export class AppDatabase {
                         constraint alarm_schedule_id_fk
                             references schedule
                                 on update cascade on delete cascade,
+                    days UNSIGNED INTEGER not null,
                     sleepTime UNSIGNED INTEGER not null,
                     wakeTime UNSIGNED INTEGER not null,
                     getUpTime UNSIGNED INTEGER not null
-                );
-            `);
-        }
-
-        // create alarm => days mapping table
-        if (!(await appDb.doesTableExist("alarm_days"))) {
-            await appDb.execute(`
-                create table alarm_days
-                (
-                    alarmId INTEGER not null
-                        constraint alarm_days_alarm_id_fk
-                            references alarm
-                                on update cascade on delete cascade,
-                    day UNSIGNED INTEGER not null
                 );
             `);
         }

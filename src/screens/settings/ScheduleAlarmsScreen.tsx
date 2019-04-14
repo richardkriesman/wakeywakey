@@ -3,11 +3,10 @@
  */
 
 import React, { ReactNode } from "react";
-import {FlatList, SectionList, StyleSheet, View} from "react-native";
-import { ListItem, Text } from "react-native-elements";
+import {SectionList, StyleSheet, View} from "react-native";
+import { ListItem } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 import Colors from "../../constants/Colors";
-import Layout from "../../constants/Layout";
 import { Schedule } from "../../models";
 import { Alarm } from "../../models/Alarm";
 import AlarmUtils from "../../utils/AlarmUtils";

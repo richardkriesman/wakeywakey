@@ -4,6 +4,7 @@ import { Alarm } from "./Alarm";
 import { Watcher } from "../utils/watcher/Watcher";
 import { Emitter } from "../utils/watcher/Emitter";
 import {Time} from "../utils/Time";
+import {number} from "prop-types";
 
 /**
  * A Schedule represents a weekly alarm schedule, such as "School Nights" for weeks when a child has to get up earlier
@@ -118,9 +119,10 @@ export class Schedule extends Model {
      * @param sleepTime Time the child should go to sleep
      * @param wakeTime Time the child should wake up
      * @param getUpTime Time the child is allowed to get up
+     * @param days Days the Alarm is active represented as a bitwise ORed integer
      */
-    public createAlarm(sleepTime: Time, wakeTime: Time, getUpTime: Time): Promise<Alarm> {
-        return Alarm.create(this.db, this.id, sleepTime, wakeTime, getUpTime, []);
+    public createAlarm(sleepTime: Time, wakeTime: Time, getUpTime: Time, days: number): Promise<Alarm> {
+        return Alarm.create(this.db, this.id, sleepTime, wakeTime, getUpTime, days);
     }
 
     /**
@@ -130,7 +132,7 @@ export class Schedule extends Model {
         const emitter: Emitter<Alarm> = this.db.getEmitterSet<Alarm>(Alarm.name).create();
 
         // configure filter
-        emitter.onFilter((alarms: Alarm[]) => {
+        emitter.onFilter((alarms: Alarm[]) => { // filter out alarms not attached to this schedule
             const newAlarms: Alarm[] = [];
             for (const alarm of alarms) {
                 if (alarm.scheduleId === this.id) {
