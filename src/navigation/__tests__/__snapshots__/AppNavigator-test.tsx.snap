@@ -76,209 +76,244 @@ exports[`AppNavigator renders properly 1`] = `
               }
             >
               <View
+                onMoveShouldSetResponder={[Function]}
+                onMoveShouldSetResponderCapture={[Function]}
+                onResponderEnd={[Function]}
+                onResponderGrant={[Function]}
+                onResponderMove={[Function]}
+                onResponderReject={[Function]}
+                onResponderRelease={[Function]}
+                onResponderStart={[Function]}
+                onResponderTerminate={[Function]}
+                onResponderTerminationRequest={[Function]}
+                onStartShouldSetResponder={[Function]}
+                onStartShouldSetResponderCapture={[Function]}
                 style={
                   Object {
-                    "alignItems": "center",
                     "flex": 1,
-                    "marginTop": 20,
-                    "padding": 0,
                   }
                 }
               >
                 <View
+                  accessible={true}
+                  onResponderGrant={[Function]}
+                  onResponderMove={[Function]}
+                  onResponderRelease={[Function]}
+                  onResponderTerminate={[Function]}
+                  onResponderTerminationRequest={[Function]}
+                  onStartShouldSetResponder={[Function]}
                   style={
                     Object {
                       "flex": 1,
-                      "flexBasis": "100%",
-                      "justifyContent": "center",
-                      "width": "85%",
                     }
                   }
                 >
-                  <Text
+                  <View
                     style={
                       Object {
-                        "fontSize": 30,
-                        "textAlign": "center",
+                        "alignItems": "center",
+                        "flex": 1,
+                        "marginTop": 20,
+                        "padding": 0,
                       }
                     }
-                  >
-                    Hello, world!
-                  </Text>
-                  <View
-                    style={Object {}}
                   >
                     <View
                       style={
                         Object {
-                          "marginBottom": 20,
-                          "marginTop": 20,
+                          "flex": 1,
+                          "flexBasis": "100%",
+                          "justifyContent": "center",
+                          "width": "85%",
                         }
                       }
                     >
                       <Text
                         style={
                           Object {
-                            "fontSize": 60,
+                            "fontSize": 30,
                             "textAlign": "center",
                           }
                         }
                       >
-                        12:22 pm
+                        Hello, world!
                       </Text>
-                    </View>
-                  </View>
-                  <View
-                    style={
-                      Object {
-                        "borderRadius": 3,
-                      }
-                    }
-                  >
-                    <View
-                      accessible={true}
-                      isTVSelectable={true}
-                      onResponderGrant={[Function]}
-                      onResponderMove={[Function]}
-                      onResponderRelease={[Function]}
-                      onResponderTerminate={[Function]}
-                      onResponderTerminationRequest={[Function]}
-                      onStartShouldSetResponder={[Function]}
-                      style={
-                        Object {
-                          "opacity": 1,
-                        }
-                      }
-                    >
                       <View
-                        style={
-                          Object {
-                            "alignItems": "center",
-                            "backgroundColor": "black",
-                            "borderColor": "#2089dc",
-                            "borderRadius": 3,
-                            "borderWidth": 0,
-                            "flexDirection": "row",
-                            "justifyContent": "center",
-                            "padding": 15,
-                          }
-                        }
+                        style={Object {}}
                       >
-                        <Text
+                        <View
                           style={
                             Object {
-                              "color": "white",
-                              "fontSize": 18,
-                              "paddingBottom": 1,
-                              "paddingTop": 2,
-                              "textAlign": "center",
+                              "marginBottom": 20,
+                              "marginTop": 20,
                             }
                           }
                         >
-                          Snooze
-                        </Text>
+                          <Text
+                            style={
+                              Object {
+                                "fontSize": 60,
+                                "textAlign": "center",
+                              }
+                            }
+                          >
+                            12:22 pm
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                  </View>
-                </View>
-                <View
-                  style={
-                    Object {
-                      "alignItems": "center",
-                      "bottom": -10,
-                      "justifyContent": "center",
-                      "position": "absolute",
-                      "width": "100%",
-                      "zIndex": 99,
-                    }
-                  }
-                >
-                  <View
-                    style={
-                      Object {
-                        "borderRadius": 3,
-                      }
-                    }
-                  >
-                    <View
-                      accessible={true}
-                      isTVSelectable={true}
-                      onResponderGrant={[Function]}
-                      onResponderMove={[Function]}
-                      onResponderRelease={[Function]}
-                      onResponderTerminate={[Function]}
-                      onResponderTerminationRequest={[Function]}
-                      onStartShouldSetResponder={[Function]}
-                      style={
-                        Object {
-                          "opacity": 1,
-                        }
-                      }
-                    >
                       <View
                         style={
                           Object {
-                            "alignItems": "center",
-                            "backgroundColor": "black",
-                            "borderColor": "#2089dc",
                             "borderRadius": 3,
-                            "borderWidth": 0,
-                            "flexDirection": "row",
-                            "justifyContent": "center",
-                            "padding": 8,
-                            "width": "100%",
                           }
                         }
                       >
-                        <View>
+                        <View
+                          accessible={true}
+                          isTVSelectable={true}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
+                          style={
+                            Object {
+                              "opacity": 1,
+                            }
+                          }
+                        >
                           <View
                             style={
                               Object {
                                 "alignItems": "center",
-                                "backgroundColor": "transparent",
+                                "backgroundColor": "black",
+                                "borderColor": "#2089dc",
+                                "borderRadius": 3,
+                                "borderWidth": 0,
+                                "flexDirection": "row",
                                 "justifyContent": "center",
+                                "padding": 15,
                               }
                             }
-                            theme={
-                              Object {
-                                "colors": Object {
-                                  "disabled": "hsl(208, 8%, 90%)",
-                                  "divider": "#bcbbc1",
-                                  "error": "#ff190c",
-                                  "grey0": "#393e42",
-                                  "grey1": "#43484d",
-                                  "grey2": "#5e6977",
-                                  "grey3": "#86939e",
-                                  "grey4": "#bdc6cf",
-                                  "grey5": "#e1e8ee",
-                                  "greyOutline": "#bbb",
-                                  "platform": Object {
-                                    "android": Object {
-                                      "error": "#f44336",
-                                      "primary": "#2196f3",
-                                      "secondary": "#9C27B0",
-                                      "success": "#4caf50",
-                                      "warning": "#ffeb3b",
-                                    },
-                                    "ios": Object {
-                                      "error": "#ff3b30",
-                                      "primary": "#007aff",
-                                      "secondary": "#5856d6",
-                                      "success": "#4cd964",
-                                      "warning": "#ffcc00",
-                                    },
-                                  },
-                                  "primary": "#2089dc",
-                                  "searchBg": "#303337",
-                                  "secondary": "#8F0CE8",
-                                  "success": "#52c41a",
-                                  "warning": "#faad14",
-                                },
-                              }
-                            }
-                            underlayColor="white"
                           >
-                            <Text />
+                            <Text
+                              style={
+                                Object {
+                                  "color": "white",
+                                  "fontSize": 18,
+                                  "paddingBottom": 1,
+                                  "paddingTop": 2,
+                                  "textAlign": "center",
+                                }
+                              }
+                            >
+                              Snooze
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "bottom": -10,
+                          "justifyContent": "center",
+                          "position": "absolute",
+                          "width": "100%",
+                          "zIndex": 99,
+                        }
+                      }
+                    >
+                      <View
+                        style={
+                          Object {
+                            "borderRadius": 3,
+                          }
+                        }
+                      >
+                        <View
+                          accessible={true}
+                          isTVSelectable={true}
+                          onResponderGrant={[Function]}
+                          onResponderMove={[Function]}
+                          onResponderRelease={[Function]}
+                          onResponderTerminate={[Function]}
+                          onResponderTerminationRequest={[Function]}
+                          onStartShouldSetResponder={[Function]}
+                          style={
+                            Object {
+                              "opacity": 1,
+                            }
+                          }
+                        >
+                          <View
+                            style={
+                              Object {
+                                "alignItems": "center",
+                                "backgroundColor": "black",
+                                "borderColor": "#2089dc",
+                                "borderRadius": 3,
+                                "borderWidth": 0,
+                                "flexDirection": "row",
+                                "justifyContent": "center",
+                                "padding": 8,
+                                "width": "100%",
+                              }
+                            }
+                          >
+                            <View>
+                              <View
+                                style={
+                                  Object {
+                                    "alignItems": "center",
+                                    "backgroundColor": "transparent",
+                                    "justifyContent": "center",
+                                  }
+                                }
+                                theme={
+                                  Object {
+                                    "colors": Object {
+                                      "disabled": "hsl(208, 8%, 90%)",
+                                      "divider": "#bcbbc1",
+                                      "error": "#ff190c",
+                                      "grey0": "#393e42",
+                                      "grey1": "#43484d",
+                                      "grey2": "#5e6977",
+                                      "grey3": "#86939e",
+                                      "grey4": "#bdc6cf",
+                                      "grey5": "#e1e8ee",
+                                      "greyOutline": "#bbb",
+                                      "platform": Object {
+                                        "android": Object {
+                                          "error": "#f44336",
+                                          "primary": "#2196f3",
+                                          "secondary": "#9C27B0",
+                                          "success": "#4caf50",
+                                          "warning": "#ffeb3b",
+                                        },
+                                        "ios": Object {
+                                          "error": "#ff3b30",
+                                          "primary": "#007aff",
+                                          "secondary": "#5856d6",
+                                          "success": "#4cd964",
+                                          "warning": "#ffcc00",
+                                        },
+                                      },
+                                      "primary": "#2089dc",
+                                      "searchBg": "#303337",
+                                      "secondary": "#8F0CE8",
+                                      "success": "#52c41a",
+                                      "warning": "#faad14",
+                                    },
+                                  }
+                                }
+                                underlayColor="white"
+                              >
+                                <Text />
+                              </View>
+                            </View>
                           </View>
                         </View>
                       </View>

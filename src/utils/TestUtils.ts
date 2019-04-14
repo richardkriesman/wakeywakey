@@ -54,6 +54,7 @@ export class TestEnvironment {
      */
     public get navigationProp(): NavigationScreenProp<NavigationRoute<NavigationParams>, NavigationParams> {
         return {
+            addListener: jest.fn(),
             dispatch: jest.fn(),
             getParam: (name: string) => {
                 switch (name) {
