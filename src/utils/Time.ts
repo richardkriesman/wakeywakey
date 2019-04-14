@@ -45,4 +45,8 @@ export class Time {
         this.second = Math.floor(value - (this.hour * 3600) - (this.minute * 60));
     }
 
+    public equals(time: Time): boolean {
+        return this.totalSeconds === time.totalSeconds;
+    }
+
 }

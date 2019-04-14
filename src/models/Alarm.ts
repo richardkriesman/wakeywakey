@@ -1,8 +1,7 @@
 import { AppDatabase } from "../utils/AppDatabase";
 import { Model } from "../utils/Model";
 import { Schedule } from "./Schedule";
-import {Time} from "../utils/Time";
-import {totalmem} from "os";
+import { Time } from "../utils/Time";
 
 export enum AlarmDay {
     Monday = 0,
@@ -135,9 +134,9 @@ export class Alarm extends Model {
     private static load(db: AppDatabase, row: any): Alarm {
         const model = new Alarm(db, row.scheduleId);
         model._id = row.id;
-        model._sleepTime = row.sleepTime;
-        model._wakeTime = row.wakeTime;
-        model._getUpTime = row.getUpTime;
+        model._sleepTime = Time.createFromTotalSeconds(row.sleepTime);
+        model._wakeTime = Time.createFromTotalSeconds(row.wakeTime);
+        model._getUpTime = Time.createFromTotalSeconds(row.getUpTime);
         return model;
     }
 
@@ -146,9 +145,9 @@ export class Alarm extends Model {
      */
     public readonly scheduleId: number;
 
-    private _sleepTime: number;
-    private _wakeTime: number;
-    private _getUpTime: number;
+    private _sleepTime: Time;
+    private _wakeTime: Time;
+    private _getUpTime: Time;
 
     private constructor(db: AppDatabase, scheduleId: number) {
         super(db);
@@ -159,27 +158,21 @@ export class Alarm extends Model {
      * Time the child should go to sleep as the number of seconds from the start of the day.
      */
     public get sleepTime(): Time {
-        const time = new Time();
-        time.totalSeconds = this._sleepTime;
-        return time;
+        return this._sleepTime;
     }
 
     /**
      * Time the child should wake up as the number of seconds from the start of the day.
      */
     public get wakeTime(): Time {
-        const time = new Time();
-        time.totalSeconds = this._wakeTime;
-        return time;
+        return this._wakeTime
     }
 
     /**
      * Time the child is allowed to get up as the number of seconds from the start of the day.
      */
     public get getUpTime(): Time {
-        const time = new Time();
-        time.totalSeconds = this._getUpTime;
-        return time;
+        return this._getUpTime;
     }
 
     /**
@@ -193,6 +186,34 @@ export class Alarm extends Model {
             WHERE
                 id = ?
         `, [this.id]);
+        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
+    }
+
+    public async setSleepTime(time: Time): Promise<void> {
+        await this.db.execute(`
+            UPDATE alarm
+            SET
+                sleepTime = ?
+        `, [time.totalSeconds]);
+        this._sleepTime = time;
+        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
+    }
+
+    public async setWakeTime(time: Time): Promise<void> {
+        await this.db.execute(`
+            UPDATE alarm
+            SET
+                wakeTime = ?
+        `, [time.totalSeconds]);
+        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
+    }
+
+    public async setGetUpTime(time: Time): Promise<void> {
+        await this.db.execute(`
+            UPDATE alarm
+            SET
+                getUpTime = ?
+        `, [time.totalSeconds]);
         await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
     }
 

@@ -44,7 +44,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             schedule: this.props.navigation.getParam("schedule"),
             sleepTime: alarm ? alarm.sleepTime : Time.createFromTotalSeconds(72000), // 8:00 PM
             wakeTime: alarm ? alarm.wakeTime : Time.createFromTotalSeconds(21600) // 6:00 AM
-        }
+        };
     }
 
     public renderContent(): ReactNode {
@@ -113,14 +113,25 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
     private onSavePress(): void {
         if (!this.state.alarm) { // new alarm
-            // TODO: actually get times from the UI
             this.state.schedule.createAlarm(this.state.sleepTime, this.state.wakeTime, this.state.getUpTime)
                 .then(() => {
                     this.dismiss();
                 });
         } else {
-            // TODO: update existing alarm
-            this.dismiss();
+            const promises: Array<Promise<void>> = [];
+            if (!this.state.alarm.sleepTime.equals(this.state.sleepTime)) {
+                promises.push(this.state.alarm.setSleepTime(this.state.sleepTime));
+            }
+            if (!this.state.alarm.wakeTime.equals(this.state.wakeTime)) {
+                promises.push(this.state.alarm.setWakeTime(this.state.wakeTime));
+            }
+            if (!this.state.alarm.getUpTime.equals(this.state.getUpTime)) {
+                promises.push(this.state.alarm.setGetUpTime(this.state.getUpTime));
+            }
+            Promise.all(promises)
+                .then(() => {
+                   this.dismiss();
+                });
         }
     }
 
