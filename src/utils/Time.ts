@@ -1,3 +1,6 @@
+/**
+ * An immutable representation of the current time of any day.
+ */
 export class Time {
 
     /**
@@ -7,30 +10,50 @@ export class Time {
      */
     public static createFromTotalSeconds(totalSeconds: number): Time {
         const time = new Time();
-        time.totalSeconds = totalSeconds;
+        time._hour = Math.floor(totalSeconds / 3600);
+        time._minute = Math.floor((totalSeconds - (time.hour * 3600)) / 60);
+        time._second = Math.floor(totalSeconds - (time.hour * 3600) - (time.minute * 60));
         return time;
+    }
+
+    public static createFromDisplayTime(hour: number, minute: number, second?: number): Time {
+        const time = new Time();
+        time._hour = hour;
+        time._minute = minute;
+        time._second = second ? second : 0;
+        return time;
+    }
+
+    private _hour: number;
+    private _minute: number;
+    private _second: number;
+
+    public constructor() {
+        const now = new Date();
+        this._hour = now.getHours();
+        this._minute = now.getMinutes();
+        this._second = now.getSeconds();
     }
 
     /**
      * Number of hours since midnight on any day.
      */
-    public hour: number;
+    public get hour(): number {
+        return this._hour;
+    }
 
     /**
      * Number of minutes since the last hour.
      */
-    public minute: number;
+    public get minute(): number {
+        return this._minute;
+    }
 
     /**
      * Number of seconds since the last minute.
      */
-    public second: number;
-
-    public constructor() {
-        const now = new Date();
-        this.hour = now.getHours();
-        this.minute = now.getMinutes();
-        this.second = now.getSeconds();
+    public get second(): number {
+        return this._second;
     }
 
     /**
@@ -38,11 +61,6 @@ export class Time {
      */
     public get totalSeconds(): number {
         return (this.hour * 3600) + (this.minute * 60) + this.second;
-    }
-    public set totalSeconds(value: number) {
-        this.hour = Math.floor(value / 3600);
-        this.minute = value - (this.hour * 3600) - Math.floor(this.second / 60);
-        this.second = Math.floor(value - (this.hour * 3600) - (this.minute * 60));
     }
 
     public equals(time: Time): boolean {

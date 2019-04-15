@@ -6,6 +6,7 @@
     "only-arrow-functions": false,
     "trailing-comma": [true, {"multiline": "never", "singleline": "never" }],
     "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
-    "no-trailing-whitespace": false
+    "no-trailing-whitespace": false,
+    "no-bitwise": false
   }
 }

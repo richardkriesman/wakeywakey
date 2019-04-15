@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 import { DatePickerIOS, Platform, TimePickerAndroid, TimePickerAndroidOpenReturn, View } from "react-native";
-import { Modal } from "./modal/Modal";
-import { Time } from "../utils/Time";
 import { Button } from "react-native-elements";
+import { Time } from "../utils/Time";
+import { Modal } from "./modal/Modal";
 
 export interface TimePickerState {
     isVisible: boolean;
@@ -90,11 +90,7 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
                 })
                     .then((result: TimePickerAndroidOpenReturn) => { // time picker was shown and closed
                         if (result.action === TimePickerAndroid.timeSetAction) { // time picker was completed
-                            const newTime = new Time();
-                            newTime.hour = result.hour;
-                            newTime.minute = result.minute;
-                            newTime.second = 0;
-                            resolve(newTime); // return result in seconds
+                            resolve(Time.createFromDisplayTime(result.hour, result.minute)); // return result in seconds
                         } else {
                             resolve(undefined);
                         }
@@ -117,11 +113,9 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
     }
 
     private onIOSDateChange(date: Date): void {
-        const time = new Time();
-        time.hour = date.getHours();
-        time.minute = date.getMinutes();
-        time.second = date.getSeconds();
-        this.setState({ time });
+        this.setState({
+            time: Time.createFromDisplayTime(date.getHours(), date.getMinutes(), date.getSeconds())
+        });
     }
 
 }

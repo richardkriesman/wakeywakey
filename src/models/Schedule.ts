@@ -1,10 +1,9 @@
 import { AppDatabase } from "../utils/AppDatabase";
 import { Model } from "../utils/Model";
-import { Alarm } from "./Alarm";
-import { Watcher } from "../utils/watcher/Watcher";
+import { Time } from "../utils/Time";
 import { Emitter } from "../utils/watcher/Emitter";
-import {Time} from "../utils/Time";
-import {number} from "prop-types";
+import { Watcher } from "../utils/watcher/Watcher";
+import { Alarm } from "./Alarm";
 
 /**
  * A Schedule represents a weekly alarm schedule, such as "School Nights" for weeks when a child has to get up earlier

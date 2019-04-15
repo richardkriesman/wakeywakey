@@ -24,7 +24,55 @@ exports[`HomeScreenClock renders the correct (fake) initial time 1`] = `
 </View>
 `;
 
+exports[`HomeScreenClock renders the correct (fake) initial timing 1`] = `
+<View>
+  <View
+    style={
+      Object {
+        "marginBottom": 20,
+        "marginTop": 20,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontSize": 60,
+          "textAlign": "center",
+        }
+      }
+    >
+      12:22 pm
+    </Text>
+  </View>
+</View>
+`;
+
 exports[`HomeScreenClock renders the correct (fake) later time 1`] = `
+<View>
+  <View
+    style={
+      Object {
+        "marginBottom": 20,
+        "marginTop": 20,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontSize": 60,
+          "textAlign": "center",
+        }
+      }
+    >
+      12:23 pm
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`HomeScreenClock renders the correct (fake) later timing 1`] = `
 <View>
   <View
     style={

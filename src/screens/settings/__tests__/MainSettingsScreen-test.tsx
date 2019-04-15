@@ -1,6 +1,6 @@
 import * as React from "react";
 import Renderer from "react-test-renderer";
-import { TestEnvironment } from "../../../utils/TestUtils";
+import { TestEnvironment } from "../../../utils/testing";
 import MainSettingsScreen from "../MainSettingsScreen";
 
 let env: TestEnvironment;

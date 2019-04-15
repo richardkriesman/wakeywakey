@@ -1,7 +1,7 @@
 import React from "react";
 import "react-native";
 import renderer, { ReactTestInstance } from "react-test-renderer";
-import { TestEnvironment } from "../../utils/TestUtils";
+import { TestEnvironment } from "../../utils/testing";
 import HomeScreen from "../HomeScreen";
 
 const fakeDateMillis = 1551896555862;
@@ -12,7 +12,7 @@ beforeEach((done) => {
     TestEnvironment.init()
         .then((newEnv) => {
             env = newEnv;
-            env.date = fakeDateMillis;
+            env.timing.date = fakeDateMillis;
             done();
         });
 });
