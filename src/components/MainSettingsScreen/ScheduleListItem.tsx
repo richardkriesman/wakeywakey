@@ -45,7 +45,7 @@ export class ScheduleListItem extends React.Component<ScheduleListItemProps, Sch
         return (
             <ListItem
                 title={this.props.title}
-                rightIcon={<Icon name="arrow-forward" type="ionicons"/>}
+                rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                 onPress={this.props.onPress}
                 switch={{
                     onValueChange: this.onSwitchValueChanged.bind(this),

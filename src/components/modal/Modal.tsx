@@ -64,7 +64,8 @@ export const style = StyleSheet.create({
     },
     panel: {
         backgroundColor: Colors.white,
-        borderRadius: 4
+        borderRadius: 4,
+        minWidth: 270
     },
     text: {
         fontSize: 17,

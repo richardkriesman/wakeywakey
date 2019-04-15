@@ -58,7 +58,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 containerStyle={styles.deleteButtonContainer}
                 onPress={this.onDeletePress.bind(this)}
                 titleStyle={styles.deleteButtonTitle}
-                title="Delete Alarm" />;
+                title="Delete alarm" />;
         }
 
         return (

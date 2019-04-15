@@ -1029,7 +1029,7 @@ exports[`renders correctly 1`] = `
               }
             }
           >
-            Delete Alarm
+            Delete alarm
           </Text>
         </View>
       </View>
