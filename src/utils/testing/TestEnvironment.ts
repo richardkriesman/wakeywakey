@@ -1,8 +1,8 @@
 import { NavigationParams, NavigationRoute, NavigationScreenProp } from "react-navigation";
 import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import { AppDatabase } from "../AppDatabase";
-import { TimeMachine } from "./TimeMachine";
 import { MockDatabase } from "./MockDatabase";
+import { TimeMachine } from "./TimeMachine";
 
 jest.mock("../AppDatabase");
 

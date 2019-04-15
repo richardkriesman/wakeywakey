@@ -75,10 +75,18 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
                 this.setState({
                     isVisible: true,
                     onIOSCancelled: () => {
-                        resolve(undefined);
+                        this.setState({
+                            isVisible: false
+                        }, () => {
+                            resolve(undefined);
+                        });
                     },
                     onIOSCompleted: (newTime: Time) => {
-                        resolve(newTime);
+                        this.setState({
+                            isVisible: false
+                        }, () => {
+                            resolve(newTime);
+                        });
                     },
                     time: this.state.time
                 });
