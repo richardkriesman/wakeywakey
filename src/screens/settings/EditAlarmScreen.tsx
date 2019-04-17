@@ -6,16 +6,16 @@ import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, ListItem } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
+import { ListHeader } from "../../components/ListHeader";
+import { TimePicker } from "../../components/TimePicker";
 
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
+import { Alarm, AlarmDay } from "../../models/Alarm";
 import { Schedule } from "../../models/Schedule";
+import * as AlarmUtils from "../../utils/AlarmUtils";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
-import {Alarm, AlarmDay} from "../../models/Alarm";
-import { TimePicker } from "../../components/TimePicker";
-import * as AlarmUtils from "../../utils/AlarmUtils";
-import { ListHeader } from "../../components/ListHeader";
 import { Time } from "../../utils/Time";
 
 export interface EditAlarmScreenState {
@@ -28,7 +28,7 @@ export interface EditAlarmScreenState {
 }
 
 @HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
-                                       onPress={() => (screen as EditAlarmScreen).onSavePress()} />)
+                                       onPress={() => (screen as EditAlarmScreen).onSavePress()}/>)
 export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
 
     private timePicker: TimePicker;
@@ -37,9 +37,9 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
         super(props);
 
         // build initial state
-        const alarm: Alarm|undefined = this.props.navigation.getParam("alarm");
+        const alarm: Alarm | undefined = this.props.navigation.getParam("alarm");
         this.state = {
-            alarm: alarm,
+            alarm,
             days: alarm ? alarm.days : 0,
             getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
             schedule: this.props.navigation.getParam("schedule"),
@@ -51,71 +51,71 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     public renderContent(): ReactNode {
 
         // render delete button if the alarm already exists
-        let deleteButton: ReactNode|undefined;
+        let deleteButton: ReactNode | undefined;
         if (this.state.alarm) {
             deleteButton = <Button
                 buttonStyle={styles.deleteButton}
                 containerStyle={styles.deleteButtonContainer}
                 onPress={this.onDeletePress.bind(this)}
                 titleStyle={styles.deleteButtonTitle}
-                title="Delete alarm" />;
+                title="Delete alarm"/>;
         }
 
         return (
             <View style={styles.viewScroller}>
                 <TimePicker ref={(ref) => this.timePicker = ref}/>
 
-                <ListHeader title="Days" />
+                <ListHeader title="Days"/>
                 <Divider style={styles.divider}/>
                 <View style={styles.daySelector}>
                     <ToggleButton
                         title="M"
                         isToggled={this.isDayToggled(AlarmDay.Monday)}
-                        onToggle={this.onDayToggle.bind(this, AlarmDay.Monday)} />
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Monday)}/>
                     <ToggleButton
                         title="Tu"
                         isToggled={this.isDayToggled(AlarmDay.Tuesday)}
-                        onToggle={this.onDayToggle.bind(this, AlarmDay.Tuesday)} />
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Tuesday)}/>
                     <ToggleButton
                         title="W"
                         isToggled={this.isDayToggled(AlarmDay.Wednesday)}
-                        onToggle={this.onDayToggle.bind(this, AlarmDay.Wednesday)} />
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Wednesday)}/>
                     <ToggleButton
                         title="Th"
                         isToggled={this.isDayToggled(AlarmDay.Thursday)}
-                        onToggle={this.onDayToggle.bind(this, AlarmDay.Thursday)} />
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Thursday)}/>
                     <ToggleButton
                         title="F"
                         isToggled={this.isDayToggled(AlarmDay.Friday)}
-                        onToggle={this.onDayToggle.bind(this, AlarmDay.Friday)} />
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Friday)}/>
                     <ToggleButton
                         title="Sa"
                         isToggled={this.isDayToggled(AlarmDay.Saturday)}
-                        onToggle={this.onDayToggle.bind(this, AlarmDay.Saturday)} />
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Saturday)}/>
                     <ToggleButton
                         title="Su"
                         isToggled={this.isDayToggled(AlarmDay.Sunday)}
-                        onToggle={this.onDayToggle.bind(this, AlarmDay.Sunday)} />
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Sunday)}/>
                 </View>
 
                 <Divider style={styles.divider}/>
 
-                <ListHeader title="Alarm times" />
+                <ListHeader title="Alarm times"/>
                 <ListItem key={0}
                           title="Sleep"
                           subtitle={AlarmUtils.formatTime(this.state.sleepTime)}
                           rightIcon={{ name: "arrow-forward" }}
-                          onPress={this.onTimeSleepPress.bind(this)} />
+                          onPress={this.onTimeSleepPress.bind(this)}/>
                 <ListItem key={1}
                           title="Wake up"
                           subtitle={AlarmUtils.formatTime(this.state.wakeTime)}
                           rightIcon={{ name: "arrow-forward" }}
-                          onPress={this.onTimeWakePress.bind(this)} />
+                          onPress={this.onTimeWakePress.bind(this)}/>
                 <ListItem key={2}
                           title="Get up"
                           subtitle={AlarmUtils.formatTime(this.state.getUpTime)}
                           rightIcon={{ name: "arrow-forward" }}
-                          onPress={this.onTimeGetUpPress.bind(this)} />
+                          onPress={this.onTimeGetUpPress.bind(this)}/>
 
                 {deleteButton}
             </View>
@@ -141,7 +141,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     private onSavePress(): void {
         if (!this.state.alarm) { // new alarm
             this.state.schedule.createAlarm(this.state.sleepTime, this.state.wakeTime, this.state.getUpTime,
-                    this.state.days)
+                this.state.days)
                 .then(() => {
                     this.dismiss();
                 });
@@ -161,14 +161,14 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             }
             Promise.all(promises)
                 .then(() => {
-                   this.dismiss();
+                    this.dismiss();
                 });
         }
     }
 
     private onTimeGetUpPress(): void {
         this.timePicker.present(this.state.getUpTime)
-            .then((time: Time|undefined) => {
+            .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
                         getUpTime: time
@@ -179,7 +179,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
     private onTimeSleepPress(): void {
         this.timePicker.present(this.state.sleepTime)
-            .then((time: Time|undefined) => {
+            .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
                         sleepTime: time
@@ -190,7 +190,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
     private onTimeWakePress(): void {
         this.timePicker.present(this.state.getUpTime)
-            .then((time: Time|undefined) => {
+            .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
                         wakeTime: time

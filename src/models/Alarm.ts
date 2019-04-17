@@ -1,7 +1,7 @@
 import { AppDatabase } from "../utils/AppDatabase";
 import { Model } from "../utils/Model";
-import { Schedule } from "./Schedule";
 import { Time } from "../utils/Time";
+import { Schedule } from "./Schedule";
 
 export enum AlarmDay {
     Monday = 1,
@@ -94,7 +94,7 @@ export class Alarm extends Model {
      * @param db Database connection
      * @param id ID of the Alarm to retrieve
      */
-    public static async getById(db: AppDatabase, id: number): Promise<Alarm|undefined> {
+    public static async getById(db: AppDatabase, id: number): Promise<Alarm | undefined> {
         const result: SQLResultSet = await db.execute(`
             SELECT *
             FROM alarm
@@ -175,7 +175,7 @@ export class Alarm extends Model {
      * Time the child should wake up
      */
     public get wakeTime(): Time {
-        return this._wakeTime
+        return this._wakeTime;
     }
 
     /**

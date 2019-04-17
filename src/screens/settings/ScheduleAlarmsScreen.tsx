@@ -3,9 +3,11 @@
  */
 
 import React, { ReactNode } from "react";
-import {SectionList, StyleSheet, View} from "react-native";
+import { SectionList, StyleSheet, View } from "react-native";
 import { ListItem } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
+import { EmptyView } from "../../components/EmptyView";
+import { ListHeader } from "../../components/ListHeader";
 import Colors from "../../constants/Colors";
 import { Schedule } from "../../models";
 import { Alarm } from "../../models/Alarm";
@@ -13,8 +15,6 @@ import AlarmUtils from "../../utils/AlarmUtils";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher/Watcher";
-import {EmptyView} from "../../components/EmptyView";
-import {ListHeader} from "../../components/ListHeader";
 
 export interface EditScheduleScreenState {
     alarms: Map<number, Alarm>;

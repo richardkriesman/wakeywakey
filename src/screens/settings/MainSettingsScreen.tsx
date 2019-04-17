@@ -7,14 +7,14 @@ import { SectionList, StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton, ScheduleListItem } from "../../components";
+import { EmptyView } from "../../components/EmptyView";
+import { ListHeader } from "../../components/ListHeader";
 import { TextInputModal } from "../../components/modal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
-import { EmptyView } from "../../components/EmptyView";
-import { ListHeader } from "../../components/ListHeader";
 
 /**
  * Main settings screen state. Includes schedule states.
@@ -42,12 +42,12 @@ export interface ScheduleListItemData {
     <View style={styles.header}>
         <HeaderIconButton
             icon="lock"
-            onPress={() => screen.present("PasscodeChange")} />
+            onPress={() => screen.present("PasscodeChange")}/>
         <HeaderIconButton
             icon="add"
             onPress={() => screen.setState({
                 isCreateModalVisible: true
-            })} />
+            })}/>
     </View>)
 export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
 
@@ -76,7 +76,7 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
         // build a new map of schedules
         const scheduleItems: Map<number, ScheduleListItemData> = new Map();
         for (const schedule of schedules) {
-            let scheduleItem: ScheduleListItemData|undefined = this.state.schedules.get(schedule.id);
+            let scheduleItem: ScheduleListItemData | undefined = this.state.schedules.get(schedule.id);
             if (scheduleItem) {
                 scheduleItem.schedule = schedule;
             } else {
@@ -153,7 +153,7 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                 <EmptyView
                     icon="ios-calendar"
                     title="No schedules yet"
-                    subtitle="Create a schedule to set alarms" />
+                    subtitle="Create a schedule to set alarms"/>
             );
         }
 
@@ -165,7 +165,7 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                     title="Create schedule"
                     text="Type a name for the new schedule:"
                     onCancelled={this.onModalCancelled.bind(this)}
-                    onCompleted={this.onModalCompleted.bind(this)} />
+                    onCompleted={this.onModalCompleted.bind(this)}/>
                 {content}
             </View>
         );
