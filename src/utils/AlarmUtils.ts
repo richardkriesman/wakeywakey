@@ -38,7 +38,7 @@ export function getAlarmSubtitle(alarm: Alarm): string {
 }
 
 export function formatTime(time: Time): string {
-    return `${padTime(time.hour)}:${padTime(time.minute)}`;
+    return time ? `${padTime(time.hour)}:${padTime(time.minute)}` : "";
 }
 
 export function padTime(time: number): string {

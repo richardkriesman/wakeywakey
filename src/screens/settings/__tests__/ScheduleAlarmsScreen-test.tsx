@@ -3,6 +3,9 @@ import renderer from "react-test-renderer";
 import { TestEnvironment } from "../../../utils/testing";
 import ScheduleAlarmsScreen from "../ScheduleAlarmsScreen";
 
+jest.mock("../../../models/Schedule");
+jest.mock("../../../models/Alarm");
+
 let env: TestEnvironment;
 beforeEach((done) => {
     TestEnvironment.init()

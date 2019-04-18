@@ -4,12 +4,9 @@ import { TestEnvironment } from "../../../utils/testing";
 import EditAlarmScreen from "../EditAlarmScreen";
 
 let env: TestEnvironment;
-beforeEach((done) => {
-    TestEnvironment.init()
-        .then((newEnv) => {
-            env = newEnv;
-            done();
-        });
+beforeEach(async (done) => {
+    env = await TestEnvironment.init();
+    done();
 });
 
 it("renders correctly", () => {
