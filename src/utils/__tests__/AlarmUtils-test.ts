@@ -4,13 +4,13 @@ import AlarmUtils from "../AlarmUtils";
 import { TestEnvironment } from "../testing";
 import { Time } from "../Time";
 
+jest.mock("../../models/Schedule");
+jest.mock("../../models/Alarm");
+
 let env: TestEnvironment;
-beforeEach((done) => {
-    TestEnvironment.init()
-        .then((newEnv) => {
-            env = newEnv;
-            done();
-        });
+beforeEach(async (done) => {
+    env = await TestEnvironment.init();
+    done();
 });
 
 describe("alarm formatting", () => {
@@ -23,19 +23,10 @@ describe("alarm formatting", () => {
     let alarm: Alarm;
     let schedule: Schedule;
 
-    beforeEach((done) => {
-
-        // create new alarm and schedule for each test
-        // FIXME: Create a mock database and a
-        Schedule.create(env.db, "Test schedule")
-            .then((value) => {
-                schedule = value;
-                return Alarm.create(env.db, schedule.id, sleepTime, wakeTime, getUpTime, days);
-            })
-            .then((value) => {
-                alarm = value;
-                done();
-            });
+    beforeEach(async (done) => {
+        schedule = await Schedule.create(env.db, "Test schedule");
+        alarm = await Alarm.create(env.db, schedule.id, sleepTime, wakeTime, getUpTime, days);
+        done();
     });
 
     it("formats the title correctly", (done) => {

@@ -3,7 +3,7 @@ interface MockTable {
     [id: number]: MockRow;
 }
 
-interface MockRow {
+export interface MockRow {
     id: number;
     [col: string]: any;
 }
@@ -32,6 +32,20 @@ export class MockDatabase {
     }
 
     /**
+     * Select a row by ID from the {@link MockDatabase}.
+     *
+     * @param table Table to select from
+     * @param id ID of row to select
+     */
+    public select(table: string, id: number): MockRow {
+        if (!this.data.hasOwnProperty(table)) {
+            return null;
+        }
+
+        return this.data[table][id] || null;
+    }
+
+    /**
      * Deletes a row from the {@link MockDatabase}.
      *
      * @param table Name of the table
@@ -55,6 +69,15 @@ export class MockDatabase {
     }
 
     /**
+     * Looks to see if the table is in the mock database.
+     *
+     * @param name Name of the table to look for
+     */
+    public hasTable(name: string): boolean {
+        return this.data.hasOwnProperty(name);
+    }
+
+    /**
      * Creates a new "table" if one does not exist.
      *
      * @param name Name of the table to create
@@ -66,5 +89,4 @@ export class MockDatabase {
             };
         }
     }
-
 }
