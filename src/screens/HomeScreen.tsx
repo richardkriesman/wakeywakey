@@ -6,7 +6,7 @@ import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationScreenProps } from "react-navigation";
-import { Clock, SlideUpIndicator, SnoozeButton, LockScreenSlider } from "../components/HomeScreen";
+import { Clock, LockScreenSlider, SnoozeButton } from "../components/HomeScreen";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -44,20 +44,18 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public renderContent(): ReactNode {
         return (
-            <View style={ExtraStyles.container}>
-                <View style={ExtraStyles.contentWrapper}>
-                    <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
-                    <Clock wrapperStyle={ExtraStyles.clockWrapper}/>
-                    <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
-                </View>
-                <View style={ExtraStyles.bottom}>
-                    <LockScreenSlider />
+            <View>
+                <LockScreenSlider />
+                <View style={ExtraStyles.container}>
+                    <View style={ExtraStyles.contentWrapper}>
+                        <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
+                        <Clock wrapperStyle={ExtraStyles.clockWrapper}/>
+                        <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
+                    </View>
                 </View>
             </View>
         );
     }
-
-//<SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
 
     public switchToSettings(): void {
         // TODO
@@ -73,14 +71,6 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 }
 
 const ExtraStyles = StyleSheet.create({
-    bottom: {
-        alignItems: "center",
-        bottom: -10,
-        justifyContent: "center",
-        position: "absolute",
-        width: "100%",
-        zIndex: 99
-    },
     clockWrapper: {},
     container: {
         alignItems: "center",
