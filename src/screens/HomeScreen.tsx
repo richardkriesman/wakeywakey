@@ -74,7 +74,6 @@ const ExtraStyles = StyleSheet.create({
     clockWrapper: {},
     container: {
         alignItems: "center",
-        flex: 1,
         marginTop: 20,
         padding: 0
     },

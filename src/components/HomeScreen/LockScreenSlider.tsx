@@ -2,10 +2,10 @@
  * @module components
  */
 
-import React, { Component } from 'react';
-import { StyleSheet, ScrollView, Text, View } from 'react-native';
+import React, { Component, ReactNode } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import VerticalSwipe from 'react-native-vertical-swipe';
+import VerticalSwipe from "react-native-vertical-swipe";
 
 /**
  * The vertical slider for password on the home screen.
@@ -14,66 +14,56 @@ import VerticalSwipe from 'react-native-vertical-swipe';
  */
 
 export class LockScreenSlider extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <VerticalSwipe
-          offsetTop={300}   // Distance from top slider reaches
-          closeSwipeThreshold={25} // Distance for slide to register
-          openSwipeOffset={150} // Size of area open slide is registered
-          //style={styles.dragContainer}
-          content={(
-            <View style={styles.innerContainer}>
-              <ScrollView>
-                <Text style={styles.innerText}>
-                  Spongebob me boy, enter that password! Arghegegegegegh
-                </Text>
-                <Text style={styles.innerText}>
-                  Spongebob me boy, enter that password! Arghegegegegegh
-                </Text>
-              </ScrollView>
-            </View>
-          )}>
-        </VerticalSwipe>
-      </View>
-    );
-  }
+    public render(): ReactNode {
+        return (
+            <VerticalSwipe
+                offsetTop={300}   // Distance from top slider reaches
+                closeSwipeThreshold={25} // Distance for slide to register
+                openSwipeOffset={150} // Size of area open slide is registered
+                // style={styles.dragContainer}
+                content={(
+                    <View style={styles.innerContainer}>
+                        <ScrollView>
+                            <Text style={styles.innerText}>
+                                Spongebob me boy, enter that password! Arghegegegegegh
+                            </Text>
+                            <Text style={styles.innerText}>
+                                Spongebob me boy, enter that password! Arghegegegegegh
+                            </Text>
+                        </ScrollView>
+                    </View>
+                )}>
+            </VerticalSwipe>
+        );
+    }
 }
-
-//<Text style={styles.text}>Try to swap from the deep bottom</Text>
-
-
-//export default LockScreenSlider;
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+        backgroundColor: "blue"
     },
+
     // Screen
     dragContainer: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "gray",
-      //openSwipeOffset: 200,
+        alignItems: "center",
+        backgroundColor: "gray",
+        flex: 1,
+        justifyContent: "center"
     },
-  
+
     // Slider
     innerContainer: {
-      alignSelf: "center",
-      backgroundColor: "black",
-      //blurRadius: 10,
-      //opacity: .5,
-      width: 300, 
-      height: 600, 
-      borderTopLeftRadius: 25, 
-      borderTopRightRadius: 25,
+        alignSelf: "center",
+        backgroundColor: "black",
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
+        height: 600,
+        width: 300
     },
-  
+
     // Text in slider
     innerText: {
-      color: "white",
-      //opacity: 10,
-      padding: 50,
+        color: "white",
+        padding: 50
     }
-  });
+});
