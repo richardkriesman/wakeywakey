@@ -138,6 +138,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
                 </Text>
                 <Input
                     containerStyle={styles.containerStyle}
+                    errorStyle={styles.errorStyle}
                     inputContainerStyle={styles.inputContainerStyle}
                     inputStyle={styles.inputStyle}
 
@@ -161,36 +162,32 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
 
 const styles = StyleSheet.create({
     containerStyle: {
-        backgroundColor: "white",
-        borderRadius: 5,
-        marginTop: 20,
-        width: "70%"
+        height: "55%"
     },
     errorStyle: {
-        color: "red",
+        color: "darkred",
+        fontSize: 15,
         textAlign: "center"
     },
     inputContainerStyle: {
-        marginBottom: 5,
-        marginTop: 5
+        backgroundColor: "white",
+        width: "70%"
     },
     inputStyle: {
-        fontSize: 32,
-        letterSpacing: 30,
-        marginLeft: 10,
-        textAlign: "left"
+        fontSize: 30,
+        letterSpacing: 20,
+        marginRight: 32,
+        textAlign: "center"
     },
     mainContainer: {
         alignItems: "center",
-        bottom: 50,
         flex: 1,
-        justifyContent: "center",
-        width: "100%"
+        justifyContent: "flex-end"
     },
     promptStyle: {
-        color: "black",
         fontSize: 32,
         fontWeight: "bold",
-        textAlign: "center"
+        paddingBottom: 20,
+        textAlign: "center",
     }
 });
