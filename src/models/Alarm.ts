@@ -1,7 +1,7 @@
+import { AlarmService } from "../services/AlarmService";
 import { AppDatabase } from "../utils/AppDatabase";
 import { Model } from "../utils/Model";
 import { Time } from "../utils/Time";
-import { Schedule } from "./Schedule";
 
 export enum AlarmDay {
     Monday = 1,
@@ -29,112 +29,15 @@ export enum AlarmDay {
 export class Alarm extends Model {
 
     /**
-     * Creates a new Alarm.
-     *
-     * Days are selected by using the bitwise OR operation like so:
-     *     `AlarmDays.Monday | AlarmDays.Tuesday`
-     *
-     * For internal use only. Use a {@link Schedule} to create a new alarm from the UI.
-     *
-     * @param db Database connection
-     * @param scheduleId ID of the Schedule to which this alarm is attached
-     * @param sleepTime Time the child should go to sleep
-     * @param wakeTime Time the child should wake up
-     * @param getUpTime Time the child is allowed to get up
-     * @param days Days of the week the Alarm is active for as an integer
-     */
-    public static async create(db: AppDatabase, scheduleId: number, sleepTime: Time, wakeTime: Time,
-                               getUpTime: Time, days: number): Promise<Alarm> {
-
-        // insert the alarm into the database
-        const result: SQLResultSet = await db.execute(`
-            INSERT INTO alarm
-                (scheduleId, days, sleepTime, wakeTime, getUpTime)
-            VALUES
-                (?, ?, ?, ?, ?)
-        `, [scheduleId, days, sleepTime.totalSeconds, wakeTime.totalSeconds, getUpTime.totalSeconds]);
-
-        // update the watchers
-        db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(db));
-
-        // build the resulting model
-        return Alarm.load(db, {
-            getUpTime: getUpTime.totalSeconds,
-            id: result.insertId,
-            scheduleId,
-            sleepTime: sleepTime.totalSeconds,
-            wakeTime: wakeTime.totalSeconds
-        });
-    }
-
-    /**
-     * Gets all {@link Alarm}s.
-     *
-     * For internal use only.
-     *
-     * @param db Database connection
-     */
-    public static async getAll(db: AppDatabase): Promise<Alarm[]> {
-        const result: SQLResultSet = await db.execute(`
-            SELECT *
-            FROM alarm;
-        `);
-        const alarms: Alarm[] = [];
-        for (let i = 0; i < result.rows.length; i++) {
-            alarms.push(Alarm.load(db, result.rows.item(i)));
-        }
-        return alarms;
-    }
-
-    /**
-     * Gets an {@link Alarm} by its ID.
-     *
-     * For internal use only.
-     *
-     * @param db Database connection
-     * @param id ID of the Alarm to retrieve
-     */
-    public static async getById(db: AppDatabase, id: number): Promise<Alarm | undefined> {
-        const result: SQLResultSet = await db.execute(`
-            SELECT *
-            FROM alarm
-            WHERE
-                id = ?
-        `, [id]);
-        return result.rows.length > 0 ? Alarm.load(db, result.rows.item(0)) : undefined;
-    }
-
-    /**
-     * Gets an {@link Alarm} by its {@link Schedule}'s ID.
-     *
-     * For internal use only.
-     *
-     * @param db Database connection
-     * @param scheduleId ID of the Schedule to which the Alarms are attached
-     */
-    public static async getByScheduleId(db: AppDatabase, scheduleId: number): Promise<Alarm[]> {
-        const result: SQLResultSet = await db.execute(`
-            SELECT *
-            FROM alarm
-            WHERE
-                scheduleId = ?
-        `, [scheduleId]);
-        const alarms: Alarm[] = [];
-        for (let i = 0; i < result.rows.length; i++) {
-            alarms.push(Alarm.load(db, result.rows.item(i)));
-        }
-        return alarms;
-    }
-
-    /**
      * Generates a model given a row from the database.
      *
      * @param db Database connection
      * @param row Row from the database
      */
-    private static load(db: AppDatabase, row: any): Alarm {
-        const model = new Alarm(db, row.scheduleId);
+    public static load(db: AppDatabase, row: any): Alarm {
+        const model = new Alarm(db);
         model._id = row.id;
+        model._scheduleId = row.scheduleId;
         model._days = row.days;
         model._sleepTime = Time.createFromTotalSeconds(row.sleepTime);
         model._wakeTime = Time.createFromTotalSeconds(row.wakeTime);
@@ -143,25 +46,39 @@ export class Alarm extends Model {
     }
 
     /**
-     * ID of the {@link Schedule} to which this Alarm is attached.
+     * Serializes an alarm {@link Alarm}.
+     *
+     * @param alarm Alarm to serialize
      */
-    public readonly scheduleId: number;
+    public static save(alarm: Alarm): any {
+        return {
+            days: alarm._days,
+            getUpTime: alarm._getUpTime.totalSeconds,
+            id: alarm._id,
+            scheduleId: alarm._scheduleId,
+            sleepTime: alarm._sleepTime.totalSeconds,
+            wakeUpTime: alarm._wakeTime.totalSeconds
+        };
+    }
 
     private _days: number;
+    private _scheduleId: number;
     private _sleepTime: Time;
     private _wakeTime: Time;
     private _getUpTime: Time;
-
-    private constructor(db: AppDatabase, scheduleId: number) {
-        super(db);
-        this.scheduleId = scheduleId;
-    }
 
     /**
      * Days set as a bitwise ORed integer
      */
     public get days(): number {
         return this._days;
+    }
+
+    /**
+     * ID of the {@link Schedule} to which this Alarm is attached
+     */
+    public get scheduleId(): number {
+        return this._scheduleId;
     }
 
     /**
@@ -186,17 +103,12 @@ export class Alarm extends Model {
     }
 
     /**
-     * Deletes the Alarm.
+     * Deletes this Alarm.
      *
      * Do not use this Alarm after it has been deleted.
      */
     public async delete(): Promise<void> {
-        await this.db.execute(`
-            DELETE FROM alarm
-            WHERE
-                id = ?
-        `, [this.id]);
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
+        await this.db.getService(AlarmService).delete(this);
     }
 
     /**
@@ -209,61 +121,34 @@ export class Alarm extends Model {
     }
 
     /**
-     * Sets the days the Alarm is active to the given days, represented as a bitwise ORed integer.
-     *
-     * @param days Days the alarm is active
+     * @param days New days
      */
     public async setDays(days: number): Promise<void> {
-        await this.db.execute(`
-            UPDATE alarm
-            SET
-                days = ?
-        `, [days]);
-        this._days = days;
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
+        await this.db.getService(AlarmService).setDays(this, days);
     }
 
     /**
-     * Sets the sleep time to a given time
-     *
-     * @param time The time to set
-     */
-    public async setSleepTime(time: Time): Promise<void> {
-        await this.db.execute(`
-            UPDATE alarm
-            SET
-                sleepTime = ?
-        `, [time.totalSeconds]);
-        this._sleepTime = time;
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
-    }
-
-    /**
-     * Sets the wake time to a given time
-     *
-     * @param time The time to set
-     */
-    public async setWakeTime(time: Time): Promise<void> {
-        await this.db.execute(`
-            UPDATE alarm
-            SET
-                wakeTime = ?
-        `, [time.totalSeconds]);
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
-    }
-
-    /**
-     * Sets the get up time to a given time
-     *
-     * @param time The time to set
+     * @param time New get up time
      */
     public async setGetUpTime(time: Time): Promise<void> {
-        await this.db.execute(`
-            UPDATE alarm
-            SET
-                getUpTime = ?
-        `, [time.totalSeconds]);
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await Alarm.getAll(this.db));
+        await this.db.getService(AlarmService).setGetUpTime(this, time);
+        this._getUpTime = time;
+    }
+
+    /**
+     * @param time New sleep time
+     */
+    public async setSleepTime(time: Time): Promise<void> {
+        await this.db.getService(AlarmService).setSleepTime(this, time);
+        this._sleepTime = time;
+    }
+
+    /**
+     * @param time New wake time
+     */
+    public async setWakeTime(time: Time): Promise<void> {
+        await this.db.getService(AlarmService).setWakeTime(this, time);
+        this._wakeTime = time;
     }
 
 }

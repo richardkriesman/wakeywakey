@@ -11,6 +11,7 @@ import { ListHeader } from "../../components/ListHeader";
 import Colors from "../../constants/Colors";
 import { Schedule } from "../../models";
 import { Alarm } from "../../models/Alarm";
+import { AlarmService } from "../../services/AlarmService";
 import AlarmUtils from "../../utils/AlarmUtils";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
@@ -39,14 +40,17 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
             headerTitle: this.props.navigation.getParam("title"),
             schedule: this.props.navigation.getParam("schedule") || null
         }, () => { // got the schedule, watch for alarms
-            this.watcher = this.state.schedule.watchAlarms();
+            this.watcher = this.getService(AlarmService).watchBySchedule(this.state.schedule);
             this.dataSetChangedHandler = this.onDataSetChanged.bind(this);
             this.watcher.on(this.dataSetChangedHandler);
         });
     }
 
-    public onAlarmPressed(key: number): void {
+    public componentWillUnmount(): void {
         this.watcher.off(this.dataSetChangedHandler);
+    }
+
+    public onAlarmPressed(key: number): void {
         this.present("EditAlarm", {
             alarm: this.state.alarms.get(key),
             title: this.state.headerTitle

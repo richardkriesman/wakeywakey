@@ -1,3 +1,7 @@
+/**
+ * @module services
+ */
+
 import { Schedule } from "../models";
 import { Service } from "../utils/Service";
 import { Emitter, Watcher } from "../utils/watcher";
@@ -10,27 +14,75 @@ export class ScheduleService extends Service {
      * @param name Non-unique name for the schedule
      */
     public async create(name: string): Promise<Schedule> {
-        const model = await Schedule.create(this.db, name);
-        this.updateEmitters();
-        return model;
+
+        // insert the schedule into the database
+        const result: SQLResultSet = await this.db.execute(`
+            INSERT INTO schedule
+                (name, isEnabled)
+            VALUES
+                (?, 0)
+        `, [name]);
+
+        // update the emitters
+        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+
+        // build the resulting model
+        return Schedule.load(this.db, {
+            id: result.insertId,
+            isEnabled: false,
+            name
+        });
     }
 
     /**
      * Deletes a {@link Schedule}. All associated alarms and options will also be deleted.
      *
+     * Do not use the Schedule after it has been deleted.
+     *
      * @param schedule Schedule to be deleted
      */
     public async delete(schedule: Schedule): Promise<void> {
-        // noinspection TypeScriptValidateJSTypes - WebStorm thinks this is an invalid type for some reason?
-        await Schedule.delete(this.db, schedule);
-        this.updateEmitters();
+        await this.db.execute(`
+            DELETE FROM schedule
+            WHERE
+                id = ?
+        `, [schedule.id]);
+        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+    }
+
+    /**
+     * Gets a {@link Schedule} by its ID.
+     *
+     * @param id ID of the Schedule
+     */
+    public async get(id: number): Promise<Schedule|undefined> {
+        const result: SQLResultSet = await this.db.execute(`
+            SELECT *
+            FROM schedule
+            WHERE
+                id = ?
+        `, [id]);
+        return result.rows.length > 0 ? Schedule.load(this.db, result.rows.item(0)) : undefined;
     }
 
     /**
      * Gets all {@link Schedule}s.
      */
-    public getAll(): Promise<Schedule[]> {
-        return Schedule.getAll(this.db);
+    public async getAll(): Promise<Schedule[]> {
+
+        // get all rows in ascending order
+        const result: SQLResultSet = await this.db.execute(`
+            SELECT *
+            FROM schedule;     
+        `);
+
+        // build models from results
+        const models: Schedule[] = [];
+        for (let i = 0; i < result.rows.length; i++) {
+            models.push(Schedule.load(this.db, result.rows.item(i)));
+        }
+        return models;
+
     }
 
     /**
@@ -49,7 +101,7 @@ export class ScheduleService extends Service {
                     ELSE 0
                     END
         `, [scheduleId, isEnabled ? 1 : 0]);
-        this.updateEmitters();
+        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
     }
 
     /**
@@ -62,14 +114,6 @@ export class ScheduleService extends Service {
                 emitter.updateInitialSet(schedules);
             });
         return emitter;
-    }
-
-    /**
-     * Updates the data set for all emitters.
-     */
-    private updateEmitters(): void {
-        this.getAll().then((schedules: Schedule[]) =>
-            this.db.getEmitterSet<Schedule>(Schedule.name).update(schedules));
     }
 
 }

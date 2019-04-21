@@ -13,6 +13,7 @@ import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
 import { Alarm, AlarmDay } from "../../models/Alarm";
 import { Schedule } from "../../models/Schedule";
+import { AlarmService } from "../../services/AlarmService";
 import * as AlarmUtils from "../../utils/AlarmUtils";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
@@ -140,8 +141,8 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     // noinspection JSUnusedLocalSymbols - this method is used, just in a decorator
     private onSavePress(): void {
         if (!this.state.alarm) { // new alarm
-            this.state.schedule.createAlarm(this.state.sleepTime, this.state.wakeTime, this.state.getUpTime,
-                this.state.days)
+            this.getService(AlarmService).create(this.state.schedule, this.state.sleepTime, this.state.wakeTime,
+                this.state.getUpTime, this.state.days)
                 .then(() => {
                     this.dismiss();
                 });

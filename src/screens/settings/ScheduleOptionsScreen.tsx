@@ -71,7 +71,7 @@ export class ScheduleOptionsScreen extends UIScreen<{}, ScheduleOptionsScreenSta
             isDeleteModalVisible: false
         }, () => {
             if (shouldDelete) {
-                this.getService(ScheduleService).delete(this.schedule)
+                this.schedule.delete()
                     .then(() => {
                         this.dismiss();
                     });
