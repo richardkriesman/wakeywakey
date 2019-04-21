@@ -57,9 +57,17 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
         });
     }
 
-    public handleChangeText(): void {
-        if (this.state.errorMessage.length !== 0) {
-            this.setState({ errorMessage: "" });
+    public handleChangeText(passcode: string): void {
+        if (passcode.length == PASSCODE_LENGTH) { // passcode correct length
+            if (!this.state.isConfirming) {
+                this.handleChoosingPasscode(passcode);
+            } else {
+                this.handleConfirmingPasscode(passcode);
+            }
+        } else { // clear error message
+            if (this.state.errorMessage.length !== 0) {
+                this.setState({ errorMessage: "" });
+            }
         }
     }
 
@@ -71,14 +79,6 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
             this.setState({
                 errorMessage: "Passcode must be " + PASSCODE_LENGTH + " digits long!"
             });
-        } else { // passcode long enough
-
-            // check state of input (choosing or confirming)
-            if (!this.state.isConfirming) {
-                this.handleChoosingPasscode(passcode);
-            } else {
-                this.handleConfirmingPasscode(passcode);
-            }
         }
     }
 
@@ -101,6 +101,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
         } else {
             if (this.props.confirmPasscode) { // switch to confirming
                 this.setState({
+                    errorMessage: "",
                     isConfirming: true,
                     passcode,
                     promptText: this.props.defaultConfirmText
@@ -145,6 +146,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
                     autoFocus={true}
                     blurOnSubmit={false}
                     caretHidden={true}
+                    contextMenuHidden={true}
                     errorMessage={this.state.errorMessage}
                     keyboardType="numeric"
                     leftIcon={ <AntDesign name="lock" size={32} /> }
@@ -152,6 +154,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
                     onChangeText={this.handleChangeText.bind(this)}
                     onSubmitEditing={this.handleSubmitEditing.bind(this)}
                     ref={this.inputRef}
+                    returnKeyType={"done"}
                     secureTextEntry={true}
                 />
             </View>
