@@ -11,10 +11,10 @@ const PASSCODE_LENGTH = 4;
 
 export interface PasscodeInputProps {
     // optional
-    confirmPasscode: boolean; // whether to confirm, does nothing if mustEqual is set
+    confirmPasscode: boolean; // whether to confirm, does nothing if verifyPasscode is set
     defaultConfirmText: string;
     defaultPromptText: string;
-    mustEqual: string; // passcode must equal this for success
+    verifyPasscode?(passcode: string): boolean; // checks if passcode is correct
 
     // required
     handleSuccess(passcode: string): void;
@@ -38,8 +38,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
     public static defaultProps = {
         confirmPasscode: false,
         defaultConfirmText: "Confirm your passcode:",
-        defaultPromptText: "Enter passcode:",
-        mustEqual: ""
+        defaultPromptText: "Enter passcode:"
     };
 
     private inputRef = React.createRef<Input>();
@@ -58,7 +57,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
     }
 
     public handleChangeText(passcode: string): void {
-        if (passcode.length == PASSCODE_LENGTH) { // passcode correct length
+        if (passcode.length === PASSCODE_LENGTH) { // passcode correct length
             if (!this.state.isConfirming) {
                 this.handleChoosingPasscode(passcode);
             } else {
@@ -85,11 +84,11 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
     /**
      * handles choosing passcode
      * Sets the state to confirming.
-     * If mustEqual is set, checks if passcode is equal. If not equal, resets.
+     * If verifyPasscode is set, checks if passcode is equal. If not equal, resets.
      */
     public handleChoosingPasscode(passcode: string): void {
-        if (this.props.mustEqual !== "") {
-            if (passcode === this.props.mustEqual) { // correct passcode
+        if (this.props.verifyPasscode) {
+            if (this.props.verifyPasscode(passcode)) { // correct passcode
                 this.props.handleSuccess(passcode); // done!
             } else { // incorrect passcode
                 this.setState({
@@ -191,6 +190,6 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: "bold",
         paddingBottom: 20,
-        textAlign: "center",
+        textAlign: "center"
     }
 });
