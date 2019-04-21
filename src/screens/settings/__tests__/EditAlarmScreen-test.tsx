@@ -6,6 +6,7 @@ import EditAlarmScreen from "../EditAlarmScreen";
 let env: TestEnvironment;
 beforeEach(async (done) => {
     env = await TestEnvironment.init();
+    env.timing.date = 0;
     done();
 });
 
