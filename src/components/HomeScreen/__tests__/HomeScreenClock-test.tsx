@@ -18,7 +18,7 @@ describe("HomeScreenClock", () => {
     });
 
     it("renders the correct (fake) later time", () => {
-        env.timing.date = 1000;
+        env.timing.date = 1555810244489;
         const tree = renderer.create(<HomeScreenClock/>).toJSON();
         expect(tree).toMatchSnapshot();
     });
