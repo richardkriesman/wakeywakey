@@ -1,5 +1,6 @@
 import { Model } from "../Model";
 import { Service } from "../Service";
+import { MockDatabase } from "../testing/MockDatabase";
 import { EmitterSet } from "../watcher";
 
 interface MockPreferences {
@@ -9,26 +10,33 @@ interface MockPreferences {
 export class AppDatabase {
 
     public static get initCount(): number {
-        return 0;
+        return AppDatabase._initCount;
     }
 
     public static async init(): Promise<AppDatabase> {
         return new AppDatabase();
     }
 
-    /**
-     * Stores mock preference data
-     */
-    public mockPreferences: MockPreferences = {};
+    private static _initCount = 0;
 
+    public readonly db: MockDatabase = new MockDatabase(this as any);
+
+    private mockPreferences: MockPreferences = {};
     private services: Map<string, Service> = new Map();
     private emitters: Map<string, EmitterSet<any>> = new Map();
 
     private constructor() {
+        this.db.createTable("schedule");
+        this.db.createTable("alarm");
     }
 
     public async doesTableExist(name: string): Promise<boolean> {
-        return this.services.has(name);
+        return this.db.hasTable(name);
+    }
+
+    public async execute(sql: DOMString, args: ObjectArray = []): Promise<SQLResultSet> {
+        throw new Error("AppDatabase.execute() cannot be mocked. Use the MockDatabase for manipulating persistence " +
+            "data.");
     }
 
     public getEmitterSet<T extends Model>(name: string): EmitterSet<T> {

@@ -6,6 +6,7 @@ import {Alarm, AlarmDay} from "../models/Alarm";
 import {Time} from "./Time";
 
 export function getAlarmTitle(alarm: Alarm): string {
+    console.log("we're here");
     const start = formatTime(alarm.sleepTime);
     const end = formatTime(alarm.getUpTime);
     return `${start} - ${end}`;

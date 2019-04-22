@@ -1,19 +1,23 @@
 import { Schedule } from "../../models";
 import { Alarm, AlarmDay } from "../../models/Alarm";
+import { AlarmService, ScheduleService } from "../../services";
 import AlarmUtils from "../AlarmUtils";
 import { TestEnvironment } from "../testing";
 import { Time } from "../Time";
 
-jest.mock("../../models/Schedule");
-jest.mock("../../models/Alarm");
-
-let env: TestEnvironment;
-beforeEach(async (done) => {
-    env = await TestEnvironment.init();
-    done();
-});
+jest.mock("../../services/AlarmService");
+jest.mock("../../services/ScheduleService");
 
 describe("alarm formatting", () => {
+
+    let env: TestEnvironment;
+    beforeEach((done) => {
+        TestEnvironment.init()
+            .then((newEnv) => {
+                env = newEnv;
+                done();
+            });
+    });
 
     const days: number = AlarmDay.Monday | AlarmDay.Wednesday | AlarmDay.Friday; // MWF
     const sleepTime: Time = Time.createFromDisplayTime(22, 0);      // 22:00
@@ -23,10 +27,16 @@ describe("alarm formatting", () => {
     let alarm: Alarm;
     let schedule: Schedule;
 
-    beforeEach(async (done) => {
-        schedule = await Schedule.create(env.db, "Test schedule");
-        alarm = await Alarm.create(env.db, schedule.id, sleepTime, wakeTime, getUpTime, days);
-        done();
+    beforeEach((done) => {
+        env.db.getService(ScheduleService).create("Test schedule")
+            .then((newSchedule) => {
+                schedule = newSchedule;
+                return env.db.getService(AlarmService).create(schedule, sleepTime, wakeTime, getUpTime, days);
+            })
+            .then((newAlarm) => {
+                alarm = newAlarm;
+                done();
+            });
     });
 
     it("formats the title correctly", (done) => {
@@ -45,12 +55,18 @@ describe("alarm formatting", () => {
 
 describe("time formatting", () => {
 
+    let env: TestEnvironment;
+    beforeEach((done) => {
+        TestEnvironment.init()
+            .then((newEnv) => {
+                env = newEnv;
+                env.timing.date = dateTimeMillis;
+                done();
+            });
+    });
+
     // Wed Mar 27 2019 15:00:30 CDT
     const dateTimeMillis: number = 1553716830510;
-
-    beforeEach(() => {
-        env.timing.date = dateTimeMillis;
-    });
 
     it("should be formatted correctly", () => {
         const time: string = AlarmUtils.formatTime(new Time());

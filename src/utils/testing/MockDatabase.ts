@@ -1,3 +1,5 @@
+import { AppDatabase } from "../AppDatabase";
+
 interface MockTable {
     nextId: number;
     [id: number]: MockRow;
@@ -13,7 +15,49 @@ export interface MockRow {
  */
 export class MockDatabase {
 
-    private data: { [table: string]: MockTable };
+    public readonly appDb: AppDatabase;
+
+    private readonly data: { [table: string]: MockTable } = {};
+
+    public constructor(appDb: AppDatabase) {
+        this.appDb = appDb;
+    }
+
+    /**
+     * Creates a new "table" if one does not exist.
+     *
+     * @param name Name of the table to create
+     */
+    public createTable(name: string): void {
+        if (!this.data.hasOwnProperty(name)) {
+            this.data[name] = {
+                nextId: 1
+            };
+        }
+    }
+
+    /**
+     * Deletes a row from the {@link MockDatabase}.
+     *
+     * @param table Name of the table
+     * @param row Row to delete
+     */
+    public delete(table: string, row: any): void {
+        if (!this.hasTable(table)) {
+            throw new Error(`Table ${table} does not exist`);
+        }
+
+        delete this.data[table][row.id];
+    }
+
+    /**
+     * Looks to see if the table is in the mock database.
+     *
+     * @param name Name of the table to look for
+     */
+    public hasTable(name: string): boolean {
+        return this.data.hasOwnProperty(name);
+    }
 
     /**
      * Inserts a new row into the {@link MockDatabase}.
@@ -21,8 +65,11 @@ export class MockDatabase {
      * @param table Name of the table
      * @param row Row to insert
      */
-    public insert(table: string, row: any): any {
-        this.createTable(table);
+    public insert(table: string, row: any): MockRow {
+        if (!this.hasTable(table)) {
+            throw new Error(`Table ${table} does not exist`);
+        }
+
         const id: number = this.data[table].nextId++;
         this.data[table][id] = {
             id,
@@ -37,23 +84,27 @@ export class MockDatabase {
      * @param table Table to select from
      * @param id ID of row to select
      */
-    public select(table: string, id: number): MockRow {
-        if (!this.data.hasOwnProperty(table)) {
-            return null;
+    public select(table: string, id: number): MockRow|undefined {
+        if (!this.hasTable(table)) {
+            throw new Error(`Table ${table} does not exist`);
         }
 
-        return this.data[table][id] || null;
+        return this.data[table][id] || undefined;
     }
 
     /**
-     * Deletes a row from the {@link MockDatabase}.
+     * Selects all rows from a table.
      *
-     * @param table Name of the table
-     * @param row Row to delete
+     * @param table Table to select from
      */
-    public delete(table: string, row: any): void {
-        this.createTable(table);
-        delete this.data[table][row.id];
+    public selectAll(table: string): MockRow[] {
+        const rows: MockRow[] = [];
+        for (const key of Object.keys(this.data[table])) {
+            if (key !== "nextId") {
+                rows.push(this.data[table][key as any]);
+            }
+        }
+        return rows;
     }
 
     /**
@@ -62,31 +113,13 @@ export class MockDatabase {
      * @param table Name of the table
      * @param row Row to replace
      */
-    public update(table: string, row: any): void {
-        this.createTable(table);
+    public update(table: string, row: any): MockRow {
+        if (!this.hasTable(table)) {
+            throw new Error(`Table ${table} does not exist`);
+        }
+
         this.data[table][row.id] = row;
         return row;
     }
 
-    /**
-     * Looks to see if the table is in the mock database.
-     *
-     * @param name Name of the table to look for
-     */
-    public hasTable(name: string): boolean {
-        return this.data.hasOwnProperty(name);
-    }
-
-    /**
-     * Creates a new "table" if one does not exist.
-     *
-     * @param name Name of the table to create
-     */
-    private createTable(name: string): void {
-        if (!this.data.hasOwnProperty(name)) {
-            this.data[name] = {
-                nextId: 1
-            };
-        }
-    }
 }

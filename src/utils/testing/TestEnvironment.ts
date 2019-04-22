@@ -1,7 +1,6 @@
 import { NavigationParams, NavigationRoute, NavigationScreenProp } from "react-navigation";
 import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import { AppDatabase } from "../AppDatabase";
-import { MockDatabase } from "./MockDatabase";
 import { TimeMachine } from "./TimeMachine";
 
 jest.mock("../AppDatabase");
@@ -28,11 +27,6 @@ export class TestEnvironment {
 
         return env;
     }
-
-    /**
-     * Store and retrieve raw model data from an in-memory "database"
-     */
-    public readonly data: MockDatabase = new MockDatabase();
 
     /**
      * Manipulate the system clock
