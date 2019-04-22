@@ -4,6 +4,9 @@
 
 import {FileSystem, SQLite} from "expo";
 import * as Log from "./Log";
+import { Model } from "./Model";
+import { Service } from "./Service";
+import { EmitterSet } from "./watcher/EmitterSet";
 
 const DATABASE_NAME: string = "app";
 const DATABASE_LOG_TAG: string = "Database";
@@ -22,7 +25,7 @@ export class AppDatabase {
 
         // create preferences table
         if (!(await appDb.doesTableExist("preferences"))) {
-            console.debug(`Database table "preferences" does not exist, creating it`);
+            Log.info(DATABASE_LOG_TAG, 'Database table "preferences" does not exist, creating it');
             await appDb.execute(`
                 CREATE TABLE preferences
                 (
@@ -30,6 +33,41 @@ export class AppDatabase {
                         constraint preferences_pk primary key,
                     value VARCHAR not null
                 )
+            `);
+        }
+
+        // create schedules table
+        if (!(await appDb.doesTableExist("schedule"))) {
+            Log.info(DATABASE_LOG_TAG, 'Database table "schedule" does not exist, creating it');
+            await appDb.execute(`
+                CREATE TABLE schedule
+                (
+                    id INTEGER not null
+                        constraint schedule_pk
+                            primary key autoincrement,
+                    name VARCHAR(30) not null,
+                    isEnabled BOOLEAN default 0 not null
+                )
+            `);
+        }
+
+        // create alarm table
+        if (!(await appDb.doesTableExist("alarm"))) {
+            await appDb.execute(`
+                CREATE TABLE alarm
+                (
+                    id INTEGER not null
+                        constraint alarm_pk
+                            primary key autoincrement,
+                    scheduleId INTEGER not null
+                        constraint alarm_schedule_id_fk
+                            references schedule
+                                on update cascade on delete cascade,
+                    days UNSIGNED INTEGER not null,
+                    sleepTime UNSIGNED INTEGER not null,
+                    wakeTime UNSIGNED INTEGER not null,
+                    getUpTime UNSIGNED INTEGER not null
+                );
             `);
         }
 
@@ -44,6 +82,8 @@ export class AppDatabase {
     private static _initCount: number = 0;
 
     private db: Database;
+    private services: Map<string, Service> = new Map();
+    private emitters: Map<string, EmitterSet<any>> = new Map();
 
     private constructor() {
         this.db = SQLite.openDatabase(DATABASE_NAME);
@@ -63,6 +103,21 @@ export class AppDatabase {
                 tbl_name = ?
         `, [name]);
         return result.rows.length > 0;
+    }
+
+    /**
+     * Gets an {@link EmitterSet} for the specified {@link Model} class. The EmitterSet persists for the life of the
+     * {@link AppDatabase}.
+     *
+     * @param name Name of the EmitterSet
+     */
+    public getEmitterSet<T extends Model>(name: string): EmitterSet<T> {
+        let emitters: EmitterSet<T>|undefined = this.emitters.get(name);
+        if (!emitters) {
+            emitters = new EmitterSet<T>();
+            this.emitters.set(name, emitters);
+        }
+        return emitters;
     }
 
     /**
@@ -91,6 +146,18 @@ export class AppDatabase {
     }
 
     /**
+     * Gets a {@link Service}. Service instances persist for the life of the {@link AppDatabase}.
+     *
+     * @param service The {@link Service} class to retrieve.
+     */
+    public getService<T extends Service>(service: new(db: AppDatabase) => T): T {
+        if (!this.services.has(service.name)) {
+            this.services.set(service.name, new service(this));
+        }
+        return this.services.get(service.name) as any;
+    }
+
+    /**
      * Executes a SQL query against the database, returning a {@link SQLResultSet} containing the resultant rows.
      *
      * @param sql The SQL query to execute.
@@ -100,9 +167,19 @@ export class AppDatabase {
         return new Promise<SQLResultSet>((resolve, reject) => {
             this.db.transaction((transaction) => { // wrap the query in a transaction
                 transaction.executeSql(sql, args, (_, resultSet) => { // success, return result set
+
+                    // log the query
+                    let query: DOMString = sql;
+                    for (const arg of args) {
+                        query = query.replace("?", arg);
+                    }
+                    Log.debug(DATABASE_LOG_TAG, `Query: ${query}`);
+
+                    // resolve the promise
                     resolve(resultSet);
+
                 }, (_, error) => { // error, reject
-                    console.log(error);
+                    Log.error(DATABASE_LOG_TAG, `SQL Error ${error.code}: ${error.message}`);
                     reject(error);
                     return true;
                 });

@@ -1,16 +1,15 @@
 import * as React from "react";
 import renderer from "react-test-renderer";
+import { TestEnvironment } from "../../../utils/testing";
 import { HomeScreenClock } from "../HomeScreenClock";
-
-import MockDate from "mockdate";
 
 describe("HomeScreenClock", () => {
 
-    jest.useFakeTimers();
-    const fakeDateMillis = 1551896555862;
-
-    beforeEach(() => {
-        MockDate.set(fakeDateMillis);
+    let env: TestEnvironment;
+    beforeEach(async (done) => {
+        env = await TestEnvironment.init();
+        env.timing.date = 0;
+        done();
     });
 
     it("renders the correct (fake) initial time", () => {
@@ -19,7 +18,7 @@ describe("HomeScreenClock", () => {
     });
 
     it("renders the correct (fake) later time", () => {
-        MockDate.set(fakeDateMillis + 60000);
+        env.timing.date = 1555810244489;
         const tree = renderer.create(<HomeScreenClock/>).toJSON();
         expect(tree).toMatchSnapshot();
     });

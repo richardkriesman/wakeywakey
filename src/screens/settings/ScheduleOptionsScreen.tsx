@@ -7,40 +7,87 @@ import { StyleSheet, View } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
+import { DestructiveButton } from "../../components/DestructiveButton";
+import { ConfirmationModal } from "../../components/modal/ConfirmationModal";
 import Colors from "../../constants/Colors";
-import Layout from "../../constants/Layout";
+import { Schedule } from "../../models/Schedule";
+import { ScheduleService } from "../../services/ScheduleService";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
-// tslint:disable-next-line:no-empty-interface
 export interface ScheduleOptionsScreenState {
-
+    isDeleteModalVisible: boolean;
 }
 
-@BottomTabBarIcon("ios-cog") @Title("Options")
+@BottomTabBarIcon("ios-cog")
+@Title("Options")
 export class ScheduleOptionsScreen extends UIScreen<{}, ScheduleOptionsScreenState> {
+
+    private readonly schedule: Schedule;
 
     public constructor(props: NavigationScreenProps) {
         super(props);
+        this.state = {
+            isDeleteModalVisible: false
+        };
+        this.schedule = this.props.navigation.getParam("schedule");
     }
 
     public renderContent(): ReactNode {
         return (
             <View style={styles.viewScroller}>
+                <ConfirmationModal
+                    isDestructiveAction={true}
+                    isVisible={this.state.isDeleteModalVisible}
+                    positiveLabel="Delete"
+                    negativeLabel="Cancel"
+                    title="Delete this schedule?"
+                    onCompleted={this.onDeleteModalCompleted.bind(this)} />
+
                 <Text style={styles.textSectionHeader}>Options</Text>
 
                 <ListItem title="Color Scheme" subtitle="Summer" rightIcon={forwardIcon}/>
                 <ListItem title="Audio" rightIcon={forwardIcon}/>
                 <ListItem title="Snooze" rightIcon={forwardIcon}/>
                 <ListItem title="Clock Style" subtitle="Digital" rightIcon={forwardIcon}/>
+
+                <View style={styles.footer}>
+                    <DestructiveButton
+                        onPress={this.onDeleteButtonPress.bind(this)}
+                        title="Delete schedule" />
+                </View>
             </View>
         );
     }
+
+    private onDeleteButtonPress(): void {
+        this.setState({
+            isDeleteModalVisible: true
+        });
+    }
+
+    private onDeleteModalCompleted(shouldDelete: boolean): void {
+        this.setState({
+            isDeleteModalVisible: false
+        }, () => {
+            if (shouldDelete) {
+                this.schedule.delete()
+                    .then(() => {
+                        this.dismiss();
+                    });
+            }
+        });
+    }
+
 }
 
 const forwardIcon = { name: "arrow-forward", type: "ionicons" };
 
 const styles = StyleSheet.create({
+    footer: {
+        flex: 1,
+        justifyContent: "flex-end"
+    },
     textSectionHeader: {
         color: Colors.subheaderColor,
         fontSize: 17,
@@ -48,7 +95,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     viewScroller: {
-        height: Layout.window.height,
+        flex: 1,
         padding: 20
     }
 });

@@ -28,19 +28,24 @@ export class ScheduleListItem extends React.Component<ScheduleListItemProps, Sch
     }
 
     public onSwitchValueChanged(isEnabledNow: boolean) {
-        this.forceEnabled(isEnabledNow);
-        this.props.onSwitchToggled(isEnabledNow);
+        this.forceEnabled(isEnabledNow).then(() => {
+            this.props.onSwitchToggled(isEnabledNow);
+        });
     }
 
-    public forceEnabled(e: boolean) {
-        this.setState({ enabled: e });
+    public forceEnabled(e: boolean): Promise<void> {
+        return new Promise<void>((resolve) => {
+            this.setState({ enabled: e }, () => {
+                resolve();
+            });
+        });
     }
 
     public render(): ReactNode {
         return (
             <ListItem
                 title={this.props.title}
-                rightIcon={<Icon name="arrow-forward" type="ionicons"/>}
+                rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                 onPress={this.props.onPress}
                 switch={{
                     onValueChange: this.onSwitchValueChanged.bind(this),

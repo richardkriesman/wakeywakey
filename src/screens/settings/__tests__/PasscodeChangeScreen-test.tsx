@@ -1,7 +1,7 @@
 import React from "react";
 import "react-native";
 import renderer from "react-test-renderer";
-import {TestEnvironment} from "../../../utils/TestUtils";
+import {TestEnvironment} from "../../../utils/testing";
 import PasscodeChangeScreen from "../PasscodeChangeScreen";
 
 let env: TestEnvironment;

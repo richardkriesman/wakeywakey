@@ -2,20 +2,44 @@
  * @module utils
  */
 
-import { AlarmModel } from "../models/AlarmModel";
+import {Alarm, AlarmDay} from "../models/Alarm";
+import {Time} from "./Time";
 
-export function getAlarmTitle(alarm: AlarmModel): string {
+export function getAlarmTitle(alarm: Alarm): string {
+    console.log("we're here");
     const start = formatTime(alarm.sleepTime);
     const end = formatTime(alarm.getUpTime);
     return `${start} - ${end}`;
 }
 
-export function getAlarmSubtitle(alarm: AlarmModel): string {
-    return alarm.days.join(", ");
+export function getAlarmSubtitle(alarm: Alarm): string {
+    const displayDays: string[] = [];
+    if (alarm.isDayActive(AlarmDay.Monday)) {
+        displayDays.push("M");
+    }
+    if (alarm.isDayActive(AlarmDay.Tuesday)) {
+        displayDays.push("Tu");
+    }
+    if (alarm.isDayActive(AlarmDay.Wednesday)) {
+        displayDays.push("W");
+    }
+    if (alarm.isDayActive(AlarmDay.Thursday)) {
+        displayDays.push("Th");
+    }
+    if (alarm.isDayActive(AlarmDay.Friday)) {
+        displayDays.push("F");
+    }
+    if (alarm.isDayActive(AlarmDay.Saturday)) {
+        displayDays.push("Sa");
+    }
+    if (alarm.isDayActive(AlarmDay.Sunday)) {
+        displayDays.push("Su");
+    }
+    return displayDays.join(", ");
 }
 
-export function formatTime(date: Date): string {
-    return `${padTime(date.getHours())}:${padTime(date.getMinutes())}`;
+export function formatTime(time: Time): string {
+    return time ? `${padTime(time.hour)}:${padTime(time.minute)}` : "";
 }
 
 export function padTime(time: number): string {

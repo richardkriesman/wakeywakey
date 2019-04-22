@@ -1,15 +1,13 @@
 import * as React from "react";
 import renderer from "react-test-renderer";
-import { TestEnvironment } from "../../../utils/TestUtils";
+import { TestEnvironment } from "../../../utils/testing";
 import EditAlarmScreen from "../EditAlarmScreen";
 
 let env: TestEnvironment;
-beforeEach((done) => {
-    TestEnvironment.init()
-        .then((newEnv) => {
-            env = newEnv;
-            done();
-        });
+beforeEach(async (done) => {
+    env = await TestEnvironment.init();
+    env.timing.date = 0;
+    done();
 });
 
 it("renders correctly", () => {

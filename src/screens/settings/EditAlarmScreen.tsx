@@ -4,76 +4,209 @@
 
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Divider, ListItem, Text } from "react-native-elements";
+import { Button, Divider, ListItem } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
-import { HeaderBackButton } from "../../components/HeaderBackButton";
+import { ListHeader } from "../../components/ListHeader";
+import { TimePicker } from "../../components/TimePicker";
 
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
-import Layout from "../../constants/Layout";
-import { AlarmModel, DayOfWeek } from "../../models/AlarmModel";
+import { Alarm, AlarmDay } from "../../models/Alarm";
+import { Schedule } from "../../models/Schedule";
+import { AlarmService } from "../../services/AlarmService";
+import * as AlarmUtils from "../../utils/AlarmUtils";
 import { UIScreen } from "../../utils/screen";
-import { HeaderButtonLeft, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { Time } from "../../utils/Time";
 
 export interface EditAlarmScreenState {
-    alarm?: AlarmModel;
+    alarm?: Alarm;
+    days: number;
+    schedule: Schedule;
+    sleepTime: Time;
+    wakeTime: Time;
+    getUpTime: Time;
 }
 
-@HeaderButtonLeft((screen) => <HeaderBackButton title="Cancel" onPress={() => screen.dismiss()}/>)
 @HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
-                                       onPress={() => screen.dismiss()}/>)
+                                       onPress={() => (screen as EditAlarmScreen).onSavePress()}/>)
 export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
+
+    private timePicker: TimePicker;
 
     public constructor(props: NavigationScreenProps) {
         super(props);
-    }
 
-    public componentWillMount(): void {
-        this.setState({
-            alarm: this.props.navigation.getParam("alarm")
-        });
+        // build initial state
+        const alarm: Alarm | undefined = this.props.navigation.getParam("alarm");
+        this.state = {
+            alarm,
+            days: alarm ? alarm.days : 0,
+            getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
+            schedule: this.props.navigation.getParam("schedule"),
+            sleepTime: alarm ? alarm.sleepTime : Time.createFromTotalSeconds(72000), // 8:00 PM
+            wakeTime: alarm ? alarm.wakeTime : Time.createFromTotalSeconds(21600) // 6:00 AM
+        };
     }
 
     public renderContent(): ReactNode {
+
+        // render delete button if the alarm already exists
+        let deleteButton: ReactNode | undefined;
+        if (this.state.alarm) {
+            deleteButton = <Button
+                buttonStyle={styles.deleteButton}
+                containerStyle={styles.deleteButtonContainer}
+                onPress={this.onDeletePress.bind(this)}
+                titleStyle={styles.deleteButtonTitle}
+                title="Delete alarm"/>;
+        }
+
         return (
             <View style={styles.viewScroller}>
-                <Text style={styles.textSectionHeader}>Days</Text>
+                <TimePicker ref={(ref) => this.timePicker = ref}/>
 
-                { /* TODO use a map here? wow this looks bad */}
+                <ListHeader title="Days"/>
+                <Divider style={styles.divider}/>
                 <View style={styles.daySelector}>
-                    <ToggleButton title="M" isToggled={this.daysContains(DayOfWeek.Monday)}/>
-                    <ToggleButton title="Tu" isToggled={this.daysContains(DayOfWeek.Tuesday)}/>
-                    <ToggleButton title="W" isToggled={this.daysContains(DayOfWeek.Wednesday)}/>
-                    <ToggleButton title="Th" isToggled={this.daysContains(DayOfWeek.Thursday)}/>
-                    <ToggleButton title="F" isToggled={this.daysContains(DayOfWeek.Friday)}/>
-                    <ToggleButton title="Sa" isToggled={this.daysContains(DayOfWeek.Saturday)}/>
-                    <ToggleButton title="Su" isToggled={this.daysContains(DayOfWeek.Sunday)}/>
+                    <ToggleButton
+                        title="M"
+                        isToggled={this.isDayToggled(AlarmDay.Monday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Monday)}/>
+                    <ToggleButton
+                        title="Tu"
+                        isToggled={this.isDayToggled(AlarmDay.Tuesday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Tuesday)}/>
+                    <ToggleButton
+                        title="W"
+                        isToggled={this.isDayToggled(AlarmDay.Wednesday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Wednesday)}/>
+                    <ToggleButton
+                        title="Th"
+                        isToggled={this.isDayToggled(AlarmDay.Thursday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Thursday)}/>
+                    <ToggleButton
+                        title="F"
+                        isToggled={this.isDayToggled(AlarmDay.Friday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Friday)}/>
+                    <ToggleButton
+                        title="Sa"
+                        isToggled={this.isDayToggled(AlarmDay.Saturday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Saturday)}/>
+                    <ToggleButton
+                        title="Su"
+                        isToggled={this.isDayToggled(AlarmDay.Sunday)}
+                        onToggle={this.onDayToggle.bind(this, AlarmDay.Sunday)}/>
                 </View>
 
                 <Divider style={styles.divider}/>
 
-                <Text style={styles.textSectionHeader}>Alarm Times</Text>
-                <ListItem key={0} title="Sleep" subtitle="8:00 PM" rightIcon={{ name: "arrow-forward" }}/>
-                <ListItem key={1} title="Wake up" subtitle="6:00 AM" rightIcon={{ name: "arrow-forward" }}/>
-                <ListItem key={2} title="Get up" subtitle="7:00 AM" rightIcon={{ name: "arrow-forward" }}/>
+                <ListHeader title="Alarm times"/>
+                <ListItem key={0}
+                          title="Sleep"
+                          subtitle={AlarmUtils.formatTime(this.state.sleepTime)}
+                          rightIcon={{ name: "arrow-forward" }}
+                          onPress={this.onTimeSleepPress.bind(this)}/>
+                <ListItem key={1}
+                          title="Wake up"
+                          subtitle={AlarmUtils.formatTime(this.state.wakeTime)}
+                          rightIcon={{ name: "arrow-forward" }}
+                          onPress={this.onTimeWakePress.bind(this)}/>
+                <ListItem key={2}
+                          title="Get up"
+                          subtitle={AlarmUtils.formatTime(this.state.getUpTime)}
+                          rightIcon={{ name: "arrow-forward" }}
+                          onPress={this.onTimeGetUpPress.bind(this)}/>
 
-                <Divider style={styles.divider}/>
-
-                <Button buttonStyle={styles.deleteButton} containerStyle={styles.deleteButtonContainer}
-                        titleStyle={styles.deleteButtonTitle} title="Delete Alarm"/>
+                {deleteButton}
             </View>
         );
     }
 
-    private daysContains(specificDay: DayOfWeek): boolean {
-        return this.state.alarm && this.state.alarm.days && this.state.alarm.days.indexOf(specificDay) > -1;
+    private isDayToggled(day: AlarmDay): boolean {
+        return (this.state.days & day) !== 0;
     }
+
+    private onDayToggle(day: AlarmDay, isToggled: boolean): void {
+        this.setState({
+            days: isToggled ? (this.state.days | day) : (this.state.days & ~day)
+        });
+    }
+
+    private onDeletePress(): void {
+        this.state.alarm.delete()
+            .then(() => this.dismiss());
+    }
+
+    // noinspection JSUnusedLocalSymbols - this method is used, just in a decorator
+    private onSavePress(): void {
+        if (!this.state.alarm) { // new alarm
+            this.getService(AlarmService).create(this.state.schedule, this.state.sleepTime, this.state.wakeTime,
+                this.state.getUpTime, this.state.days)
+                .then(() => {
+                    this.dismiss();
+                });
+        } else {
+            const promises: Array<Promise<void>> = [];
+            if (!this.state.alarm.sleepTime.equals(this.state.sleepTime)) {
+                promises.push(this.state.alarm.setSleepTime(this.state.sleepTime));
+            }
+            if (!this.state.alarm.wakeTime.equals(this.state.wakeTime)) {
+                promises.push(this.state.alarm.setWakeTime(this.state.wakeTime));
+            }
+            if (!this.state.alarm.getUpTime.equals(this.state.getUpTime)) {
+                promises.push(this.state.alarm.setGetUpTime(this.state.getUpTime));
+            }
+            if (this.state.alarm.days !== this.state.days) {
+                promises.push(this.state.alarm.setDays(this.state.days));
+            }
+            Promise.all(promises)
+                .then(() => {
+                    this.dismiss();
+                });
+        }
+    }
+
+    private onTimeGetUpPress(): void {
+        this.timePicker.present(this.state.getUpTime)
+            .then((time: Time | undefined) => {
+                if (time) {
+                    this.setState({
+                        getUpTime: time
+                    });
+                }
+            });
+    }
+
+    private onTimeSleepPress(): void {
+        this.timePicker.present(this.state.sleepTime)
+            .then((time: Time | undefined) => {
+                if (time) {
+                    this.setState({
+                        sleepTime: time
+                    });
+                }
+            });
+    }
+
+    private onTimeWakePress(): void {
+        this.timePicker.present(this.state.getUpTime)
+            .then((time: Time | undefined) => {
+                if (time) {
+                    this.setState({
+                        wakeTime: time
+                    });
+                }
+            });
+    }
+
 }
 
 const styles = StyleSheet.create({
     daySelector: {
         flexDirection: "row",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
+        paddingHorizontal: 20
     },
     deleteButton: {
         backgroundColor: Colors.appleButtonRed
@@ -101,7 +234,6 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     viewScroller: {
-        height: Layout.window.height,
-        padding: 20
+        flex: 1
     }
 });

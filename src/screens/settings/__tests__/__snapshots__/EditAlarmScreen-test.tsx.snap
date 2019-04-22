@@ -11,65 +11,376 @@ exports[`renders correctly 1`] = `
   <View
     style={
       Object {
-        "height": 1334,
-        "padding": 20,
+        "flex": 1,
       }
     }
   >
-    <Text
+    <Modal
+      animationType="none"
+      hardwareAccelerated={false}
+      hideModalContentWhileAnimating={false}
+      onModalHide={[Function]}
+      onModalWillHide={[Function]}
+      onModalWillShow={[Function]}
+      onRequestClose={[Function]}
+      scrollOffset={0}
+      scrollOffsetMax={0}
+      scrollTo={null}
+      supportedOrientations={
+        Array [
+          "portrait",
+          "landscape",
+        ]
+      }
+      swipeThreshold={100}
+      transparent={true}
+      visible={false}
+    >
+      <View
+        accessible={true}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "backgroundColor": "black",
+            "bottom": 0,
+            "height": 1334,
+            "left": 0,
+            "opacity": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+            "width": 750,
+          }
+        }
+      />
+      <View
+        onLayout={[Function]}
+        pointerEvents="box-none"
+        style={
+          Array [
+            Array [
+              Object {
+                "margin": 37.5,
+                "transform": Array [
+                  Object {
+                    "translateY": 0,
+                  },
+                ],
+              },
+              Object {
+                "flex": 1,
+                "justifyContent": "center",
+              },
+              undefined,
+              Object {
+                "margin": 0,
+              },
+            ],
+            Object {
+              "paddingBottom": 0,
+            },
+          ]
+        }
+      >
+        <View
+          hideModalContentWhileAnimating={false}
+          onModalHide={[Function]}
+          onModalWillHide={[Function]}
+          onModalWillShow={[Function]}
+          pointerEvents="box-none"
+          scrollOffset={0}
+          scrollOffsetMax={0}
+          scrollTo={null}
+          style={
+            Object {
+              "flex": 1,
+              "justifyContent": "center",
+              "margin": 37.5,
+              "transform": Array [
+                Object {
+                  "translateY": 0,
+                },
+              ],
+            }
+          }
+          supportedOrientations={
+            Array [
+              "portrait",
+              "landscape",
+            ]
+          }
+          swipeThreshold={100}
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flex": 1,
+                "justifyContent": "center",
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "#ffffff",
+                  "borderRadius": 4,
+                  "minWidth": 270,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "padding": 24,
+                  }
+                }
+              >
+                <Text
+                  style={
+                    Object {
+                      "fontSize": 17,
+                      "fontWeight": "600",
+                      "marginBottom": 8,
+                    }
+                  }
+                >
+                  Select a time
+                </Text>
+                <View>
+                  <RCTDatePicker
+                    date={0}
+                    mode="time"
+                    onChange={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      Object {
+                        "height": 216,
+                      }
+                    }
+                  />
+                </View>
+              </View>
+              <View
+                style={
+                  Object {
+                    "borderTopColor": "#d9d9d9",
+                    "borderTopWidth": 1,
+                    "flexDirection": "row",
+                    "justifyContent": "flex-end",
+                    "paddingBottom": 4,
+                    "paddingLeft": 18,
+                    "paddingRight": 18,
+                    "paddingTop": 4,
+                  }
+                }
+              >
+                <View
+                  style={
+                    Object {
+                      "borderRadius": 3,
+                    }
+                  }
+                >
+                  <View
+                    accessible={true}
+                    isTVSelectable={true}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      Object {
+                        "opacity": 1,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "backgroundColor": "transparent",
+                          "borderColor": "#2089dc",
+                          "borderRadius": 3,
+                          "borderWidth": 0,
+                          "flexDirection": "row",
+                          "justifyContent": "center",
+                          "padding": 8,
+                        }
+                      }
+                    >
+                      <Text
+                        style={
+                          Object {
+                            "color": "#2089dc",
+                            "fontSize": 18,
+                            "paddingBottom": 1,
+                            "paddingTop": 2,
+                            "textAlign": "center",
+                          }
+                        }
+                      >
+                        Cancel
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={
+                    Object {
+                      "borderRadius": 3,
+                    }
+                  }
+                >
+                  <View
+                    accessible={true}
+                    isTVSelectable={true}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      Object {
+                        "opacity": 1,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "backgroundColor": "transparent",
+                          "borderColor": "#2089dc",
+                          "borderRadius": 3,
+                          "borderWidth": 0,
+                          "flexDirection": "row",
+                          "justifyContent": "center",
+                          "padding": 8,
+                        }
+                      }
+                    >
+                      <Text
+                        style={
+                          Object {
+                            "color": "#2089dc",
+                            "fontSize": 18,
+                            "paddingBottom": 1,
+                            "paddingTop": 2,
+                            "textAlign": "center",
+                          }
+                        }
+                      >
+                        OK
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </Modal>
+    <View>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "white",
+            "borderBottomWidth": 0.5,
+            "borderColor": "#e3e3e3",
+            "flexDirection": "row",
+            "padding": 14,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#5e5e5e",
+                "fontSize": 17,
+                "fontWeight": "bold",
+              }
+            }
+            testID="listItemTitle"
+            theme={
+              Object {
+                "colors": Object {
+                  "disabled": "hsl(208, 8%, 90%)",
+                  "divider": "#bcbbc1",
+                  "error": "#ff190c",
+                  "grey0": "#393e42",
+                  "grey1": "#43484d",
+                  "grey2": "#5e6977",
+                  "grey3": "#86939e",
+                  "grey4": "#bdc6cf",
+                  "grey5": "#e1e8ee",
+                  "greyOutline": "#bbb",
+                  "platform": Object {
+                    "android": Object {
+                      "error": "#f44336",
+                      "primary": "#2196f3",
+                      "secondary": "#9C27B0",
+                      "success": "#4caf50",
+                      "warning": "#ffeb3b",
+                    },
+                    "ios": Object {
+                      "error": "#ff3b30",
+                      "primary": "#007aff",
+                      "secondary": "#5856d6",
+                      "success": "#4cd964",
+                      "warning": "#ffcc00",
+                    },
+                  },
+                  "primary": "#2089dc",
+                  "searchBg": "#303337",
+                  "secondary": "#8F0CE8",
+                  "success": "#52c41a",
+                  "warning": "#faad14",
+                },
+              }
+            }
+          >
+            Days
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
       style={
         Object {
-          "color": "#5e5e5e",
-          "fontSize": 17,
-          "fontWeight": "600",
-          "marginBottom": 10,
+          "backgroundColor": "#fff",
+          "height": 0.5,
+          "marginBottom": 20,
+          "marginTop": 10,
         }
       }
-      theme={
-        Object {
-          "colors": Object {
-            "disabled": "hsl(208, 8%, 90%)",
-            "divider": "#bcbbc1",
-            "error": "#ff190c",
-            "grey0": "#393e42",
-            "grey1": "#43484d",
-            "grey2": "#5e6977",
-            "grey3": "#86939e",
-            "grey4": "#bdc6cf",
-            "grey5": "#e1e8ee",
-            "greyOutline": "#bbb",
-            "platform": Object {
-              "android": Object {
-                "error": "#f44336",
-                "primary": "#2196f3",
-                "secondary": "#9C27B0",
-                "success": "#4caf50",
-                "warning": "#ffeb3b",
-              },
-              "ios": Object {
-                "error": "#ff3b30",
-                "primary": "#007aff",
-                "secondary": "#5856d6",
-                "success": "#4cd964",
-                "warning": "#ffcc00",
-              },
-            },
-            "primary": "#2089dc",
-            "searchBg": "#303337",
-            "secondary": "#8F0CE8",
-            "success": "#52c41a",
-            "warning": "#faad14",
-          },
-        }
-      }
-    >
-      Days
-    </Text>
+    />
     <View
       style={
         Object {
           "flexDirection": "row",
           "justifyContent": "space-around",
+          "paddingHorizontal": 20,
         }
       }
     >
@@ -406,56 +717,91 @@ exports[`renders correctly 1`] = `
         }
       }
     />
-    <Text
-      style={
-        Object {
-          "color": "#5e5e5e",
-          "fontSize": 17,
-          "fontWeight": "600",
-          "marginBottom": 10,
-        }
-      }
-      theme={
-        Object {
-          "colors": Object {
-            "disabled": "hsl(208, 8%, 90%)",
-            "divider": "#bcbbc1",
-            "error": "#ff190c",
-            "grey0": "#393e42",
-            "grey1": "#43484d",
-            "grey2": "#5e6977",
-            "grey3": "#86939e",
-            "grey4": "#bdc6cf",
-            "grey5": "#e1e8ee",
-            "greyOutline": "#bbb",
-            "platform": Object {
-              "android": Object {
-                "error": "#f44336",
-                "primary": "#2196f3",
-                "secondary": "#9C27B0",
-                "success": "#4caf50",
-                "warning": "#ffeb3b",
-              },
-              "ios": Object {
-                "error": "#ff3b30",
-                "primary": "#007aff",
-                "secondary": "#5856d6",
-                "success": "#4cd964",
-                "warning": "#ffcc00",
-              },
-            },
-            "primary": "#2089dc",
-            "searchBg": "#303337",
-            "secondary": "#8F0CE8",
-            "success": "#52c41a",
-            "warning": "#faad14",
-          },
-        }
-      }
-    >
-      Alarm Times
-    </Text>
     <View>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "white",
+            "borderBottomWidth": 0.5,
+            "borderColor": "#e3e3e3",
+            "flexDirection": "row",
+            "padding": 14,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 1,
+              "justifyContent": "center",
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#5e5e5e",
+                "fontSize": 17,
+                "fontWeight": "bold",
+              }
+            }
+            testID="listItemTitle"
+            theme={
+              Object {
+                "colors": Object {
+                  "disabled": "hsl(208, 8%, 90%)",
+                  "divider": "#bcbbc1",
+                  "error": "#ff190c",
+                  "grey0": "#393e42",
+                  "grey1": "#43484d",
+                  "grey2": "#5e6977",
+                  "grey3": "#86939e",
+                  "grey4": "#bdc6cf",
+                  "grey5": "#e1e8ee",
+                  "greyOutline": "#bbb",
+                  "platform": Object {
+                    "android": Object {
+                      "error": "#f44336",
+                      "primary": "#2196f3",
+                      "secondary": "#9C27B0",
+                      "success": "#4caf50",
+                      "warning": "#ffeb3b",
+                    },
+                    "ios": Object {
+                      "error": "#ff3b30",
+                      "primary": "#007aff",
+                      "secondary": "#5856d6",
+                      "success": "#4cd964",
+                      "warning": "#ffcc00",
+                    },
+                  },
+                  "primary": "#2089dc",
+                  "searchBg": "#303337",
+                  "secondary": "#8F0CE8",
+                  "success": "#52c41a",
+                  "warning": "#faad14",
+                },
+              }
+            }
+          >
+            Alarm times
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      accessible={true}
+      isTVSelectable={true}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={null}
+    >
       <View
         style={
           Object {
@@ -568,7 +914,7 @@ exports[`renders correctly 1`] = `
               }
             }
           >
-            8:00 PM
+            
           </Text>
         </View>
         <View
@@ -627,7 +973,17 @@ exports[`renders correctly 1`] = `
         </View>
       </View>
     </View>
-    <View>
+    <View
+      accessible={true}
+      isTVSelectable={true}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={null}
+    >
       <View
         style={
           Object {
@@ -740,7 +1096,7 @@ exports[`renders correctly 1`] = `
               }
             }
           >
-            6:00 AM
+            
           </Text>
         </View>
         <View
@@ -799,7 +1155,17 @@ exports[`renders correctly 1`] = `
         </View>
       </View>
     </View>
-    <View>
+    <View
+      accessible={true}
+      isTVSelectable={true}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={null}
+    >
       <View
         style={
           Object {
@@ -912,7 +1278,7 @@ exports[`renders correctly 1`] = `
               }
             }
           >
-            7:00 AM
+            
           </Text>
         </View>
         <View
@@ -974,16 +1340,6 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "#fff",
-          "height": 0.5,
-          "marginBottom": 20,
-          "marginTop": 10,
-        }
-      }
-    />
-    <View
-      style={
-        Object {
           "borderRadius": 3,
           "padding": 20,
         }
@@ -1029,7 +1385,7 @@ exports[`renders correctly 1`] = `
               }
             }
           >
-            Delete Alarm
+            Delete alarm
           </Text>
         </View>
       </View>

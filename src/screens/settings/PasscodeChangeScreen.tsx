@@ -20,7 +20,7 @@ export default class PasscodeChangeScreen extends UIScreen<{}, {}> {
         super(props);
     }
 
-    // handles passcodeinput success8
+    // handles passcodeinput success
     public async handleSuccess(passcode: string): Promise<void> {
         try {
             await this.getService(PasscodeService).setPasscode(passcode); // set the passcode in the database

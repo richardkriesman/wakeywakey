@@ -1,7 +1,10 @@
 import * as React from "react";
 import renderer from "react-test-renderer";
-import { TestEnvironment } from "../../../utils/TestUtils";
+import { TestEnvironment } from "../../../utils/testing";
 import ScheduleAlarmsScreen from "../ScheduleAlarmsScreen";
+
+jest.mock("../../../models/Schedule");
+jest.mock("../../../models/Alarm");
 
 let env: TestEnvironment;
 beforeEach((done) => {

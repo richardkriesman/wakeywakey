@@ -1,7 +1,8 @@
 import * as React from "react";
 import renderer from "react-test-renderer";
-import { ScheduleListHeader } from "../ScheduleListHeader";
+import {ListHeader} from "../../ListHeader";
+
 
 it("renders correctly", () => {
-    expect(renderer.create(<ScheduleListHeader title="OwO" />).toJSON()).toMatchSnapshot();
+    expect(renderer.create(<ListHeader title="OwO" />).toJSON()).toMatchSnapshot();
 });
