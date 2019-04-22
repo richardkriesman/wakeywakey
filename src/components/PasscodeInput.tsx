@@ -11,10 +11,10 @@ const PASSCODE_LENGTH = 4;
 
 export interface PasscodeInputProps {
     // optional
-    confirmPasscode: boolean; // whether to confirm, does nothing if mustEqual is set
+    confirmPasscode: boolean; // whether to confirm, does nothing if verifyPasscode is set
     defaultConfirmText: string;
     defaultPromptText: string;
-    mustEqual: string; // passcode must equal this for success
+    verifyPasscode?(passcode: string): boolean; // checks if passcode is correct
 
     // required
     handleSuccess(passcode: string): void;
@@ -38,8 +38,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
     public static defaultProps = {
         confirmPasscode: false,
         defaultConfirmText: "Confirm your passcode:",
-        defaultPromptText: "Enter passcode:",
-        mustEqual: ""
+        defaultPromptText: "Enter passcode:"
     };
 
     private inputRef = React.createRef<Input>();
@@ -57,9 +56,17 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
         });
     }
 
-    public handleChangeText(): void {
-        if (this.state.errorMessage.length !== 0) {
-            this.setState({ errorMessage: "" });
+    public handleChangeText(passcode: string): void {
+        if (passcode.length === PASSCODE_LENGTH) { // passcode correct length
+            if (!this.state.isConfirming) {
+                this.handleChoosingPasscode(passcode);
+            } else {
+                this.handleConfirmingPasscode(passcode);
+            }
+        } else { // clear error message
+            if (this.state.errorMessage.length !== 0) {
+                this.setState({ errorMessage: "" });
+            }
         }
     }
 
@@ -71,25 +78,17 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
             this.setState({
                 errorMessage: "Passcode must be " + PASSCODE_LENGTH + " digits long!"
             });
-        } else { // passcode long enough
-
-            // check state of input (choosing or confirming)
-            if (!this.state.isConfirming) {
-                this.handleChoosingPasscode(passcode);
-            } else {
-                this.handleConfirmingPasscode(passcode);
-            }
         }
     }
 
     /**
      * handles choosing passcode
      * Sets the state to confirming.
-     * If mustEqual is set, checks if passcode is equal. If not equal, resets.
+     * If verifyPasscode is set, checks if passcode is equal. If not equal, resets.
      */
     public handleChoosingPasscode(passcode: string): void {
-        if (this.props.mustEqual !== "") {
-            if (passcode === this.props.mustEqual) { // correct passcode
+        if (this.props.verifyPasscode) {
+            if (this.props.verifyPasscode(passcode)) { // correct passcode
                 this.props.handleSuccess(passcode); // done!
             } else { // incorrect passcode
                 this.setState({
@@ -101,6 +100,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
         } else {
             if (this.props.confirmPasscode) { // switch to confirming
                 this.setState({
+                    errorMessage: "",
                     isConfirming: true,
                     passcode,
                     promptText: this.props.defaultConfirmText
@@ -138,12 +138,14 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
                 </Text>
                 <Input
                     containerStyle={styles.containerStyle}
+                    errorStyle={styles.errorStyle}
                     inputContainerStyle={styles.inputContainerStyle}
                     inputStyle={styles.inputStyle}
 
                     autoFocus={true}
                     blurOnSubmit={false}
                     caretHidden={true}
+                    contextMenuHidden={true}
                     errorMessage={this.state.errorMessage}
                     keyboardType="numeric"
                     leftIcon={ <AntDesign name="lock" size={32} /> }
@@ -151,6 +153,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
                     onChangeText={this.handleChangeText.bind(this)}
                     onSubmitEditing={this.handleSubmitEditing.bind(this)}
                     ref={this.inputRef}
+                    returnKeyType={"done"}
                     secureTextEntry={true}
                 />
             </View>
@@ -161,36 +164,32 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
 
 const styles = StyleSheet.create({
     containerStyle: {
-        backgroundColor: "white",
-        borderRadius: 5,
-        marginTop: 20,
-        width: "70%"
+        height: "55%"
     },
     errorStyle: {
-        color: "red",
+        color: "darkred",
+        fontSize: 15,
         textAlign: "center"
     },
     inputContainerStyle: {
-        marginBottom: 5,
-        marginTop: 5
+        backgroundColor: "white",
+        width: "70%"
     },
     inputStyle: {
-        fontSize: 32,
-        letterSpacing: 30,
-        marginLeft: 10,
-        textAlign: "left"
+        fontSize: 30,
+        letterSpacing: 20,
+        marginRight: 32,
+        textAlign: "center"
     },
     mainContainer: {
         alignItems: "center",
-        bottom: 50,
         flex: 1,
-        justifyContent: "center",
-        width: "100%"
+        justifyContent: "flex-end"
     },
     promptStyle: {
-        color: "black",
         fontSize: 32,
         fontWeight: "bold",
+        paddingBottom: 20,
         textAlign: "center"
     }
 });

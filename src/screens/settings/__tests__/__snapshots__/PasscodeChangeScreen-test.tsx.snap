@@ -22,19 +22,17 @@ exports[`renders correctly 1`] = `
       style={
         Object {
           "alignItems": "center",
-          "bottom": 50,
           "flex": 1,
-          "justifyContent": "center",
-          "width": "100%",
+          "justifyContent": "flex-end",
         }
       }
     >
       <Text
         style={
           Object {
-            "color": "black",
             "fontSize": 32,
             "fontWeight": "bold",
+            "paddingBottom": 20,
             "textAlign": "center",
           }
         }
@@ -81,11 +79,9 @@ exports[`renders correctly 1`] = `
       <View
         style={
           Object {
-            "backgroundColor": "white",
-            "borderRadius": 5,
-            "marginTop": 20,
+            "height": "55%",
             "paddingHorizontal": 10,
-            "width": "70%",
+            "width": "100%",
           }
         }
       >
@@ -93,16 +89,16 @@ exports[`renders correctly 1`] = `
           style={
             Object {
               "alignItems": "center",
+              "backgroundColor": "white",
               "borderBottomWidth": 1,
               "borderColor": "#86939e",
               "flexDirection": "row",
-              "marginBottom": 5,
-              "marginTop": 5,
               "transform": Array [
                 Object {
                   "translateX": 0,
                 },
               ],
+              "width": "70%",
             }
           }
         >
@@ -123,21 +119,23 @@ exports[`renders correctly 1`] = `
             autoFocus={true}
             blurOnSubmit={false}
             caretHidden={true}
+            contextMenuHidden={true}
             keyboardType="numeric"
             maxLength={4}
             onChangeText={[Function]}
             onSubmitEditing={[Function]}
+            returnKeyType="done"
             secureTextEntry={true}
             style={
               Object {
                 "alignSelf": "center",
                 "color": "black",
                 "flex": 1,
-                "fontSize": 32,
-                "letterSpacing": 30,
-                "marginLeft": 10,
+                "fontSize": 30,
+                "letterSpacing": 20,
+                "marginRight": 32,
                 "minHeight": 40,
-                "textAlign": "left",
+                "textAlign": "center",
               }
             }
             testID="RNE__Input__text-input"
