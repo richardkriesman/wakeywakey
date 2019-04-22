@@ -24,6 +24,10 @@ export class Time {
         return time;
     }
 
+    public static createFromDate(date: Date): Time {
+        return this.createFromDisplayTime(date.getHours(), date.getMinutes(), date.getSeconds());
+    }
+
     private _hour: number;
     private _minute: number;
     private _second: number;
@@ -67,4 +71,7 @@ export class Time {
         return this.totalSeconds === time.totalSeconds;
     }
 
+    public isPastOrEqual(rel: Time): boolean {
+        return this.totalSeconds >= rel.totalSeconds;
+    }
 }
