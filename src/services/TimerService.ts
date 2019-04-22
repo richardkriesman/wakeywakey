@@ -1,7 +1,7 @@
 /**
  * @module utils
  */
-import * as Log from "./Log";
+import * as Log from "../utils/Log";
 
 const TIMER_LOG_TAG: string = "AppTimer";
 
@@ -37,16 +37,16 @@ export type TimerEventStr = "start" | "second" | "minute" | "hour" | "stop";
  *
  * Register a {@link TimerHandler} to listen for {@link TimerEvent}s by using {@link on}
  */
-export class AppTimer {
+export class TimerService {
 
-    private static readonly INSTANCE: AppTimer = new AppTimer();
+    private static readonly INSTANCE: TimerService = new TimerService();
 
     /**
-     * Retrieve the static instance of {@link AppTimer}.
+     * Retrieve the static instance of {@link TimerService}.
      * @constructor
      */
-    public static get Instance(): AppTimer {
-        return AppTimer.INSTANCE;
+    public static get Instance(): TimerService {
+        return TimerService.INSTANCE;
     }
 
     /**
@@ -92,7 +92,7 @@ export class AppTimer {
     }
 
     /**
-     * Start this {@link AppTimer} instance.
+     * Start this {@link TimerService} instance.
      */
     public start() {
         Log.info(TIMER_LOG_TAG, "Starting AppTimer");
@@ -101,7 +101,7 @@ export class AppTimer {
     }
 
     /**
-     * Stop this {@link AppTimer} instance and clear its {@link NodeJS.Timeout}, if defined.
+     * Stop this {@link TimerService} instance and clear its {@link NodeJS.Timeout}, if defined.
      */
     public stop() {
         Log.info(TIMER_LOG_TAG, "Stopping AppTimer");
@@ -168,4 +168,4 @@ export class AppTimer {
 
 }
 
-export default (() => AppTimer.Instance)();
+export default (() => TimerService.Instance)();

@@ -1,7 +1,7 @@
 import MockDate from "mockdate";
-import { AppTimer } from "../AppTimer";
+import { TimerService } from "../TimerService";
 
-let timer: AppTimer;
+let timer: TimerService;
 
 function walkForward(step: number, numSteps: number) {
     for (let i: number = 0; i < numSteps; i++) {
@@ -17,7 +17,7 @@ describe("TimerService", () => {
 
     beforeEach(() => {
         MockDate.set(0);
-        timer = new AppTimer(); // directly instantiate, rather than using instance
+        timer = new TimerService(); // directly instantiate, rather than using instance
     });
 
     afterEach(() => {

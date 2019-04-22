@@ -4,11 +4,10 @@
 
 import { AppLoading, Font } from "expo";
 import React, { ReactNode } from "react";
-import {ErrorHandlerCallback, Platform, StatusBar, StyleSheet, View} from "react-native";
+import { ErrorHandlerCallback, Platform, StatusBar, StyleSheet, View } from "react-native";
 
 import AppNavigator from "./navigation/AppNavigator";
-import {AppDatabase} from "./utils/AppDatabase";
-import AppTimer from "./utils/AppTimer";
+import AppTimer from "./services/TimerService";
 import * as Log from "./utils/Log";
 
 export interface AppProps {
