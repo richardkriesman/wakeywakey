@@ -7,7 +7,6 @@ import React, { ReactNode } from "react";
 import { ErrorHandlerCallback, Platform, StatusBar, StyleSheet, View } from "react-native";
 
 import AppNavigator from "./navigation/AppNavigator";
-import AppTimer from "./services/TimerService";
 import * as Log from "./utils/Log";
 
 export interface AppProps {
@@ -42,8 +41,7 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     public componentWillMount() {
-        // start services
-        AppTimer.start();
+        // start services?
     }
 
     public render(): ReactNode {
