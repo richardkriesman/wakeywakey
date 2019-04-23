@@ -6,9 +6,10 @@ import { KeepAwake } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { NavigationScreenProps } from "react-navigation";
+import { NavigationEvents, NavigationScreenProps } from "react-navigation";
 import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { InactivityHandler } from "../components/InactivityHandler";
+import { PreferencesService } from "../services/PreferencesService";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -25,6 +26,7 @@ export interface HomeScreenProps {
  */
 interface HomeScreenState {
     messageText: string;
+    twentyFourHour: boolean;
 }
 
 /**
@@ -38,23 +40,26 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
+        this.state = { messageText: "", twentyFourHour: true };
     }
 
     public componentWillMount(): void {
-        this.setState({ messageText: "Hello, world!" });
+        this.refresh();
     }
 
     public renderContent(): ReactNode {
         return (
             <InactivityHandler
                 idleTime={15000}
-                navigation={this.props.navigation}
-            >
+                navigation={this.props.navigation}>
                 <KeepAwake/>
+                <NavigationEvents
+                    onWillFocus={this.refresh.bind(this)}
+                />
                 <View style={ExtraStyles.container}>
                     <View style={ExtraStyles.contentWrapper}>
                         <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
-                        <Clock wrapperStyle={ExtraStyles.clockWrapper}/>
+                        <Clock wrapperStyle={ExtraStyles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
                         <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
                     </View>
                     <View style={ExtraStyles.bottom}>
@@ -66,14 +71,29 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     public switchToSettings(): void {
-        // TODO
-        this.setState({ messageText: "Switch to settings!" });
         this.present("SettingsMain");
     }
 
     public onSnoozePressed(): void {
-        // TODO
-        this.setState({ messageText: "Alarm snoozed!" });
+        this.updateState({ messageText: "Alarm snoozed!" });
+    }
+
+    private refresh(): void {
+        if (!this.getService(PreferencesService)) {
+            this.setState({ messageText: this.props.initialMessageText });
+            this.forceUpdate();
+            return;
+        }
+
+        this.fullDatabaseRead().then(this.updateState.bind(this));
+    }
+
+    private async fullDatabaseRead(): Promise<HomeScreenState> {
+        const pref: PreferencesService = this.getService(PreferencesService);
+        return {
+            messageText: "Hello, world!",
+            twentyFourHour: await pref.get24HourTime()
+        };
     }
 }
 
