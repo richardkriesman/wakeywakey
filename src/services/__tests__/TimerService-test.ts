@@ -1,23 +1,16 @@
-import MockDate from "mockdate";
+import { TestEnvironment } from "../../utils/testing";
 import { TimerService } from "../TimerService";
-
-let timer: TimerService;
-
-function walkForward(step: number, numSteps: number) {
-    for (let i: number = 0; i < numSteps; i++) {
-        // increase mocked time by one second and advance timers
-        MockDate.set((i + 1) * step);
-        jest.advanceTimersByTime(step);
-    }
-}
 
 describe("TimerService", () => {
 
-    jest.useFakeTimers();
+    let env: TestEnvironment;
+    let timer: TimerService;
 
-    beforeEach(() => {
-        MockDate.set(0);
-        timer = new TimerService(); // directly instantiate, rather than using instance
+    beforeEach(async (done) => {
+        env = await TestEnvironment.init();
+        env.timing.date = 0;
+        timer = env.db.getService(TimerService);
+        done();
     });
 
     afterEach(() => {
@@ -39,7 +32,7 @@ describe("TimerService", () => {
         const numDays = 7;
         const numHours = numDays * 24;
         const numMinutes = numHours * 60;
-        const numSeconds = numMinutes * 60;
+        const numSeconds = (numMinutes * 60) + 1;
 
         const onHour = jest.fn();
         const onMinute = jest.fn();
@@ -54,8 +47,9 @@ describe("TimerService", () => {
         expect(onMinute).not.toHaveBeenCalled();
         expect(onSecond).not.toHaveBeenCalled();
 
-        const step: number = 1000;
-        walkForward(step, numSeconds);
+        for (let i: number = 0; i < numSeconds; i++) {
+            env.timing.forward(1000);
+        }
 
         expect(onHour).toHaveBeenCalledTimes(numHours);
         expect(onMinute).toHaveBeenCalledTimes(numMinutes);
