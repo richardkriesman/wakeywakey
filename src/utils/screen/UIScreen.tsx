@@ -56,7 +56,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @param service The {@link Service} class to retrieve.
      */
     public getService<T extends Service>(service: new(db: AppDatabase) => T): T {
-        return this.db.getService(service);
+        return this.db ? this.db.getService(service) : null;
     }
 
     /**
