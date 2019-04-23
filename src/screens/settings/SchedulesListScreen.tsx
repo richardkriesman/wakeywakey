@@ -12,7 +12,7 @@ import { ListHeader } from "../../components/ListHeader";
 import { TextInputModal } from "../../components/modal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
-import { BottomTabBarIcon, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { BottomTabBarIcon, HeaderButtonRight, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
 
@@ -38,6 +38,7 @@ export interface ScheduleListItemData {
  * Main Settings screen.
  * @author Shawn Lutch, Miika Raina
  */
+@Title("Schedules")
 @BottomTabBarIcon("ios-calendar")
 @HeaderButtonRight((screen) =>
     <View style={styles.header}>
