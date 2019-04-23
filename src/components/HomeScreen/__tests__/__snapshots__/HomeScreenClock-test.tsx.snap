@@ -18,7 +18,7 @@ exports[`HomeScreenClock renders the correct (fake) initial time 1`] = `
         }
       }
     >
-      06:00 pm
+      6:00 pm
     </Text>
   </View>
 </View>
@@ -42,7 +42,7 @@ exports[`HomeScreenClock renders the correct (fake) later time 1`] = `
         }
       }
     >
-      08:30 pm
+      8:30 pm
     </Text>
   </View>
 </View>

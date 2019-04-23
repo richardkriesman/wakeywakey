@@ -135,9 +135,7 @@ exports[`renders properly 1`] = `
                             "textAlign": "center",
                           }
                         }
-                      >
-                        Hello, world!
-                      </Text>
+                      />
                       <View
                         style={Object {}}
                       >
@@ -157,7 +155,7 @@ exports[`renders properly 1`] = `
                               }
                             }
                           >
-                            12:22 pm
+                            12:22
                           </Text>
                         </View>
                       </View>
