@@ -85,6 +85,19 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     }
 
     /**
+     * Update just a few keys in the screen's state, with an optional callback.
+     * Preserves RN's state-render pipeline by calling setState underneath.
+     *
+     * @param newValues A new set of values to copy into the state
+     * @param cb Optional callback for setState
+     */
+    protected updateState(newValues: object, cb?: () => void): void {
+        const temp = Object.assign({}, this.state);
+        const newState = Object.assign(temp, newValues);
+        this.setState(newState, cb);
+    }
+
+    /**
      * Renders the screen's content within safe area bounds for iOS.
      */
     protected abstract renderContent(): ReactNode;

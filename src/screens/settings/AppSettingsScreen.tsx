@@ -37,12 +37,6 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
         );
     }
 
-    private updateState(newValues: object, cb?: () => void): void {
-        const temp = Object.assign({}, this.state);
-        const newState = Object.assign(temp, newValues);
-        this.setState(newState, cb);
-    }
-
     private async readAll(): Promise<AppSettingsScreenState> {
         this.updateState({ loading: true });
 
