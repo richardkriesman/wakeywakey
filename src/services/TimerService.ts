@@ -174,7 +174,6 @@ export class TimerService extends Service {
      * Check active alarms and see whether we need to fire any of them.
      */
     private async checkActiveAlarms(now: Date): Promise<void> {
-        Log.info(TIMER_LOG_TAG, "checking active alarms");
         const alarms: Alarm[] = await this.fetchActiveAlarms();
         alarms.forEach(this.checkAlarm.bind(this, now));
     }
