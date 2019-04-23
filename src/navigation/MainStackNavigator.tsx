@@ -7,9 +7,9 @@ import { HeaderIconButton } from "../components/HeaderIconButton";
 import { Schedule } from "../models/Schedule";
 import HomeScreen from "../screens/HomeScreen";
 import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
-import MainSettingsScreen from "../screens/settings/MainSettingsScreen";
 import PasscodeChangeScreen from "../screens/settings/PasscodeChangeScreen";
 import { UIScreen } from "../utils/screen/UIScreen";
+import DefaultSettingsNavigator from "./DefaultSettingsNavigator";
 import ScheduleDetailsNavigator from "./ScheduleDetailsNavigator";
 
 /**
@@ -32,7 +32,7 @@ export default createStackNavigator(
 
         SettingsMain: {
             navigationOptions: { title: "Settings" },
-            screen: MainSettingsScreen
+            screen: DefaultSettingsNavigator
         },
 
         EditSchedule: {

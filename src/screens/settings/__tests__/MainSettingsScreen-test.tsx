@@ -1,7 +1,7 @@
 import * as React from "react";
 import Renderer from "react-test-renderer";
 import { TestEnvironment } from "../../../utils/testing";
-import MainSettingsScreen from "../MainSettingsScreen";
+import SchedulesListScreen from "../SchedulesListScreen";
 
 let env: TestEnvironment;
 beforeEach(async (done) => {
@@ -10,13 +10,13 @@ beforeEach(async (done) => {
 });
 
 it("renders properly", () => {
-    const tree = Renderer.create(<MainSettingsScreen navigation={env.navigationProp}/>);
+    const tree = Renderer.create(<SchedulesListScreen navigation={env.navigationProp}/>);
     expect(tree.toJSON()).toMatchSnapshot();
 });
 
 describe("toggles", () => {
     it("handles toggling", () => {
-        const screen = new MainSettingsScreen({ navigation: env.navigationProp });
+        const screen = new SchedulesListScreen({ navigation: env.navigationProp });
 
         screen.componentWillMount();
         screen.render();

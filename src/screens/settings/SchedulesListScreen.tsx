@@ -12,7 +12,7 @@ import { ListHeader } from "../../components/ListHeader";
 import { TextInputModal } from "../../components/modal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
-import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { BottomTabBarIcon, HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
 
@@ -38,6 +38,7 @@ export interface ScheduleListItemData {
  * Main Settings screen.
  * @author Shawn Lutch, Miika Raina
  */
+@BottomTabBarIcon("ios-calendar")
 @HeaderButtonRight((screen) =>
     <View style={styles.header}>
         <HeaderIconButton
@@ -49,7 +50,7 @@ export interface ScheduleListItemData {
                 isCreateModalVisible: true
             })}/>
     </View>)
-export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
+export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreenState> {
 
     private dataSetChangedHandler: (data: Schedule[]) => void;
     private watcher: Watcher<Schedule> = this.getService(ScheduleService).watchAll();
