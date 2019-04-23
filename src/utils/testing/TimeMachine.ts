@@ -25,6 +25,7 @@ export class TimeMachine {
      */
     public forward(ms: number): void {
         jest.advanceTimersByTime(ms);
+        this.date += ms;
     }
 
     /**
