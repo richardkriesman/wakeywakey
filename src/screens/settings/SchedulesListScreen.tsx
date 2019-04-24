@@ -12,7 +12,7 @@ import { ListHeader } from "../../components/ListHeader";
 import { TextInputModal } from "../../components/modal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
-import { BottomTabBarIcon, HeaderButtonRight, Title } from "../../utils/screen/NavigationOptions";
+import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
 
@@ -40,17 +40,6 @@ export interface ScheduleListItemData {
  */
 @Title("Schedules")
 @BottomTabBarIcon("ios-calendar")
-@HeaderButtonRight((screen) =>
-    <View style={styles.header}>
-        <HeaderIconButton
-            icon="lock"
-            onPress={() => screen.present("PasscodeChange")}/>
-        <HeaderIconButton
-            icon="add"
-            onPress={() => screen.setState({
-                isCreateModalVisible: true
-            })}/>
-    </View>)
 export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreenState> {
 
     private dataSetChangedHandler: (data: Schedule[]) => void;
@@ -155,7 +144,9 @@ export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreen
                 <EmptyView
                     icon="ios-calendar"
                     title="No schedules yet"
-                    subtitle="Create a schedule to set alarms"/>
+                    subtitle="Tap here to create one!"
+                    onPress={this.showModal.bind(this)}
+                />
             );
         }
 
@@ -171,6 +162,12 @@ export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreen
                 {content}
             </View>
         );
+    }
+
+    private showModal(): void {
+        this.setState({
+            isCreateModalVisible: true
+        });
     }
 
     private onModalCancelled(): void {
