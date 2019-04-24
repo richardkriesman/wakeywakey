@@ -10,19 +10,6 @@ beforeEach(async (done) => {
 });
 
 it("renders properly", () => {
-    const tree = Renderer.create(<SchedulesListScreen navigation={env.navigationProp}/>);
+    const tree = Renderer.create(<SchedulesListScreen {...env.emptyUIScreenProps}/>);
     expect(tree.toJSON()).toMatchSnapshot();
-});
-
-describe("toggles", () => {
-    it("handles toggling", () => {
-        const screen = new SchedulesListScreen({ navigation: env.navigationProp });
-
-        screen.componentWillMount();
-        screen.render();
-
-        // const setState = jest.spyOn(screen, "setState");
-        // screen.onScheduleItemToggled(screen.state.schedules.length - 1, true);
-        // expect(setState).toHaveBeenCalledTimes(1);
-    });
 });

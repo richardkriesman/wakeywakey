@@ -13,6 +13,6 @@ beforeEach(async (done) => {
 it("renders correctly", () => {
     // TODO need to mock navigation.getParam() to actually return a value
     // ...but still be a Jest spy?
-    const tree = renderer.create(<EditAlarmScreen navigation={env.navigationProp} />);
+    const tree = renderer.create(<EditAlarmScreen {...env.emptyUIScreenProps} />);
     expect(tree.toJSON()).toMatchSnapshot();
 });

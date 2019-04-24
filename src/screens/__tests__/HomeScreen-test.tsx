@@ -27,7 +27,7 @@ describe("App snapshot", () => {
 
     it("renders the screen", async () => {
         const tree = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} navigation={env.navigationProp} />
+            <HomeScreen initialMessageText={initialMessageText} {...env.emptyUIScreenProps} />
         ).toJSON();
         expect(tree).toMatchSnapshot();
     });
@@ -39,7 +39,7 @@ describe("screen instance methods", () => {
     it("switches to settings", () => {
         // mock component
         const component = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} navigation={env.navigationProp}/>
+            <HomeScreen initialMessageText={initialMessageText} {...env.emptyUIScreenProps}/>
         );
 
         // get instance
@@ -59,7 +59,7 @@ describe("screen instance methods", () => {
     it("snoozes the alarm", () => {
         // mock component
         const component = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} navigation={env.navigationProp}/>
+            <HomeScreen initialMessageText={initialMessageText} {...env.emptyUIScreenProps}/>
         );
 
         // get instance

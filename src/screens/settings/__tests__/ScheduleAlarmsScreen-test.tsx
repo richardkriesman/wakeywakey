@@ -16,6 +16,6 @@ beforeEach((done) => {
 });
 
 it("renders correctly", () => {
-    const tree = renderer.create(<ScheduleAlarmsScreen navigation={env.navigationProp}/>);
+    const tree = renderer.create(<ScheduleAlarmsScreen {...env.emptyUIScreenProps}/>);
     expect(tree.toJSON()).toMatchSnapshot();
 });

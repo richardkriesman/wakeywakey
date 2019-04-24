@@ -15,7 +15,7 @@ beforeEach((done) => {
 
 it("renders the screen", async () => {
     const tree = renderer.create(
-        <SchedulesListScreen navigation={env.navigationProp} />
+        <SchedulesListScreen {...env.emptyUIScreenProps} />
     ).toJSON();
     expect(tree).toMatchSnapshot();
 });

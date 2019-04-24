@@ -15,13 +15,13 @@ beforeEach((done) => {
 
 it("renders correctly", () => {
     const tree = renderer.create(
-        <PasscodeChangeScreen navigation={env.navigationProp} />);
+        <PasscodeChangeScreen {...env.emptyUIScreenProps} />);
     expect(tree.toJSON()).toMatchSnapshot();
 });
 
 it("passcode is set successfully", (done) => {
     const component: any = renderer.create(
-        <PasscodeChangeScreen navigation={env.navigationProp} />)
+        <PasscodeChangeScreen {...env.emptyUIScreenProps} />)
         .getInstance();
 
     component.handleSuccess("1234")
