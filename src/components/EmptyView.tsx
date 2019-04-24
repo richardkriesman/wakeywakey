@@ -7,6 +7,7 @@ export interface EmptyViewProps {
     icon: string;
     title: string;
     subtitle: string;
+    onPress?: () => void;
 }
 
 export class EmptyView extends React.Component<EmptyViewProps> {
@@ -14,7 +15,7 @@ export class EmptyView extends React.Component<EmptyViewProps> {
     public render(): React.ReactNode {
         return (
             <View style={styles.container}>
-                <Ionicons name={this.props.icon} size={64}/>
+                <Ionicons name={this.props.icon} size={64} onPress={this.props.onPress}/>
                 <Text style={styles.title}>{this.props.title}</Text>
                 <Text style={styles.subtitle}>{this.props.subtitle}</Text>
             </View>
