@@ -7,6 +7,7 @@ import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationEvents, NavigationScreenProps } from "react-navigation";
+import { EmptyView } from "../components/EmptyView";
 import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { InactivityHandler } from "../components/InactivityHandler";
 import { PreferencesService } from "../services/PreferencesService";
@@ -27,6 +28,7 @@ export interface HomeScreenProps {
 interface HomeScreenState {
     messageText: string;
     twentyFourHour: boolean;
+    loaded: boolean;
 }
 
 /**
@@ -40,7 +42,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
-        this.state = { messageText: "", twentyFourHour: true };
+        this.state = { loaded: false, messageText: "", twentyFourHour: false };
     }
 
     public componentWillMount(): void {
@@ -48,6 +50,16 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     public renderContent(): ReactNode {
+        const loadedContent = (
+            <View style={ExtraStyles.contentWrapper}>
+                <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
+                <Clock wrapperStyle={ExtraStyles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
+                <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
+            </View>
+        );
+
+        const notLoadedContent = <EmptyView icon="ios-cog" title="Loading" subtitle="Just a sec!"/>;
+
         return (
             <InactivityHandler
                 idleTime={15000}
@@ -57,11 +69,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
                     onWillFocus={this.refresh.bind(this)}
                 />
                 <View style={ExtraStyles.container}>
-                    <View style={ExtraStyles.contentWrapper}>
-                        <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
-                        <Clock wrapperStyle={ExtraStyles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
-                        <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
-                    </View>
+                    {this.state.loaded ? loadedContent : notLoadedContent}
                     <View style={ExtraStyles.bottom}>
                         <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
                     </View>
@@ -91,6 +99,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     private async fullDatabaseRead(): Promise<HomeScreenState> {
         const pref: PreferencesService = this.getService(PreferencesService);
         return {
+            loaded: true,
             messageText: "Hello, world!",
             twentyFourHour: await pref.get24HourTime()
         };
