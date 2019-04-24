@@ -212,7 +212,9 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeGetUpPress(): void {
-        this.timePicker.present(this.state.getUpTime)
+        const minTime: Time = this.state.wakeTime.add(0, 1);
+        const maxTime: Time = this.state.sleepTime.sub(0, 1);
+        this.timePicker.present(this.state.getUpTime, maxTime, minTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
@@ -223,6 +225,8 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeSleepPress(): void {
+        const minTime: Time = this.state.getUpTime.add(0, 1);
+        const maxTime: Time = this.state.wakeTime.sub(0, 1);
         this.timePicker.present(this.state.sleepTime)
             .then((time: Time | undefined) => {
                 if (time) {
@@ -234,7 +238,9 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeWakePress(): void {
-        this.timePicker.present(this.state.getUpTime)
+        const minTime: Time = this.state.sleepTime.add(0, 1);
+        const maxTime: Time = this.state.getUpTime.sub(0, 1);
+        this.timePicker.present(this.state.wakeTime, maxTime, minTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
