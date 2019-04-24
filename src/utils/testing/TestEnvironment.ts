@@ -1,4 +1,4 @@
-import { NavigationParams, NavigationRoute, NavigationScreenProp } from "react-navigation";
+import { NavigationParams, NavigationRoute, NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import { AppDatabase } from "../AppDatabase";
 import { TimeMachine } from "./TimeMachine";
@@ -40,6 +40,16 @@ export class TestEnvironment {
      */
     public get db(): AppDatabase {
         return this._db;
+    }
+
+    /**
+     * A mock for props that should be passed to every UIScreen
+     */
+    public get emptyUIScreenProps(): NavigationScreenProps {
+        return {
+            navigation: this.navigationProp,
+            screenProps: { db: this.db }
+        };
     }
 
     /**
