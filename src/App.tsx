@@ -8,6 +8,7 @@ import { ErrorHandlerCallback, Platform, StatusBar, StyleSheet, View } from "rea
 
 import AppNavigator from "./navigation/AppNavigator";
 import * as Log from "./utils/Log";
+import { AppDatabase } from "./utils/AppDatabase";
 
 export interface AppProps {
     skipLoadingScreen?: boolean;
