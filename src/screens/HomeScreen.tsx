@@ -46,7 +46,9 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     public componentWillMount(): void {
-        this.refresh().then(() => { SplashScreen.hide(); });
+        this.refresh().then(() => {
+            SplashScreen.hide();
+        });
     }
 
     public renderContent(): ReactNode {
@@ -79,7 +81,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     public switchToSettings(): void {
-        this.present("SettingsMain");
+        this.present("SettingsMain", { screen: this });
     }
 
     public onSnoozePressed(): void {
