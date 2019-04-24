@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "gray",
         flex: 1,
-        justifyContent: "center"
+        justifyContent: "center",
+        zIndex: 2,
     },
 
     // Slider
@@ -58,7 +59,8 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         height: 600,
-        width: 300
+        width: 300,
+        zIndex: 2,
     },
 
     // Text in slider

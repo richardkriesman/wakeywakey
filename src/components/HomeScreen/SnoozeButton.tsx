@@ -29,6 +29,7 @@ export class SnoozeButton extends React.Component<SnoozeButtonProps> {
 const styles = StyleSheet.create({
     button: {
         backgroundColor: "black",
-        padding: 15
+        padding: 15,
+        zIndex: -1,
     }
 });

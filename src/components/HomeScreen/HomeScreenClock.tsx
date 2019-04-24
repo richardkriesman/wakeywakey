@@ -127,7 +127,8 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
 const styles = StyleSheet.create({
     clockText: {
         fontSize: 60,
-        textAlign: "center"
+        textAlign: "center",
+        zIndex: -1,
     },
     innerWrapper: {
         marginBottom: 20,
