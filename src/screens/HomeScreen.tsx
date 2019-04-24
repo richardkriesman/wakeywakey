@@ -68,6 +68,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
                 navigation={this.props.navigation}>
                 <KeepAwake/>
                 <NavigationEvents
+                    navigation={this.props.navigation}
                     onWillFocus={this.refresh.bind(this)}
                 />
                 <View style={ExtraStyles.container}>
