@@ -15,6 +15,7 @@ import Colors from "../../constants/Colors";
 import { Alarm, AlarmDay } from "../../models/Alarm";
 import { Schedule } from "../../models/Schedule";
 import { AlarmService } from "../../services/AlarmService";
+import { PreferencesService } from "../../services/PreferencesService";
 import * as AlarmUtils from "../../utils/AlarmUtils";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
@@ -24,6 +25,7 @@ export interface EditAlarmScreenState {
     alarm?: Alarm;
     days: number;
     disabledDays: number;
+    is24HourTime: boolean;
     isSleepTimeValid: boolean;
     isWakeTimeValid: boolean;
     isGetUpTimeValid: boolean;
@@ -54,6 +56,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             days: alarm ? alarm.days : 0,
             disabledDays: 0,
             getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
+            is24HourTime: false,
             isGetUpTimeValid: true,
             isSleepTimeValid: true,
             isWakeTimeValid: true,
@@ -85,6 +88,14 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                     disabledDays
                 });
 
+            });
+
+        // determine whether 12 or 24 hour time should be displayed
+        this.getService(PreferencesService).get24HourTime()
+            .then((is24HourTime: boolean) => {
+                this.setState({
+                    is24HourTime
+                });
             });
 
     }
@@ -153,19 +164,19 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 <ListItem key={0}
                           title="Sleep"
                           titleStyle={[!this.state.isSleepTimeValid && styles.alarmTitleError]}
-                          subtitle={AlarmUtils.formatTime(this.state.sleepTime)}
+                          subtitle={AlarmUtils.formatTime(this.state.sleepTime, this.state.is24HourTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeSleepPress.bind(this)}/>
                 <ListItem key={1}
                           title="Wake up"
                           titleStyle={[!this.state.isWakeTimeValid && styles.alarmTitleError]}
-                          subtitle={AlarmUtils.formatTime(this.state.wakeTime)}
+                          subtitle={AlarmUtils.formatTime(this.state.wakeTime, this.state.is24HourTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeWakePress.bind(this)}/>
                 <ListItem key={2}
                           title="Get up"
                           titleStyle={[!this.state.isGetUpTimeValid && styles.alarmTitleError]}
-                          subtitle={AlarmUtils.formatTime(this.state.getUpTime)}
+                          subtitle={AlarmUtils.formatTime(this.state.getUpTime, this.state.is24HourTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeGetUpPress.bind(this)}/>
 
@@ -251,7 +262,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeGetUpPress(): void {
-        this.timePicker.present(this.state.getUpTime)
+        this.timePicker.present(this.state.getUpTime, this.state.is24HourTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
@@ -264,7 +275,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeSleepPress(): void {
-        this.timePicker.present(this.state.sleepTime)
+        this.timePicker.present(this.state.sleepTime, this.state.is24HourTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
@@ -277,7 +288,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeWakePress(): void {
-        this.timePicker.present(this.state.wakeTime)
+        this.timePicker.present(this.state.wakeTime, this.state.is24HourTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({

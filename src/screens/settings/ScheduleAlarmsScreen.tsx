@@ -13,6 +13,7 @@ import Colors from "../../constants/Colors";
 import { Schedule } from "../../models";
 import { Alarm, AlarmDay } from "../../models/Alarm";
 import { AlarmService } from "../../services/AlarmService";
+import { PreferencesService } from "../../services/PreferencesService";
 import AlarmUtils from "../../utils/AlarmUtils";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
@@ -21,6 +22,7 @@ import { Watcher } from "../../utils/watcher/Watcher";
 export interface EditScheduleScreenState {
     alarms: Map<number, Alarm>;
     isAddButtonDisabled: boolean;
+    is24HourTime: boolean;
     schedule?: Schedule;
 }
 
@@ -33,18 +35,29 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
 
     public constructor(props: NavigationScreenProps) {
         super(props);
+        this.state = {
+            alarms: new Map(),
+            is24HourTime: false,
+            isAddButtonDisabled: false,
+            schedule: this.props.navigation.getParam("schedule") || null
+        };
     }
 
     public componentWillMount(): void {
-        this.setState({
-            alarms: new Map(),
-            isAddButtonDisabled: false,
-            schedule: this.props.navigation.getParam("schedule") || null
-        }, () => { // got the schedule, watch for alarms
-            this.watcher = this.getService(AlarmService).watchBySchedule(this.state.schedule);
-            this.dataSetChangedHandler = this.onDataSetChanged.bind(this);
-            this.watcher.on(this.dataSetChangedHandler);
-        });
+
+        // check if 24-hour time is enabled
+        this.getService(PreferencesService).get24HourTime()
+            .then((is24HourTime: boolean) => {
+                this.setState({
+                    is24HourTime
+                });
+            });
+
+        // watch for alarms
+        this.watcher = this.getService(AlarmService).watchBySchedule(this.state.schedule);
+        this.dataSetChangedHandler = this.onDataSetChanged.bind(this);
+        this.watcher.on(this.dataSetChangedHandler);
+
     }
 
     public componentWillUnmount(): void {
@@ -60,7 +73,7 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                         renderItem={({ item }) => (
                             <ListItem
                                 onPress={this.onAlarmPressed.bind(this, item.id)}
-                                title={AlarmUtils.getAlarmTitle(item)}
+                                title={AlarmUtils.getAlarmTitle(item, this.state.is24HourTime)}
                                 subtitle={AlarmUtils.getAlarmSubtitle(item)}
                                 rightIcon={{ name: "arrow-forward", type: "ionicons" }}
                             />
