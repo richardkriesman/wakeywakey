@@ -95,6 +95,10 @@ export class Time {
         return Time.createFromTotalSeconds(totalSeconds);
     }
 
+    public greaterThan(rel: Time): boolean {
+        return this.totalSeconds > rel.totalSeconds;
+    }
+
     public greaterThanOrEquals(rel: Time): boolean {
         return this.totalSeconds >= rel.totalSeconds;
     }
@@ -103,12 +107,24 @@ export class Time {
         return this.totalSeconds === time.totalSeconds;
     }
 
-    public isInRange(minTime: Time, maxTime: Time): boolean {
+    public isInRange(minTime: Time, maxTime: Time, isInclusive: boolean = true): boolean {
         if (minTime.lessThanOrEquals(maxTime)) { // times are in the same day
-            return minTime.lessThanOrEquals(this) && maxTime.greaterThanOrEquals(this);
+            if (isInclusive) {
+                return minTime.lessThanOrEquals(this) && maxTime.greaterThanOrEquals(this);
+            } else {
+                return minTime.lessThan(this) && maxTime.greaterThan(this);
+            }
         } else { // times cross day boundary, reverse the logic
-            return minTime.greaterThanOrEquals(this) && maxTime.lessThanOrEquals(this);
+            if (isInclusive) {
+                return minTime.greaterThanOrEquals(this) && maxTime.greaterThanOrEquals(this);
+            } else {
+                return minTime.greaterThan(this) && maxTime.greaterThan(this);
+            }
         }
+    }
+
+    public lessThan(rel: Time): boolean {
+        return this.totalSeconds < rel.totalSeconds;
     }
 
     public lessThanOrEquals(rel: Time): boolean {

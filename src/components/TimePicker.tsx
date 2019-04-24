@@ -6,8 +6,6 @@ import { Modal } from "./modal/Modal";
 
 export interface TimePickerState {
     isVisible: boolean;
-    maxTime?: Time;
-    minTime?: Time;
     onIOSCancelled?: () => void;
     onIOSCompleted?: (time: Time) => void;
     time: Time;
@@ -67,20 +65,15 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
      * modal in the view hierarchy with the iOS "spinner" design.
      *
      * @param time Time of day
-     * @param minTime Minimum time value allowed
-     * @param maxTime Maximum time value allowed
      *
      * @return A Promise that resolves when the {@link TimePicker} is closed with the {@link Time} or
      *         undefined` if the TimePicker was cancelled.
      */
-    public present(time: Time, minTime: Time = Time.createFromTotalSeconds(0),
-                   maxTime: Time = Time.createFromTotalSeconds(86399)): Promise<Time|undefined> {
+    public present(time: Time): Promise<Time|undefined> {
         return new Promise((resolve, reject) => {
             if (Platform.OS === "ios") { // iOS
                 this.setState({
                     isVisible: true,
-                    maxTime,
-                    minTime,
                     onIOSCancelled: () => {
                         this.setState({
                             isVisible: false
@@ -105,12 +98,7 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
                 })
                     .then((result: TimePickerAndroidOpenReturn) => { // time picker was shown and closed
                         if (result.action === TimePickerAndroid.timeSetAction) { // time picker was completed
-                            const newTime: Time = Time.createFromDisplayTime(result.hour, result.minute);
-                            if (newTime.isInRange(maxTime, minTime)) { // time is in valid range
-                                resolve(newTime); // return result in seconds
-                            } else { // time is not in valid range - we can't prevent closing, so cancel the dialog
-                                resolve(undefined);
-                            }
+                            resolve(Time.createFromDisplayTime(result.hour, result.minute)); // return result in seconds
                         } else {
                             resolve(undefined);
                         }
@@ -127,12 +115,8 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
     }
 
     private onIOSCompleted(): void {
-        if (this.state.time.isInRange(this.state.maxTime, this.state.minTime)) { // valid time range
-            if (this.state.onIOSCompleted) {
-                this.state.onIOSCompleted(this.state.time);
-            }
-        } else { // invalid time range, cancel
-            this.onIOSCancelled();
+        if (this.state.onIOSCompleted) {
+            this.state.onIOSCompleted(this.state.time);
         }
     }
 

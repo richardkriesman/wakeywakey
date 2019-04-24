@@ -2,7 +2,7 @@
  * @module services
  */
 
-import { Alarm } from "../models/Alarm";
+import { Alarm } from "../models";
 import { Schedule } from "../models/Schedule";
 import { Service } from "../utils/Service";
 import { Time } from "../utils/Time";

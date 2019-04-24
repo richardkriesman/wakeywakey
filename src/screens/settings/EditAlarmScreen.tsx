@@ -23,6 +23,9 @@ export interface EditAlarmScreenState {
     alarm?: Alarm;
     days: number;
     disabledDays: number;
+    isSleepTimeValid: boolean;
+    isWakeTimeValid: boolean;
+    isGetUpTimeValid: boolean;
     schedule: Schedule;
     sleepTime: Time;
     wakeTime: Time;
@@ -32,6 +35,11 @@ export interface EditAlarmScreenState {
 @HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
                                        onPress={() => (screen as EditAlarmScreen).onSavePress()}/>)
 export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
+
+    /**
+     * Whether the results of a validation check are part of a pending state update.
+     */
+    private isValidationCheckPending: boolean = false;
 
     private timePicker: TimePicker;
 
@@ -45,6 +53,9 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             days: alarm ? alarm.days : 0,
             disabledDays: 0,
             getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
+            isGetUpTimeValid: true,
+            isSleepTimeValid: true,
+            isWakeTimeValid: true,
             schedule: this.props.navigation.getParam("schedule"),
             sleepTime: alarm ? alarm.sleepTime : Time.createFromTotalSeconds(72000), // 8:00 PM
             wakeTime: alarm ? alarm.wakeTime : Time.createFromTotalSeconds(21600) // 6:00 AM
@@ -139,16 +150,19 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 <ListHeader title="Alarm times"/>
                 <ListItem key={0}
                           title="Sleep"
+                          titleStyle={[!this.state.isSleepTimeValid && styles.alarmTitleError]}
                           subtitle={AlarmUtils.formatTime(this.state.sleepTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeSleepPress.bind(this)}/>
                 <ListItem key={1}
                           title="Wake up"
+                          titleStyle={[!this.state.isWakeTimeValid && styles.alarmTitleError]}
                           subtitle={AlarmUtils.formatTime(this.state.wakeTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeWakePress.bind(this)}/>
                 <ListItem key={2}
                           title="Get up"
+                          titleStyle={[!this.state.isGetUpTimeValid && styles.alarmTitleError]}
                           subtitle={AlarmUtils.formatTime(this.state.getUpTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeGetUpPress.bind(this)}/>
@@ -156,6 +170,26 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 {deleteButton}
             </View>
         );
+    }
+
+    /**
+     * Runs validation checks and asynchronously updates the state to reflect the new validation results.
+     */
+    private doValidate(): void {
+        this.isValidationCheckPending = true;
+        this.setState({
+            isGetUpTimeValid: this.state.sleepTime.lessThan(this.state.getUpTime) ?
+                !this.state.getUpTime.isInRange(this.state.sleepTime, this.state.wakeTime, true) :
+                this.state.getUpTime.isInRange(this.state.wakeTime, this.state.sleepTime, false),
+            isSleepTimeValid: this.state.sleepTime.lessThan(this.state.wakeTime) ?
+                this.state.sleepTime.isInRange(this.state.getUpTime, this.state.wakeTime, false) :
+                !this.state.sleepTime.isInRange(this.state.wakeTime, this.state.getUpTime, true),
+            isWakeTimeValid: this.state.wakeTime.lessThan(this.state.getUpTime) ?
+                this.state.wakeTime.isInRange(this.state.sleepTime, this.state.getUpTime, false) :
+                !this.state.wakeTime.isInRange(this.state.getUpTime, this.state.sleepTime, true)
+        }, () => {
+            this.isValidationCheckPending = false;
+        });
     }
 
     private isDayDisabled(day: AlarmDay): boolean {
@@ -179,7 +213,10 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
     // noinspection JSUnusedLocalSymbols - this method is used, just in a decorator
     private onSavePress(): void {
-        if (this.state.days === 0) { // no days selected, don't allow saving the alarm
+
+        // no days selected, validation checks are pending, or time validation failed - don't allow saving
+        if (this.state.days === 0 || this.isValidationCheckPending || !this.state.isSleepTimeValid
+                || !this.state.isWakeTimeValid || !this.state.isGetUpTimeValid) {
             return;
         }
 
@@ -212,39 +249,39 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeGetUpPress(): void {
-        const minTime: Time = this.state.wakeTime.add(0, 1);
-        const maxTime: Time = this.state.sleepTime.sub(0, 1);
-        this.timePicker.present(this.state.getUpTime, maxTime, minTime)
+        this.timePicker.present(this.state.getUpTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
                         getUpTime: time
+                    }, () => {
+                        this.doValidate();
                     });
                 }
             });
     }
 
     private onTimeSleepPress(): void {
-        const minTime: Time = this.state.getUpTime.add(0, 1);
-        const maxTime: Time = this.state.wakeTime.sub(0, 1);
         this.timePicker.present(this.state.sleepTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
                         sleepTime: time
+                    }, () => {
+                        this.doValidate();
                     });
                 }
             });
     }
 
     private onTimeWakePress(): void {
-        const minTime: Time = this.state.sleepTime.add(0, 1);
-        const maxTime: Time = this.state.getUpTime.sub(0, 1);
-        this.timePicker.present(this.state.wakeTime, maxTime, minTime)
+        this.timePicker.present(this.state.wakeTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
                         wakeTime: time
+                    }, () => {
+                        this.doValidate();
                     });
                 }
             });
@@ -253,6 +290,9 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 }
 
 const styles = StyleSheet.create({
+    alarmTitleError: {
+        color: Colors.appleButtonRed
+    },
     daySelector: {
         flexDirection: "row",
         justifyContent: "space-around",
