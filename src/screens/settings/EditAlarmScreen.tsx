@@ -4,11 +4,11 @@
 
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Divider, ListItem } from "react-native-elements";
+import { Button, Divider } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
-import { ListHeader } from "../../components/ListHeader";
-import { TimePicker } from "../../components/TimePicker";
 
+import { ListHeader, ListItem } from "../../components/list";
+import { TimePicker } from "../../components/TimePicker";
 import { ToggleButton } from "../../components/ToggleButton";
 import Colors from "../../constants/Colors";
 import { Alarm, AlarmDay } from "../../models/Alarm";
@@ -22,6 +22,7 @@ import { Time } from "../../utils/Time";
 export interface EditAlarmScreenState {
     alarm?: Alarm;
     days: number;
+    disabledDays: number;
     schedule: Schedule;
     sleepTime: Time;
     wakeTime: Time;
@@ -42,11 +43,38 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
         this.state = {
             alarm,
             days: alarm ? alarm.days : 0,
+            disabledDays: 0,
             getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
             schedule: this.props.navigation.getParam("schedule"),
             sleepTime: alarm ? alarm.sleepTime : Time.createFromTotalSeconds(72000), // 8:00 PM
             wakeTime: alarm ? alarm.wakeTime : Time.createFromTotalSeconds(21600) // 6:00 AM
         };
+    }
+
+    public componentWillMount(): void {
+
+        // disable days used in other schedules
+        this.getService(AlarmService).getBySchedule(this.state.schedule)
+            .then((alarms: Alarm[]) => {
+
+                // build characteristic vector of days in use in other alarms
+                let disabledDays: number = 0;
+                for (const alarm of alarms) {
+                    if (this.state.alarm && this.state.alarm.id === alarm.id) { // this is the current alarm, skip it
+                        continue;
+                    }
+
+                    // add days in the alarm to the characteristic vector
+                    disabledDays |= alarm.days;
+                }
+
+                // update state with disabled days
+                this.setState({
+                    disabledDays
+                });
+
+            });
+
     }
 
     public renderContent(): ReactNode {
@@ -71,30 +99,37 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 <View style={styles.daySelector}>
                     <ToggleButton
                         title="M"
+                        isDisabled={this.isDayDisabled(AlarmDay.Monday)}
                         isToggled={this.isDayToggled(AlarmDay.Monday)}
                         onToggle={this.onDayToggle.bind(this, AlarmDay.Monday)}/>
                     <ToggleButton
                         title="Tu"
+                        isDisabled={this.isDayDisabled(AlarmDay.Tuesday)}
                         isToggled={this.isDayToggled(AlarmDay.Tuesday)}
                         onToggle={this.onDayToggle.bind(this, AlarmDay.Tuesday)}/>
                     <ToggleButton
                         title="W"
+                        isDisabled={this.isDayDisabled(AlarmDay.Wednesday)}
                         isToggled={this.isDayToggled(AlarmDay.Wednesday)}
                         onToggle={this.onDayToggle.bind(this, AlarmDay.Wednesday)}/>
                     <ToggleButton
                         title="Th"
+                        isDisabled={this.isDayDisabled(AlarmDay.Thursday)}
                         isToggled={this.isDayToggled(AlarmDay.Thursday)}
                         onToggle={this.onDayToggle.bind(this, AlarmDay.Thursday)}/>
                     <ToggleButton
                         title="F"
+                        isDisabled={this.isDayDisabled(AlarmDay.Friday)}
                         isToggled={this.isDayToggled(AlarmDay.Friday)}
                         onToggle={this.onDayToggle.bind(this, AlarmDay.Friday)}/>
                     <ToggleButton
                         title="Sa"
+                        isDisabled={this.isDayDisabled(AlarmDay.Saturday)}
                         isToggled={this.isDayToggled(AlarmDay.Saturday)}
                         onToggle={this.onDayToggle.bind(this, AlarmDay.Saturday)}/>
                     <ToggleButton
                         title="Su"
+                        isDisabled={this.isDayDisabled(AlarmDay.Sunday)}
                         isToggled={this.isDayToggled(AlarmDay.Sunday)}
                         onToggle={this.onDayToggle.bind(this, AlarmDay.Sunday)}/>
                 </View>
@@ -123,6 +158,10 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
         );
     }
 
+    private isDayDisabled(day: AlarmDay): boolean {
+        return (this.state.disabledDays & day) !== 0;
+    }
+
     private isDayToggled(day: AlarmDay): boolean {
         return (this.state.days & day) !== 0;
     }
@@ -140,6 +179,11 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
     // noinspection JSUnusedLocalSymbols - this method is used, just in a decorator
     private onSavePress(): void {
+        if (this.state.days === 0) { // no days selected, don't allow saving the alarm
+            return;
+        }
+
+        // create/update the alarm
         if (!this.state.alarm) { // new alarm
             this.getService(AlarmService).create(this.state.schedule, this.state.sleepTime, this.state.wakeTime,
                 this.state.getUpTime, this.state.days)

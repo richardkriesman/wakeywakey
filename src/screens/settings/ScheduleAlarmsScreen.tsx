@@ -4,10 +4,10 @@
 
 import React, { ReactNode } from "react";
 import { SectionList, StyleSheet, View } from "react-native";
-import { ListItem } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
+
 import { EmptyView } from "../../components/EmptyView";
-import { ListHeader } from "../../components/ListHeader";
+import { ListHeader, ListItem } from "../../components/list";
 import Colors from "../../constants/Colors";
 import { Schedule } from "../../models";
 import { Alarm } from "../../models/Alarm";
@@ -19,7 +19,6 @@ import { Watcher } from "../../utils/watcher/Watcher";
 
 export interface EditScheduleScreenState {
     alarms: Map<number, Alarm>;
-    headerTitle: string;
     schedule?: Schedule;
 }
 
@@ -37,7 +36,6 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     public componentWillMount(): void {
         this.setState({
             alarms: new Map(),
-            headerTitle: this.props.navigation.getParam("title"),
             schedule: this.props.navigation.getParam("schedule") || null
         }, () => { // got the schedule, watch for alarms
             this.watcher = this.getService(AlarmService).watchBySchedule(this.state.schedule);
@@ -48,13 +46,6 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
 
     public componentWillUnmount(): void {
         this.watcher.off(this.dataSetChangedHandler);
-    }
-
-    public onAlarmPressed(key: number): void {
-        this.present("EditAlarm", {
-            alarm: this.state.alarms.get(key),
-            title: this.state.headerTitle
-        });
     }
 
     public renderContent(): ReactNode {
@@ -84,6 +75,14 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                     subtitle="Create an alarm to set your child's bedtime" />
             );
         }
+    }
+
+    public onAlarmPressed(key: number): void {
+        this.present("EditAlarm", {
+            alarm: this.state.alarms.get(key),
+            schedule: this.state.schedule,
+            title: "Edit alarm"
+        });
     }
 
     private onDataSetChanged(alarms: Alarm[]): void {

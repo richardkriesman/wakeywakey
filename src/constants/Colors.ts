@@ -24,7 +24,6 @@ export default {
     tabBar: "#fefefe",
     tabIconDefault: "#ccc",
     tabIconSelected: tintColor,
-    tintColor,
     warningBackground: "#eaeB5e",
     warningText: "#666804",
     white: "#ffffff"
