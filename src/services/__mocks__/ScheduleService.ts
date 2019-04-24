@@ -52,6 +52,11 @@ export class ScheduleService extends MockService {
         this.appDb.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
     }
 
+    public async getEnabled(): Promise<Schedule | undefined> {
+        const rows: MockRow[] = await this.mockDb.selectAll("schedule").filter((row: MockRow) => row.isEnabled);
+        return rows.length > 0 ? Schedule.load(this.appDb, rows[0]) : undefined;
+    }
+
     public watchAll(): Watcher<Schedule> {
         const emitter: Emitter<Schedule> = this.appDb.getEmitterSet<Schedule>(Schedule.name).create();
         this.getAll() // get an initial data set
