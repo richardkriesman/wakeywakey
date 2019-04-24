@@ -121,96 +121,32 @@ exports[`renders properly 1`] = `
                     <View
                       style={
                         Object {
+                          "alignItems": "center",
                           "flex": 1,
-                          "flexBasis": "100%",
                           "justifyContent": "center",
-                          "width": "85%",
                         }
                       }
                     >
+                      <Text />
                       <Text
                         style={
                           Object {
-                            "fontSize": 30,
-                            "textAlign": "center",
+                            "fontSize": 17,
                           }
                         }
-                      />
-                      <View
-                        style={Object {}}
                       >
-                        <View
-                          style={
-                            Object {
-                              "marginBottom": 20,
-                              "marginTop": 20,
-                            }
-                          }
-                        >
-                          <Text
-                            style={
-                              Object {
-                                "fontSize": 60,
-                                "textAlign": "center",
-                              }
-                            }
-                          >
-                            12:22
-                          </Text>
-                        </View>
-                      </View>
-                      <View
+                        Loading
+                      </Text>
+                      <Text
                         style={
                           Object {
-                            "borderRadius": 3,
+                            "color": "#5e5e5e",
+                            "fontSize": 15,
                           }
                         }
                       >
-                        <View
-                          accessible={true}
-                          isTVSelectable={true}
-                          onResponderGrant={[Function]}
-                          onResponderMove={[Function]}
-                          onResponderRelease={[Function]}
-                          onResponderTerminate={[Function]}
-                          onResponderTerminationRequest={[Function]}
-                          onStartShouldSetResponder={[Function]}
-                          style={
-                            Object {
-                              "opacity": 1,
-                            }
-                          }
-                        >
-                          <View
-                            style={
-                              Object {
-                                "alignItems": "center",
-                                "backgroundColor": "black",
-                                "borderColor": "#2089dc",
-                                "borderRadius": 3,
-                                "borderWidth": 0,
-                                "flexDirection": "row",
-                                "justifyContent": "center",
-                                "padding": 15,
-                              }
-                            }
-                          >
-                            <Text
-                              style={
-                                Object {
-                                  "color": "white",
-                                  "fontSize": 18,
-                                  "paddingBottom": 1,
-                                  "paddingTop": 2,
-                                  "textAlign": "center",
-                                }
-                              }
-                            >
-                              Snooze
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
+                        Just a sec!
+                      </Text>
                     </View>
                     <View
                       style={
