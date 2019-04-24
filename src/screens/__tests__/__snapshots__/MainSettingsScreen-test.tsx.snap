@@ -358,7 +358,7 @@ exports[`renders the screen 1`] = `
           }
         }
       >
-        Create a schedule to set alarms
+        Tap here to create one!
       </Text>
     </View>
   </View>
