@@ -9,6 +9,13 @@ exports[`renders correctly 1`] = `
   }
 >
   <View
+    accessible={true}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
     style={
       Object {
         "alignItems": "center",
@@ -29,13 +36,18 @@ exports[`renders correctly 1`] = `
     </Text>
     <Text
       style={
-        Object {
-          "color": "#5e5e5e",
-          "fontSize": 15,
-        }
+        Array [
+          Object {
+            "color": "#5e5e5e",
+            "fontSize": 15,
+          },
+          Object {
+            "color": "#007aff",
+          },
+        ]
       }
     >
-      Create an alarm to set your child's bedtime
+      Tap here to create one!
     </Text>
   </View>
 </RCTSafeAreaView>

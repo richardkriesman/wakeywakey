@@ -119,6 +119,13 @@ exports[`renders properly 1`] = `
                     }
                   >
                     <View
+                      accessible={true}
+                      onResponderGrant={[Function]}
+                      onResponderMove={[Function]}
+                      onResponderRelease={[Function]}
+                      onResponderTerminate={[Function]}
+                      onResponderTerminationRequest={[Function]}
+                      onStartShouldSetResponder={[Function]}
                       style={
                         Object {
                           "alignItems": "center",
@@ -139,10 +146,13 @@ exports[`renders properly 1`] = `
                       </Text>
                       <Text
                         style={
-                          Object {
-                            "color": "#5e5e5e",
-                            "fontSize": 15,
-                          }
+                          Array [
+                            Object {
+                              "color": "#5e5e5e",
+                              "fontSize": 15,
+                            },
+                            undefined,
+                          ]
                         }
                       >
                         Just a sec!

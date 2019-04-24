@@ -39,8 +39,14 @@ describe("alarm formatting", () => {
             });
     });
 
-    it("formats the title correctly", (done) => {
-        const title: string = AlarmUtils.getAlarmTitle(alarm);
+    it("formats the title correctly in 12-hour time", (done) => {
+        const title: string = AlarmUtils.getAlarmTitle(alarm, false);
+        expect(title).toBe("10:00 pm - 8:00 am");
+        done();
+    });
+
+    it("formats the title correctly in 24-hour time", (done) => {
+        const title: string = AlarmUtils.getAlarmTitle(alarm, true);
         expect(title).toBe("22:00 - 08:00");
         done();
     });
@@ -68,8 +74,13 @@ describe("time formatting", () => {
     // Wed Mar 27 2019 15:00:30 CDT
     const dateTimeMillis: number = 1553716830510;
 
-    it("should be formatted correctly", () => {
-        const time: string = AlarmUtils.formatTime(new Time());
+    it("should be formatted correctly in 12-hour time", () => {
+        const time: string = AlarmUtils.formatTime(new Time(), false);
+        expect(time).toBe("3:00 pm");
+    });
+
+    it("should be formatted correctly in 24-hour time", () => {
+        const time: string = AlarmUtils.formatTime(new Time(), true);
         expect(time).toBe("15:00");
     });
 
