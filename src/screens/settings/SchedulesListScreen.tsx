@@ -4,6 +4,7 @@
 
 import React, { ReactNode } from "react";
 import { SectionList, StyleSheet, View } from "react-native";
+import { Button } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton, ScheduleListItem } from "../../components";
@@ -122,22 +123,31 @@ export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreen
         let content: ReactNode;
         if (this.state.schedules.size > 0) { // schedules exist, render the list
             content = (
-                <SectionList
-                    keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
-                    renderItem={({ item }) => (
-                        <ScheduleListItem
-                            ref={(me: ScheduleListItem) => {
-                                item.listItemRef = me;
-                            }}
-                            onPress={this.onScheduleItemPressed.bind(this, item.schedule)}
-                            onSwitchToggled={this.onScheduleItemToggled.bind(this, item.schedule)}
-                            title={item.schedule.name}
-                            enabled={item.schedule.isEnabled}
+                <View style={styles.viewScroller}>
+                    <SectionList
+                        keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
+                        renderItem={({ item }) => (
+                            <ScheduleListItem
+                                ref={(me: ScheduleListItem) => {
+                                    item.listItemRef = me;
+                                }}
+                                onPress={this.onScheduleItemPressed.bind(this, item.schedule)}
+                                onSwitchToggled={this.onScheduleItemToggled.bind(this, item.schedule)}
+                                title={item.schedule.name}
+                                enabled={item.schedule.isEnabled}
+                            />
+                        )}
+                        renderSectionHeader={({ section }) => <ListHeader title={section.title}/>}
+                        sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
+                    />
+                    <View style={styles.footer}>
+                        <Button
+                            title="Add Schedule"
+                            containerStyle={styles.footer}
+                            onPress={this.showModal.bind(this)}
                         />
-                    )}
-                    renderSectionHeader={({ section }) => <ListHeader title={section.title}/>}
-                    sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
-                />
+                    </View>
+                </View>
             );
         } else { // schedules do not exist, render empty message
             content = (
@@ -192,7 +202,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
+    footer: {
+        flex: 1,
+        justifyContent: "flex-end"
+    },
     header: {
         flexDirection: "row"
+    },
+    viewScroller: {
+        flex: 1,
+        padding: 20
     }
 });
