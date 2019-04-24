@@ -194,19 +194,19 @@ export class TimerService extends Service {
         // TODO don't fire alarms more than once per day
 
         // check sleep time first
-        if (alarm.sleepTime.isPastOrEqual(nowTime)) {
+        if (alarm.sleepTime.greaterThanOrEquals(nowTime)) {
             this.fireAll(TimerEvent.ALARM, now, { alarm, type: AlarmEventType.SLEEP });
             return;
         }
 
         // check get-up time next
-        if (alarm.getUpTime.isPastOrEqual(nowTime)) {
+        if (alarm.getUpTime.greaterThanOrEquals(nowTime)) {
             this.fireAll(TimerEvent.ALARM, now, { alarm, type: AlarmEventType.GET_UP });
             return;
         }
 
         // check wake time last
-        if (alarm.wakeTime.isPastOrEqual(nowTime)) {
+        if (alarm.wakeTime.greaterThanOrEquals(nowTime)) {
             this.fireAll(TimerEvent.ALARM, now, { alarm, type: AlarmEventType.WAKE });
             return;
         }

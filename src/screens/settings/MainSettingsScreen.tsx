@@ -8,7 +8,7 @@ import { NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton, ScheduleListItem } from "../../components";
 import { EmptyView } from "../../components/EmptyView";
-import { ListHeader } from "../../components/ListHeader";
+import { ListHeader } from "../../components/list/ListHeader";
 import { TextInputModal } from "../../components/modal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";

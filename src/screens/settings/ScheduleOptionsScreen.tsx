@@ -4,14 +4,14 @@
 
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { ListItem, Text } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
 import { DestructiveButton } from "../../components/DestructiveButton";
+import { ListHeader } from "../../components/list/ListHeader";
+import { ListItem } from "../../components/list/ListItem";
 import { ConfirmationModal } from "../../components/modal/ConfirmationModal";
 import Colors from "../../constants/Colors";
 import { Schedule } from "../../models/Schedule";
-import { ScheduleService } from "../../services/ScheduleService";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
@@ -44,7 +44,7 @@ export class ScheduleOptionsScreen extends UIScreen<{}, ScheduleOptionsScreenSta
                     title="Delete this schedule?"
                     onCompleted={this.onDeleteModalCompleted.bind(this)} />
 
-                <Text style={styles.textSectionHeader}>Options</Text>
+                <ListHeader title="Options" />
 
                 <ListItem title="Color Scheme" subtitle="Summer" rightIcon={forwardIcon}/>
                 <ListItem title="Audio" rightIcon={forwardIcon}/>
@@ -86,7 +86,8 @@ const forwardIcon = { name: "arrow-forward", type: "ionicons" };
 const styles = StyleSheet.create({
     footer: {
         flex: 1,
-        justifyContent: "flex-end"
+        justifyContent: "flex-end",
+        padding: 20
     },
     textSectionHeader: {
         color: Colors.subheaderColor,
@@ -95,7 +96,6 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     viewScroller: {
-        flex: 1,
-        padding: 20
+        flex: 1
     }
 });

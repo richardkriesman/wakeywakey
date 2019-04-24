@@ -2,7 +2,7 @@
  * @module services
  */
 
-import { Alarm } from "../models/Alarm";
+import { Alarm } from "../models";
 import { Schedule } from "../models/Schedule";
 import { Service } from "../utils/Service";
 import { Time } from "../utils/Time";
@@ -122,7 +122,9 @@ export class AlarmService extends Service {
             UPDATE alarm
             SET
                 days = ?
-        `, [days]);
+            WHERE
+                id = ?
+        `, [days, alarm.id]);
 
         await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
 
@@ -142,7 +144,9 @@ export class AlarmService extends Service {
             UPDATE alarm
             SET
                 getUpTime = ?
-        `, [time.totalSeconds]);
+            WHERE
+                id = ?
+        `, [time.totalSeconds, alarm.id]);
 
         await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
 
@@ -162,7 +166,9 @@ export class AlarmService extends Service {
             UPDATE alarm
             SET
                 sleepTime = ?
-        `, [time.totalSeconds]);
+            WHERE
+                id = ?
+        `, [time.totalSeconds, alarm.id]);
 
         await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
 
@@ -182,7 +188,9 @@ export class AlarmService extends Service {
             UPDATE alarm
             SET
                 wakeTime = ?
-        `, [time.totalSeconds]);
+            WHERE
+                id = ?
+        `, [time.totalSeconds, alarm.id]);
 
         await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
 

@@ -57,7 +57,7 @@ export default createStackNavigator(
                         // present the edit alarm screen
                         screen.present("EditAlarm", {
                             schedule,
-                            title: "Add Alarm"
+                            title: "Add alarm"
                         });
 
                     }} />,

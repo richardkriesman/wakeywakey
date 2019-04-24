@@ -17,7 +17,7 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
         super(props);
         this.state = {
             isVisible: false,
-            time: new Time()
+            time: Time.createFromDisplayTime(0, 0, 0)
         };
     }
 
@@ -25,10 +25,10 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
         if (Platform.OS === "ios") { // iOS, render modal
 
             // convert time to current date for display
-            const date = new Date();
-            date.setHours(this.state.time.hour);
-            date.setMinutes(this.state.time.minute);
-            date.setSeconds(this.state.time.second);
+            const currentDate = new Date();
+            currentDate.setHours(this.state.time.hour);
+            currentDate.setMinutes(this.state.time.minute);
+            currentDate.setSeconds(this.state.time.second);
 
             // render modal
             return (
@@ -49,7 +49,7 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
                     title="Select a time">
                     <DatePickerIOS
                         mode="time"
-                        date={date}
+                        date={currentDate}
                         onDateChange={this.onIOSDateChange.bind(this)} />
                 </Modal>
             );
@@ -88,7 +88,7 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
                             resolve(newTime);
                         });
                     },
-                    time: this.state.time
+                    time
                 });
             } else { // android, use native time picker
                 TimePickerAndroid.open({
