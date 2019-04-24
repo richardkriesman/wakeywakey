@@ -8,6 +8,7 @@ import Colors from "../constants/Colors";
 
 export interface ToggleButtonProps {
     backgroundColor?: string;
+    isDisabled?: boolean;
     isToggled?: boolean;
     onToggle?: (isToggled: boolean) => void;
     textColorIn?: string;
@@ -27,17 +28,10 @@ export class ToggleButton extends React.Component<ToggleButtonProps, ToggleButto
         return this.state.isToggled;
     }
 
-    private readonly backgroundColor: string;
     private readonly colorAnimation: Animated.Value;
-    private readonly textColorIn: string;
-    private readonly textColorOut: string;
 
     public constructor(props: ToggleButtonProps) {
         super(props);
-        this.backgroundColor = props.backgroundColor || Colors.appleButtonBlue;
-        this.textColorIn = props.textColorIn || Colors.white;
-        this.textColorOut = props.textColorOut || Colors.black;
-
         this.state = {
             isToggled: this.props.isToggled || false
         };
@@ -46,20 +40,27 @@ export class ToggleButton extends React.Component<ToggleButtonProps, ToggleButto
 
     public render(): ReactNode {
 
+        // determine colors based on current state
+        const backgroundColor: string = this.props.isDisabled ? Colors.alertFooterSeparator :
+            (this.props.backgroundColor || Colors.appleButtonBlue);
+        const textColorIn = this.props.isDisabled ? Colors.white : (this.props.textColorIn || Colors.white);
+        const textColorOut = this.props.isDisabled ? Colors.alertFooterSeparator :
+            (this.props.textColorOut || Colors.black);
+
         // build dynamic styles based on current state
         const borderDynamicStyle = {
-            backgroundColor: this.backgroundColor
+            backgroundColor
         };
         const containerDynamicStyle = {
             backgroundColor: this.colorAnimation.interpolate({
                 inputRange: [0, 1],
-                outputRange: [Colors.white, this.backgroundColor]
+                outputRange: [Colors.white, backgroundColor]
             })
         };
         const textDynamicStyle = {
             color: this.colorAnimation.interpolate({
                 inputRange: [0, 1],
-                outputRange: [this.textColorOut, this.textColorIn]
+                outputRange: [textColorOut, textColorIn]
             })
         };
 
@@ -92,6 +93,9 @@ export class ToggleButton extends React.Component<ToggleButtonProps, ToggleButto
     }
 
     private onPress(): void {
+        if (this.props.isDisabled) { // button is disabled, ignore the press
+            return;
+        }
 
         // start animation
         if (!this.state.isToggled) {
