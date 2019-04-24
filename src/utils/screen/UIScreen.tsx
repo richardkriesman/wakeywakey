@@ -22,19 +22,19 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
         super(props);
 
         // extract the database from the navigation props
-        this.db = this.props.navigation.getParam("db");
-        if (this.db) {
-            delete this.props.navigation.state.params.db;
-        } else { // database has not yet been opened, initialize it
+        this.db = this.props.screenProps.db;
+
+        if (!this.db) {
+            // database has not yet been opened, initialize it
             if (AppDatabase.initCount > 0) {
                 Log.warning("UIScreen",
                     `Database was not passed to route ${this.props.navigation.state.routeName}! ` +
                     `Did you use UIScreen.present()?`);
             }
-            AppDatabase.init()
-                .then((db) => {
-                    this.db = db;
-                });
+
+            AppDatabase.init().then((db) => {
+                this.db = db;
+            });
         }
 
         // add this screen to its own navigation params - this is nasty but it's needed for the decorators
