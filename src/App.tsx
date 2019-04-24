@@ -80,10 +80,7 @@ export default class App extends React.Component<AppProps, AppState> {
         // initialize database
         AppDatabase.init().then((db) => {
             // loading is complete, render the main screen
-            this.setState({ db, isLoadingComplete: true }, () => {
-                // hide splash
-                SplashScreen.hide();
-            });
+            this.setState({ db, isLoadingComplete: true });
         });
     }
 

@@ -2,7 +2,7 @@
  * @module screens
  */
 
-import { KeepAwake } from "expo";
+import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -46,7 +46,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     public componentWillMount(): void {
-        this.refresh();
+        this.refresh().then(() => { SplashScreen.hide(); });
     }
 
     public renderContent(): ReactNode {
@@ -86,14 +86,14 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         this.updateState({ messageText: "Alarm snoozed!" });
     }
 
-    private refresh(): void {
+    private async refresh(): Promise<void> {
         if (!this.getService(PreferencesService)) {
             this.setState({ messageText: this.props.initialMessageText });
             this.forceUpdate();
             return;
         }
 
-        this.fullDatabaseRead().then(this.updateState.bind(this));
+        return this.fullDatabaseRead().then(this.updateState.bind(this));
     }
 
     private async fullDatabaseRead(): Promise<HomeScreenState> {
