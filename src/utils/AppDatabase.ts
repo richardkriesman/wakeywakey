@@ -3,6 +3,7 @@
  */
 
 import {FileSystem, SQLite} from "expo";
+import { TimerService } from "../services/TimerService";
 import * as Log from "./Log";
 import { Model } from "./Model";
 import { Service } from "./Service";
@@ -88,6 +89,9 @@ export class AppDatabase {
     private constructor() {
         this.db = SQLite.openDatabase(DATABASE_NAME);
         Log.info(DATABASE_LOG_TAG, `Opened database at ${FileSystem.documentDirectory}SQLite/${DATABASE_NAME}`);
+
+        // start timer service
+        this.getService<TimerService>(TimerService).start();
     }
 
     /**

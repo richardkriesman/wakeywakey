@@ -55,7 +55,7 @@ export class ScheduleService extends Service {
      *
      * @param id ID of the Schedule
      */
-    public async get(id: number): Promise<Schedule|undefined> {
+    public async get(id: number): Promise<Schedule | undefined> {
         const result: SQLResultSet = await this.db.execute(`
             SELECT *
             FROM schedule
@@ -102,6 +102,20 @@ export class ScheduleService extends Service {
                     END
         `, [scheduleId, isEnabled ? 1 : 0]);
         this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+    }
+
+    /**
+     * Gets the {@link Schedule} that is currently enabled, or undefined if no {@link Schedule} is enabled.
+     */
+    public async getEnabled(): Promise<Schedule | undefined> {
+        const result: SQLResultSet = await this.db.execute(`
+            SELECT *
+            FROM schedule
+            WHERE
+                isEnabled = 1
+        `);
+
+        return result.rows.length > 0 ? Schedule.load(this.db, result.rows.item(0)) : undefined;
     }
 
     /**

@@ -46,10 +46,15 @@ export class ScheduleService extends MockService {
     public async setIsEnabled(scheduleId: number, isEnabled: boolean): Promise<void> {
         const rows: MockRow[] = this.mockDb.selectAll("schedule");
         for (const row of rows) {
-            row.isEnabled = row.id === scheduleId;
+            row.isEnabled = (row.id === scheduleId) ? isEnabled : row.isEnabled;
             this.mockDb.update("schedule", row);
         }
         this.appDb.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+    }
+
+    public async getEnabled(): Promise<Schedule | undefined> {
+        const rows: MockRow[] = await this.mockDb.selectAll("schedule").filter((row: MockRow) => row.isEnabled);
+        return rows.length > 0 ? Schedule.load(this.appDb, rows[0]) : undefined;
     }
 
     public watchAll(): Watcher<Schedule> {
