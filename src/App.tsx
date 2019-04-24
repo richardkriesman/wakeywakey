@@ -7,8 +7,8 @@ import React, { ReactNode } from "react";
 import { ErrorHandlerCallback, Platform, StatusBar, StyleSheet, View } from "react-native";
 
 import AppNavigator from "./navigation/AppNavigator";
-import * as Log from "./utils/Log";
 import { AppDatabase } from "./utils/AppDatabase";
+import * as Log from "./utils/Log";
 
 export interface AppProps {
     skipLoadingScreen?: boolean;

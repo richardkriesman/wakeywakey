@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import Colors from "../constants/Colors";
 
 export interface EmptyViewProps {
@@ -14,11 +14,13 @@ export class EmptyView extends React.Component<EmptyViewProps> {
 
     public render(): React.ReactNode {
         return (
-            <View style={styles.container}>
-                <Ionicons name={this.props.icon} size={64} onPress={this.props.onPress}/>
-                <Text style={styles.title}>{this.props.title}</Text>
-                <Text style={styles.subtitle}>{this.props.subtitle}</Text>
-            </View>
+            <TouchableWithoutFeedback onPress={this.props.onPress}>
+                <View style={styles.container}>
+                    <Ionicons name={this.props.icon} size={64} />
+                    <Text style={styles.title}>{this.props.title}</Text>
+                    <Text style={styles.subtitle}>{this.props.subtitle}</Text>
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 
