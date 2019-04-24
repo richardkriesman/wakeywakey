@@ -29,8 +29,6 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     private static handleLoadingError(error: Error): void {
-        // In this case, you might want to report the error to your error
-        // reporting service, for example Sentry
         Log.critical("Global", error);
     }
 
@@ -52,6 +50,11 @@ export default class App extends React.Component<AppProps, AppState> {
         AppTimer.start();
     }
 
+    /**
+     * Render the AppLoading screen if loading, else render the AppNavigator.
+     * Passing the AppDatabase thru the AppNavigator via screenProps suggested by Miika.
+     * Using SplashScreen to hide awkward loading screens suggested by Richard.
+     */
     public render(): ReactNode {
         if ((!this.state.isLoadingComplete && !this.props.skipLoadingScreen) || !this.state.db) {
             return (
