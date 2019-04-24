@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 
 import React from "react";
+import { Platform } from "react-native";
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
 import { HeaderIconButton } from "../components/HeaderIconButton";
@@ -73,6 +74,17 @@ export default createStackNavigator(
 
     // stack config
     {
+        defaultNavigationOptions: {
+            headerTitleStyle: {
+                ...Platform.select({
+                    android: {
+                        fontFamily: "Roboto"
+                    },
+                    ios: {}
+                })
+            }
+        },
+
         initialRouteName: "Home",
 
         initialRouteParams: {
