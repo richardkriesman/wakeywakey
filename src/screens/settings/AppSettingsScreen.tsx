@@ -36,13 +36,13 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
                 <BooleanPreference
                     disabled={this.state.loading}
                     value={this.state.twentyFourHour}
-                    title="24-Hour Clock"
+                    title="24-hour clock"
                     onValueChange={this.on24hTimeChanged.bind(this)}
                 />
 
                 <TouchPreference
                     disabled={this.state.loading}
-                    title="Change Passcode"
+                    title="Change passcode"
                     onValueChange={AppSettingsScreen.onPasscodeChanged.bind(this)}
                     onPress={this.changePasscode.bind(this)}
                     rightIcon={{ name: "arrow-forward" }}

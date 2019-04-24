@@ -6,11 +6,12 @@ import React, { ReactNode } from "react";
 import { SectionList, StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
+import { Button } from "react-native-elements";
 import { EmptyView } from "../../components/EmptyView";
 import { ListHeader, ListItem } from "../../components/list";
 import Colors from "../../constants/Colors";
 import { Schedule } from "../../models";
-import { Alarm } from "../../models/Alarm";
+import { Alarm, AlarmDay } from "../../models/Alarm";
 import { AlarmService } from "../../services/AlarmService";
 import AlarmUtils from "../../utils/AlarmUtils";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
@@ -19,6 +20,7 @@ import { Watcher } from "../../utils/watcher/Watcher";
 
 export interface EditScheduleScreenState {
     alarms: Map<number, Alarm>;
+    isAddButtonDisabled: boolean;
     schedule?: Schedule;
 }
 
@@ -36,6 +38,7 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     public componentWillMount(): void {
         this.setState({
             alarms: new Map(),
+            isAddButtonDisabled: false,
             schedule: this.props.navigation.getParam("schedule") || null
         }, () => { // got the schedule, watch for alarms
             this.watcher = this.getService(AlarmService).watchBySchedule(this.state.schedule);
@@ -65,14 +68,22 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                         renderSectionHeader={({ section }) => <ListHeader title={section.title}/>}
                         sections={[ { data: Array.from(this.state.alarms.values()), title: "Alarms"} ]}
                     />
+                    <View style={styles.footer}>
+                        <Button
+                            disabled={this.state.isAddButtonDisabled}
+                            title="Add alarm"
+                            onPress={this.onCreateAlarmPressed.bind(this)}
+                        />
+                    </View>
                 </View>
             );
         } else { // no alarms, render an empty state
             return (
                 <EmptyView
                     icon="ios-alarm"
+                    onPress={this.onCreateAlarmPressed.bind(this)}
                     title="No alarms yet"
-                    subtitle="Create an alarm to set your child's bedtime" />
+                    subtitle="Tap here to create one!" />
             );
         }
     }
@@ -88,15 +99,29 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     private onDataSetChanged(alarms: Alarm[]): void {
 
         // build a new map of alarms
+        let remainingDays: number = AlarmDay.Monday | AlarmDay.Tuesday | AlarmDay.Wednesday | AlarmDay.Thursday |
+            AlarmDay.Friday | AlarmDay.Saturday | AlarmDay.Sunday;
         const alarmItems: Map<number, Alarm> = new Map();
         for (const alarm of alarms) {
+            remainingDays &= ~alarm.days; // remove alarm's days from remaining days
             alarmItems.set(alarm.id, alarm);
         }
 
         // replace the existing alarm map
         this.setState({
-            alarms: alarmItems
+            alarms: alarmItems,
+            isAddButtonDisabled: remainingDays === 0
         });
+    }
+
+    private onCreateAlarmPressed(): void {
+
+        // present the edit alarm screen
+        this.present("EditAlarm", {
+            schedule: this.state.schedule,
+            title: "Add alarm"
+        });
+
     }
 
 }
@@ -123,6 +148,11 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.headerBackground,
         marginBottom: 20,
         marginTop: 10
+    },
+    footer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        padding: 20
     },
     saveButton: {
         color: Colors.appleButtonBlue,

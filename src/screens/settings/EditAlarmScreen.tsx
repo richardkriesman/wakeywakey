@@ -7,6 +7,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Divider } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
+import { DestructiveButton } from "../../components/DestructiveButton";
 import { ListHeader, ListItem } from "../../components/list";
 import { TimePicker } from "../../components/TimePicker";
 import { ToggleButton } from "../../components/ToggleButton";
@@ -93,12 +94,13 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
         // render delete button if the alarm already exists
         let deleteButton: ReactNode | undefined;
         if (this.state.alarm) {
-            deleteButton = <Button
-                buttonStyle={styles.deleteButton}
-                containerStyle={styles.deleteButtonContainer}
-                onPress={this.onDeletePress.bind(this)}
-                titleStyle={styles.deleteButtonTitle}
-                title="Delete alarm"/>;
+            deleteButton = (
+                <View style={styles.footer}>
+                    <DestructiveButton
+                        onPress={this.onDeletePress.bind(this)}
+                        title="Delete alarm" />
+                </View>
+            );
         }
 
         return (
@@ -298,19 +300,15 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         paddingHorizontal: 20
     },
-    deleteButton: {
-        backgroundColor: Colors.appleButtonRed
-    },
-    deleteButtonContainer: {
-        padding: 20
-    },
-    deleteButtonTitle: {
-        color: "#fff"
-    },
     divider: {
         backgroundColor: Colors.headerBackground,
         marginBottom: 20,
         marginTop: 10
+    },
+    footer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        padding: 20
     },
     saveButton: {
         color: Colors.appleButtonBlue,

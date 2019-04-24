@@ -18,7 +18,9 @@ export class EmptyView extends React.Component<EmptyViewProps> {
                 <View style={styles.container}>
                     <Ionicons name={this.props.icon} size={64} />
                     <Text style={styles.title}>{this.props.title}</Text>
-                    <Text style={styles.subtitle}>{this.props.subtitle}</Text>
+                    <Text style={[styles.subtitle, this.props.onPress && styles.touchableSubtitle]}>
+                        {this.props.subtitle}
+                    </Text>
                 </View>
             </TouchableWithoutFeedback>
         );
@@ -38,5 +40,8 @@ export const styles = StyleSheet.create({
     },
     title: {
         fontSize: 17
+    },
+    touchableSubtitle: {
+        color: Colors.appleButtonBlue
     }
 });
