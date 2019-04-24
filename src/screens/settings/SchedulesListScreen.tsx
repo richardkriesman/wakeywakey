@@ -7,7 +7,7 @@ import { SectionList, StyleSheet, View } from "react-native";
 import { Button } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
-import { HeaderIconButton, ScheduleListItem } from "../../components";
+import { ScheduleListItem } from "../../components";
 import { EmptyView } from "../../components/EmptyView";
 import { ListHeader } from "../../components/list/ListHeader";
 import { TextInputModal } from "../../components/modal";
@@ -142,8 +142,7 @@ export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreen
                     />
                     <View style={styles.footer}>
                         <Button
-                            title="Add Schedule"
-                            containerStyle={styles.footer}
+                            title="Add schedule"
                             onPress={this.showModal.bind(this)}
                         />
                     </View>
@@ -204,13 +203,13 @@ const styles = StyleSheet.create({
     },
     footer: {
         flex: 1,
-        justifyContent: "flex-end"
+        justifyContent: "flex-end",
+        padding: 20
     },
     header: {
         flexDirection: "row"
     },
     viewScroller: {
-        flex: 1,
-        padding: 20
+        flex: 1
     }
 });

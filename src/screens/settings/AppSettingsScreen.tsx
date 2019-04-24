@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { BooleanPreference } from "../../components/AppSettingsScreen/BooleanPreference";
 import { TouchPreference } from "../../components/AppSettingsScreen/TouchPreference";
-import Colors from "../../constants/Colors";
+import { ListHeader } from "../../components/list/ListHeader";
 import { PreferencesService } from "../../services/PreferencesService";
 import * as Log from "../../utils/Log";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
@@ -31,7 +31,7 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
     public renderContent(): React.ReactNode {
         return (
             <View style={styles.viewScroller}>
-                <Text style={styles.textSectionHeader}>Preferences</Text>
+                <ListHeader title="Preferences" />
 
                 <BooleanPreference
                     disabled={this.state.loading}
@@ -83,14 +83,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-end"
     },
-    textSectionHeader: {
-        color: Colors.subheaderColor,
-        fontSize: 17,
-        fontWeight: "600",
-        marginBottom: 10
-    },
     viewScroller: {
-        flex: 1,
-        padding: 20
+        flex: 1
     }
 });
