@@ -1,8 +1,8 @@
 import * as React from "react";
-import { IconProps } from "react-native-elements";
+import { IconProps, ListItem, ListItemProps } from "react-native-elements";
 
 export interface PreferenceItemProps<T> {
-    value: T;
+    value?: T;
     disabled: boolean;
     title: string;
     subtitle?: string;
@@ -12,4 +12,17 @@ export interface PreferenceItemProps<T> {
 }
 
 export abstract class PreferenceItem<T> extends React.Component<PreferenceItemProps<T>> {
+    public render(): React.ReactNode {
+        return (
+            <ListItem
+                title={this.props.title}
+                subtitle={this.props.subtitle}
+                rightIcon={this.props.rightIcon}
+                onPress={this.props.onPress}
+                {...this.extraProps()}
+            />
+        );
+    }
+
+    protected abstract extraProps(): Partial<ListItemProps>;
 }
