@@ -1,16 +1,26 @@
 /**
  * @module screens
  */
-
 import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationScreenProps } from "react-navigation";
 import { EmptyView } from "../components/EmptyView";
-import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
+
+import {
+    Clock,
+    HomeScreenAlarmState,
+    HomeScreenAlarmStateType,
+    SlideUpIndicator,
+    SnoozeButton
+} from "../components/HomeScreen";
+import { AlarmState } from "../components/HomeScreen/AlarmState";
+
 import { InactivityHandler } from "../components/InactivityHandler";
 import { PreferencesService } from "../services/PreferencesService";
+import { AlarmEvent, TimerService } from "../services/TimerService";
+import * as Log from "../utils/Log";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -26,9 +36,10 @@ export interface HomeScreenProps {
  * @author Richard Kriesman
  */
 interface HomeScreenState {
+    alarmState: HomeScreenAlarmState;
+    loaded: boolean;
     messageText: string;
     twentyFourHour: boolean;
-    loaded: boolean;
 }
 
 /**
@@ -40,15 +51,29 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public static defaultInitialMessageText: string = "Hello, world!";
 
+    private static onRefreshError(err: any): void {
+        Log.error("HomeScreen", err);
+    }
+
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
-        this.state = { loaded: false, messageText: "", twentyFourHour: false };
+        this.state = {
+            alarmState: { type: HomeScreenAlarmStateType.NONE },
+            loaded: false,
+            messageText: "",
+            twentyFourHour: false
+        };
     }
 
     public componentWillMount(): void {
-        this.refresh().then(() => {
-            SplashScreen.hide();
-        });
+        this.refresh()
+            .then(() => {
+                // loaded fine. hide splash screen and bind events.
+                SplashScreen.hide();
+
+                this.getService(TimerService).on("alarm", this.onAlarmEventFired.bind(this));
+            })
+            .catch(HomeScreen.onRefreshError.bind(this));
     }
 
     public renderContent(): ReactNode {
@@ -60,6 +85,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
             </View>
         );
 
+        // thanks to SplashScreen, this should never actually appear to the user. keeping it here just to be safe.
         const notLoadedContent = <EmptyView icon="ios-cog" title="Loading" subtitle="Just a sec!"/>;
 
         return (
@@ -86,7 +112,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     protected componentWillFocus(): void {
-        this.refresh();
+        this.refresh().catch(HomeScreen.onRefreshError.bind(this));
     }
 
     private async refresh(): Promise<void> {
@@ -99,13 +125,24 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         return this.fullDatabaseRead().then(this.updateState.bind(this));
     }
 
-    private async fullDatabaseRead(): Promise<HomeScreenState> {
+    private async fullDatabaseRead(): Promise<Partial<HomeScreenState>> {
         const pref: PreferencesService = this.getService(PreferencesService);
         return {
             loaded: true,
             messageText: "Hello, world!",
             twentyFourHour: await pref.get24HourTime()
         };
+    }
+
+    private onAlarmEventFired(when: Date, event: AlarmEvent): void {
+        if (this.state.alarmState.alarm && event.alarm.id === this.state.alarmState.alarm.id) {
+            // this is the same alarm that we are already aware of. bail out.
+            return;
+        }
+
+        const newState: AlarmState = AlarmState.fromAlarmEvent(event);
+        Log.info("HomeScreen", `${when.getTime()} - alarm event fired. new alarm state: ${newState}`);
+        this.updateState({ alarmState: newState, messageText: AlarmState.getMessageText(newState) });
     }
 }
 
