@@ -102,11 +102,26 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     }
 
     public onAlarmPressed(key: number): void {
-        this.present("EditAlarm", {
-            alarm: this.state.alarms.get(key),
-            schedule: this.state.schedule,
-            title: "Edit alarm"
+        this.getActiveDays().then((activeDays: number) => {
+            this.present("EditAlarm", {
+                activeDays,
+                alarm: this.state.alarms.get(key),
+                schedule: this.state.schedule,
+                title: "Edit alarm"
+            });
         });
+    }
+
+    private async getActiveDays(): Promise<number> {
+        const alarms: Alarm[] = await this.getService(AlarmService).getBySchedule(this.state.schedule);
+
+        // build characteristic vector of days in use in alarms
+        let activeDays: number = 0;
+        for (const alarm of alarms) {
+            activeDays |= alarm.days; // add days in the alarm to the characteristic vector
+        }
+
+        return activeDays;
     }
 
     private onDataSetChanged(alarms: Alarm[]): void {
@@ -130,9 +145,13 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     private onCreateAlarmPressed(): void {
 
         // present the edit alarm screen
-        this.present("EditAlarm", {
-            schedule: this.state.schedule,
-            title: "Add alarm"
+        this.getActiveDays().then((activeDays: number) => {
+            this.present("EditAlarm", {
+                activeDays,
+                is24HourTime: this.state.is24HourTime,
+                schedule: this.state.schedule,
+                title: "Add alarm"
+            });
         });
 
     }
