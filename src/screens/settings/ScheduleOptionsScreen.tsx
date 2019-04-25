@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     textSectionHeader: {
-        color: Colors.subheaderColor,
+        color: Colors.common.text.subheader,
         fontSize: 17,
         fontWeight: "600",
         marginBottom: 10

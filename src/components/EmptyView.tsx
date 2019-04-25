@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
         justifyContent: "center"
     },
     subtitle: {
-        color: Colors.subheaderColor,
+        color: Colors.common.text.subheader,
         fontSize: 15
     },
     title: {
