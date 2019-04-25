@@ -6,7 +6,7 @@ import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { NavigationEvents, NavigationScreenProps } from "react-navigation";
+import { NavigationScreenProps } from "react-navigation";
 import { EmptyView } from "../components/EmptyView";
 import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { InactivityHandler } from "../components/InactivityHandler";
@@ -67,10 +67,6 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
                 idleTime={15000}
                 navigation={this.props.navigation}>
                 <KeepAwake/>
-                <NavigationEvents
-                    navigation={this.props.navigation}
-                    onWillFocus={this.refresh.bind(this)}
-                />
                 <View style={ExtraStyles.container}>
                     {this.state.loaded ? loadedContent : notLoadedContent}
                     <View style={ExtraStyles.bottom}>
@@ -87,6 +83,10 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public onSnoozePressed(): void {
         this.updateState({ messageText: "Alarm snoozed!" });
+    }
+
+    protected componentWillFocus(): void {
+        this.refresh();
     }
 
     private async refresh(): Promise<void> {

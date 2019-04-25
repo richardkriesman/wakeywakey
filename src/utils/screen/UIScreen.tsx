@@ -4,7 +4,7 @@
 
 import React, { ReactNode } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
-import { NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
+import { NavigationEvents, NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
 import * as Log from "../Log";
 import { Service } from "../Service";
@@ -12,7 +12,7 @@ import { Service } from "../Service";
 export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & NavigationScreenProps, S> {
 
     // noinspection UnterminatedStatementJS - keeps WebStorm from giving a suggestion that conflicts with TSLint
-    public static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
+    public static navigationOptions = ({navigation}: NavigationScreenProps) => ({
         title: navigation.getParam("title", "Untitled")
     })
 
@@ -47,7 +47,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * Dismisses this {@link Screen}, revealing the screen below it.
      */
     public dismiss(): void {
-        this.props.navigation.dispatch(StackActions.pop({ n: 1 }));
+        this.props.navigation.dispatch(StackActions.pop({n: 1}));
     }
 
     /**
@@ -79,9 +79,31 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     public render(): ReactNode {
         return (
             <SafeAreaView style={styles.container}>
+                <NavigationEvents
+                    onDidBlur={this.componentDidBlur.bind(this)}
+                    onDidFocus={this.componentDidFocus.bind(this)}
+                    onWillBlur={this.componentWillBlur.bind(this)}
+                    onWillFocus={this.componentWillFocus.bind(this)}
+                    navigation={this.props.navigation}/>
                 {this.renderContent()}
             </SafeAreaView>
         );
+    }
+
+    protected componentDidBlur(): void {
+        return;
+    }
+
+    protected componentDidFocus(): void {
+        return;
+    }
+
+    protected componentWillBlur(): void {
+        return;
+    }
+
+    protected componentWillFocus(): void {
+        return;
     }
 
     /**
