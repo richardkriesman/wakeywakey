@@ -9,6 +9,8 @@ import { AppDatabase } from "../AppDatabase";
 import * as Log from "../Log";
 import { Service } from "../Service";
 
+type UIScreenUpdateStateCallback = () => void;
+
 export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & NavigationScreenProps, S> {
 
     // noinspection UnterminatedStatementJS - keeps WebStorm from giving a suggestion that conflicts with TSLint
@@ -113,7 +115,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @param newValues A new set of values to copy into the state
      * @param cb Optional callback for setState
      */
-    protected updateState(newValues: object, cb?: () => void): void {
+    protected updateState(newValues: Partial<S>, cb?: UIScreenUpdateStateCallback): void {
         const temp = Object.assign({}, this.state);
         const newState = Object.assign(temp, newValues);
         this.setState(newState, cb);
