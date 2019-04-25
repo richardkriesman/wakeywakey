@@ -69,7 +69,7 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
 
     private on24hTimeChanged(value: boolean): void {
         this.set24hTime(value).then(() => {
-            this.updateState({ twentyFourHours: value });
+            this.updateState({ twentyFourHour: value });
         });
     }
 
