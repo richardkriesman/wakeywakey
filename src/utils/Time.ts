@@ -155,4 +155,9 @@ export class Time {
 
         return Time.createFromTotalSeconds(totalSeconds);
     }
+
+    /** Converts this {@link Time} object into a string. */
+    public toString(): string {
+        return `${this.hour}:${this.minute}:${this.second}`;
+    }
 }
