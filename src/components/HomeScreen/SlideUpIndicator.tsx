@@ -6,6 +6,7 @@ import React, { ReactNode } from "react";
 import { StyleSheet } from "react-native";
 
 import { Button, Icon } from "react-native-elements";
+import Colors from "../../constants/Colors";
 
 /**
  * Properties that must be passed to <SlideUpIndicator />
@@ -49,7 +50,7 @@ export class SlideUpIndicator extends React.Component<SlideUpIndicatorProps> {
 
 const styles = StyleSheet.create({
     indicator: {
-        backgroundColor: "black",
+        backgroundColor: Colors.black,
         width: "100%"
     }
 });

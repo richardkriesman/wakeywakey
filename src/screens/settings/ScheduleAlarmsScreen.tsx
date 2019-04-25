@@ -160,7 +160,7 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
 
 const styles = StyleSheet.create({
     cancelButton: {
-        color: Colors.appleButtonRed,
+        color: Colors.common.tint.destructive,
         marginLeft: 10
     },
     daySelector: {
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-around"
     },
     deleteButton: {
-        backgroundColor: Colors.appleButtonRed
+        backgroundColor: Colors.common.tint.destructive
     },
     deleteButtonContainer: {
         padding: 20
@@ -176,18 +176,13 @@ const styles = StyleSheet.create({
     deleteButtonTitle: {
         color: "#fff"
     },
-    divider: {
-        backgroundColor: Colors.headerBackground,
-        marginBottom: 20,
-        marginTop: 10
-    },
     footer: {
         flex: 1,
         justifyContent: "flex-end",
         padding: 20
     },
     saveButton: {
-        color: Colors.appleButtonBlue,
+        color: Colors.common.tint.constructive,
         fontWeight: "500",
         marginRight: 10
     },

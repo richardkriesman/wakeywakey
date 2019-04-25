@@ -18,6 +18,6 @@ export class DestructiveButton extends React.Component<ButtonProps> {
 
 const theme: Theme = {
     colors: {
-        primary: Colors.appleButtonRed
+        primary: Colors.common.tint.destructive
     }
 };

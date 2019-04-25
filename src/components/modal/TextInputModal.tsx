@@ -98,7 +98,7 @@ export const style = StyleSheet.create({
         padding: 24
     },
     footer: {
-        borderTopColor: Colors.alertFooterSeparator,
+        borderTopColor: Colors.common.alert.separator,
         borderTopWidth: 1,
         flexDirection: "row",
         justifyContent: "flex-end",
@@ -111,7 +111,7 @@ export const style = StyleSheet.create({
         paddingHorizontal: 0 // override 10px padding on ends of input
     },
     inputContainer: {
-        borderBottomColor: Colors.alertFooterSeparator
+        borderBottomColor: Colors.common.alert.separator
     },
     panel: {
         backgroundColor: Colors.white,

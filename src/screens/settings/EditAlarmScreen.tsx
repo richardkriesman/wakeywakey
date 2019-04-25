@@ -274,7 +274,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
 const styles = StyleSheet.create({
     alarmTitleError: {
-        color: Colors.appleButtonRed
+        color: Colors.common.tint.destructive
     },
     daySelector: {
         flexDirection: "row",
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     divider: {
-        backgroundColor: Colors.headerBackground,
+        backgroundColor: Colors.common.screen.background,
         marginBottom: 20,
         marginTop: 10
     },
@@ -292,15 +292,9 @@ const styles = StyleSheet.create({
         padding: 20
     },
     saveButton: {
-        color: Colors.appleButtonBlue,
+        color: Colors.common.tint.constructive,
         fontWeight: "500",
         marginRight: 10
-    },
-    textSectionHeader: {
-        color: Colors.subheaderColor,
-        fontSize: 17,
-        fontWeight: "600",
-        marginBottom: 10
     },
     viewScroller: {
         flex: 1

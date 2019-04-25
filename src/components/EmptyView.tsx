@@ -42,6 +42,6 @@ export const styles = StyleSheet.create({
         fontSize: 17
     },
     touchableSubtitle: {
-        color: Colors.appleButtonBlue
+        color: Colors.common.tint.constructive
     }
 });

@@ -3,7 +3,7 @@
  */
 
 import React, { ReactNode } from "react";
-import { Icon, ListItem } from "react-native-elements";
+import { ListItem } from "../list/ListItem";
 
 export interface ScheduleListItemProps {
     enabled: boolean;
