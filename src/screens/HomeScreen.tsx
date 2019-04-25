@@ -22,6 +22,7 @@ import { PreferencesService } from "../services/PreferencesService";
 import { AlarmEvent, TimerService } from "../services/TimerService";
 import * as Log from "../utils/Log";
 import { NoHeader, UIScreen } from "../utils/screen";
+import { Time } from "../utils/Time";
 
 /**
  * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.
@@ -135,13 +136,15 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     private onAlarmEventFired(when: Date, event: AlarmEvent): void {
+        Log.debug("HomeScreen", `handling alarm event at ${Time.createFromDate(when)}: ${event.type}`);
+
         if (this.state.alarmState.alarm && event.alarm.id === this.state.alarmState.alarm.id) {
             // this is the same alarm that we are already aware of. bail out.
             return;
         }
 
         const newState: AlarmState = AlarmState.fromAlarmEvent(event);
-        Log.info("HomeScreen", `${when.getTime()} - alarm event fired. new alarm state: ${newState}`);
+        Log.debug("HomeScreen", `${when.getTime()} - alarm event fired. new alarm state: ${newState}`);
         this.updateState({ alarmState: newState, messageText: AlarmState.getMessageText(newState) });
     }
 }

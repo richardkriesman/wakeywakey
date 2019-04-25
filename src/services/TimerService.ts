@@ -135,6 +135,9 @@ export class TimerService extends Service {
      * @param alarmEvent An optional {@link AlarmEvent} to pass along to each handler, if appropriate
      */
     private fireAll(event: TimerEvent, date?: Date, alarmEvent?: AlarmEvent) {
+        const timeNow = date ? Time.createFromDate(date) : null;
+        Log.debug("TimerService", `firing event ${event} at ${timeNow || "(?)"} with alarmEvent: ${alarmEvent}`);
+
         const handlersArr = this.handlers.get(event);
 
         // bail out if no handlers are registered
@@ -208,6 +211,7 @@ export class TimerService extends Service {
         const timesMap = TimerService.alarmTimesAsMap(alarm);
         Array.from(timesMap.entries()).forEach((e: [AlarmEventType, Time]) => {
             // ignore seconds, in case this fires a second too early or late
+            Log.debug("TimerService", `checking whether ${e[0]} should fire: has time ${e[1]}`);
             if (e[1].equals(nowTime, true)) {
                 this.fireAll(TimerEvent.ALARM, now, { alarm, type: e[0] });
             }
