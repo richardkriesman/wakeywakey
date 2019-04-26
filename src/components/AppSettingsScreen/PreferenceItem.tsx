@@ -7,11 +7,11 @@ export interface PreferenceItemProps<T> {
     title: string;
     subtitle?: string;
     rightIcon?: Partial<IconProps> | React.ReactElement<{}>;
-    onValueChange: (value: T) => void;
+    onValueChange?: (value: T) => void;
     onPress?: () => void;
 }
 
-export abstract class PreferenceItem<T> extends React.Component<PreferenceItemProps<T>> {
+export abstract class PreferenceItem<T extends PreferenceItemProps<any>> extends React.Component<T> {
     public render(): React.ReactNode {
         return (
             <ListItem

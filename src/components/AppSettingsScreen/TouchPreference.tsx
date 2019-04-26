@@ -1,7 +1,11 @@
 import { ListItemProps } from "react-native-elements";
-import { PreferenceItem } from "./PreferenceItem";
+import { PreferenceItem, PreferenceItemProps } from "./PreferenceItem";
 
-export class TouchPreference extends PreferenceItem<any> {
+export interface TouchPreferenceProps extends PreferenceItemProps<any> {
+    onPress(): void;
+}
+
+export class TouchPreference extends PreferenceItem<TouchPreferenceProps> {
     protected extraProps(): Partial<ListItemProps> {
         return {};
     }
