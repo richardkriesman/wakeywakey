@@ -9,7 +9,6 @@ import { UIScreen } from "../utils/screen/UIScreen";
 
 export interface PasscodeGateScreenState {
     hasPasscode: boolean;
-    verified: boolean;
     successScreenKey: string;
 }
 
@@ -39,8 +38,7 @@ export default class PasscodeGateScreen extends UIScreen<{}, PasscodeGateScreenS
         super(props);
         this.state = {
             hasPasscode: props.navigation.getParam("hasPasscode"),
-            successScreenKey: props.navigation.getParam("successScreenKey"),
-            verified: false
+            successScreenKey: props.navigation.getParam("successScreenKey")
         };
     }
 
@@ -67,16 +65,9 @@ export default class PasscodeGateScreen extends UIScreen<{}, PasscodeGateScreenS
         );
     }
 
-    protected componentWillFocus(): void {
-        // if we've already completed this gate, dismiss it immediately
-        if (this.state.verified) {
-            this.dismiss();
-        }
-    }
-
-    private onSuccess(): void {
-        this.updateState({ verified: true });
-        this.present(this.state.successScreenKey);
+    private async onSuccess(passcode: string): Promise<void> {
+        await this.getService(PasscodeService).setPasscode(passcode);
+        this.replace(this.state.successScreenKey);
     }
 
     private async verifyPasscode(passcode: string): Promise<boolean> {
