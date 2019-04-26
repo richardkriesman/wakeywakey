@@ -46,7 +46,7 @@ export class ScheduleOptionsScreen extends UIScreen<{}, ScheduleOptionsScreenSta
 
                 <ListHeader title="Options" />
 
-                <ListItem leftIcon={schemeIcon} title = "Color Scheme" subtitle="Summer" rightIcon={forwardIcon}/>
+                <ListItem leftIcon={schemeIcon} title="Color Scheme" subtitle="Summer" rightIcon={forwardIcon}/>
                 <ListItem leftIcon={audioIcon} title="Audio" rightIcon={forwardIcon}/>
                 <ListItem leftIcon={snoozeIcon} title="Snooze" rightIcon={forwardIcon}/>
                 <ListItem leftIcon={clockIcon} title="Clock Style" subtitle="Digital" rightIcon={forwardIcon}/>
@@ -85,7 +85,6 @@ const schemeIcon = {name: "color-lens", type: "ionicons" };
 const audioIcon = {name: "headset", type: "ionicons"};
 const snoozeIcon = {name: "snooze", type: "ionicons"};
 const clockIcon = {name: "access-time", type: "ionicons"};
-
 
 const styles = StyleSheet.create({
     footer: {
