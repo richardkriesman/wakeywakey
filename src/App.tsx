@@ -11,6 +11,7 @@ import { AppDatabase } from "./utils/AppDatabase";
 import * as Log from "./utils/Log";
 
 export interface AppProps {
+    db?: AppDatabase;
     skipLoadingScreen?: boolean;
 }
 
@@ -39,7 +40,7 @@ export default class App extends React.Component<AppProps, AppState> {
         SplashScreen.preventAutoHide();
 
         this.state = {
-            db: null,
+            db: this.props.db || null,
             isLoadingComplete: false
         };
     }
