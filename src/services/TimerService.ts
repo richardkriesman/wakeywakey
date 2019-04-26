@@ -4,6 +4,7 @@
 import { Alarm } from "../models/Alarm";
 import { Schedule } from "../models/Schedule";
 import * as Log from "../utils/Log";
+import { getEnumKeyByValue } from "../utils/ObjectUtils";
 import { Service } from "../utils/Service";
 import { Time } from "../utils/Time";
 import { AlarmService } from "./AlarmService";
@@ -136,12 +137,10 @@ export class TimerService extends Service {
      */
     private fireAll(event: TimerEvent, date?: Date, alarmEvent?: AlarmEvent) {
         if (alarmEvent) { // log when alarms are fired
-            Log.info("TimerService", `Firing ${alarmEvent.type} alarm for Alarm ${alarmEvent.alarm.id}`);
+            const eventName: string = getEnumKeyByValue(AlarmEventType, alarmEvent.type);
+            Log.info("TimerService",
+                `Firing ${eventName} event for Alarm ${alarmEvent.alarm.id}`);
         }
-
-        // TODO: remove this later
-        const timeNow = date ? Time.createFromDate(date) : null;
-        Log.debug("TimerService", `firing event ${event} at ${timeNow || "(?)"} with alarmEvent: ${alarmEvent}`);
 
         const handlersArr = this.handlers.get(event);
 
@@ -207,8 +206,16 @@ export class TimerService extends Service {
      * @param alarm The alarm to check and possibly fire
      */
     private checkAlarm(now: Date, alarm: Alarm): void {
+
+        // get day of week as a characteristic vector
+        let dayOfWeek: number = now.getDay() - 1;
+        if (dayOfWeek < 0) { // now.getDay() starts on sunday, but we start with monday - normalize this
+            dayOfWeek = 6;
+        }
+        const today: number = 1 << dayOfWeek;
+
         // bail out if this alarm is not active today
-        if (!alarm.isDayActive(1 << now.getDay())) {
+        if (!alarm.isDayActive(today)) {
             return;
         }
 
@@ -217,7 +224,6 @@ export class TimerService extends Service {
         const timesMap = TimerService.alarmTimesAsMap(alarm);
         Array.from(timesMap.entries()).forEach((e: [AlarmEventType, Time]) => {
             // ignore seconds, in case this fires a second too early or late
-            Log.debug("TimerService", `checking whether ${e[0]} should fire: has time ${e[1]}`);
             if (e[1].equals(nowTime, true)) {
                 this.fireAll(TimerEvent.ALARM, now, { alarm, type: e[0] });
             }
