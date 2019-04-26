@@ -2,7 +2,7 @@
  * @module screens
  */
 
-import { KeepAwake, SplashScreen } from "expo";
+import { Audio, KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
@@ -10,17 +10,15 @@ import { NavigationScreenProps } from "react-navigation";
 import { EmptyView } from "../components/EmptyView";
 import {
     Clock,
-    HomeScreenAlarmState,
-    HomeScreenAlarmStateType,
     SlideUpIndicator,
     SnoozeButton
 } from "../components/HomeScreen";
-import { AlarmState } from "../components/HomeScreen/AlarmState";
 import { InactivityHandler } from "../components/InactivityHandler";
 import { PasscodeService } from "../services/PasscodeService";
 import { PreferencesService } from "../services/PreferencesService";
-import { AlarmEvent, TimerService } from "../services/TimerService";
+import { AlarmEvent, AlarmEventType, TimerService } from "../services/TimerService";
 import * as Log from "../utils/Log";
+import { getEnumKeyByValue } from "../utils/ObjectUtils";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -36,7 +34,8 @@ export interface HomeScreenProps {
  * @author Richard Kriesman
  */
 interface HomeScreenState {
-    alarmState: HomeScreenAlarmState;
+    activeAlarmEvent?: AlarmEvent;
+    activeSound?: Audio.Sound;
     loaded: boolean;
     messageText: string;
     twentyFourHour: boolean;
@@ -58,7 +57,6 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
         this.state = {
-            alarmState: { type: HomeScreenAlarmStateType.NONE },
             loaded: false,
             messageText: "",
             twentyFourHour: false
@@ -78,9 +76,9 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public renderContent(): ReactNode {
         const loadedContent = (
-            <View style={ExtraStyles.contentWrapper}>
-                <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
-                <Clock wrapperStyle={ExtraStyles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
+            <View style={styles.contentWrapper}>
+                <Text style={styles.message}>{this.state.messageText}</Text>
+                <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
                 <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
             </View>
         );
@@ -93,9 +91,9 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
                 idleTime={15000}
                 navigation={this.props.navigation}>
                 <KeepAwake/>
-                <View style={ExtraStyles.container}>
+                <View style={styles.container}>
                     {this.state.loaded ? loadedContent : notLoadedContent}
-                    <View style={ExtraStyles.bottom}>
+                    <View style={styles.bottom}>
                         <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
                     </View>
                 </View>
@@ -114,7 +112,12 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     public onSnoozePressed(): void {
-        this.updateState({ messageText: "Alarm snoozed!" });
+        this.stopAudio()
+            .then(() => {
+                this.updateState({
+                    messageText: "Alarm snoozed!"
+                });
+            });
     }
 
     protected componentWillFocus(): void {
@@ -124,7 +127,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     private async refresh(): Promise<void> {
         if (!this.getService(PreferencesService)) {
             this.setState({ messageText: this.props.initialMessageText });
-            this.forceUpdate();
+            this.forceUpdate(); // FIXME: this shouldn't do anything - test it and remove if so?
             return;
         }
 
@@ -141,17 +144,77 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     private onAlarmEventFired(when: Date, event: AlarmEvent): void {
-        if (this.state.alarmState.alarm && event.alarm.id === this.state.alarmState.alarm.id) {
-            // this is the same alarm that we are already aware of. bail out.
-            return;
+
+        // log the event change
+        const eventName: string = getEnumKeyByValue(AlarmEventType, event.type);
+        Log.info("HomeScreen", `Responding to event ${eventName} for Alarm ${event.alarm.id}`);
+
+        // set this event as the active one
+        this.setState({
+            activeAlarmEvent: event,
+            messageText: messageTextMap.get(event.type)
+        }, () => { // update alarm state
+
+            // start playing sound until dismissed
+            this.startAlarm();
+
+        });
+    }
+
+    private async startAlarm(): Promise<void> {
+
+        // set the audio mode to prevent interruptions by other apps
+        try {
+            await Audio.setAudioModeAsync({
+                allowsRecordingIOS: false, // we're not recording anything
+                interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX, // interrupt other apps on iOS
+                interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX, // interrupt other apps' audio on iOS
+                playsInSilentModeIOS: true, // ignore silent mode on iOS
+                shouldDuckAndroid: false // don't duck on android for other apps,
+            });
+        } catch (ex) {
+            Log.error("HomeScreen", "Audio mode configuration was rejected by the OS");
         }
 
-        const newState: AlarmState = AlarmState.fromAlarmEvent(event);
-        this.updateState({ alarmState: newState, messageText: AlarmState.getMessageText(newState) });
+        // play audio
+        const sound = new Audio.Sound();
+        this.setState({
+            activeSound: sound
+        }, () => {
+            // FIXME: proper async
+            sound.loadAsync(require("../../assets/audio/MusicBox.mp3")).then(() => {
+                return sound.setStatusAsync({
+                    isLooping: true,
+                    shouldPlay: true
+                });
+            });
+        });
+
+    }
+
+    private async stopAudio(): Promise<void> {
+        return new Promise<void>((accept, reject) => {
+            this.state.activeSound.stopAsync()
+                .then(() => {
+                    this.setState({
+                        activeSound: undefined
+                    }, () => {
+                        accept();
+                    });
+                })
+                .catch((err) => reject);
+        });
     }
 }
 
-const ExtraStyles = StyleSheet.create({
+const messageTextMap: Map<AlarmEventType|null, string> = new Map([
+    [null, "Hello, world!"],
+    [AlarmEventType.SLEEP, "Time for bed!"],
+    [AlarmEventType.WAKE, "Time to wake up!"],
+    [AlarmEventType.GET_UP, "Time to get up!"]
+]);
+
+const styles = StyleSheet.create({
     bottom: {
         alignItems: "center",
         bottom: -10,
