@@ -78,6 +78,23 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
         }));
     }
 
+    /**
+     * Replaces this {@link Screen} with another Screen.
+     *
+     * @author Miika Raina, Shawn Lutch
+     * @param routeName The name of the screen to present.
+     * @param params Additional parameters to pass through to the new Screen.
+     */
+    public replace(routeName: string, params?: NavigationParams): void {
+        this.props.navigation.dispatch(StackActions.replace({
+            params: {
+                db: this.db,
+                ...params
+            },
+            routeName
+        }));
+    }
+
     public render(): ReactNode {
         return (
             <SafeAreaView style={styles.container}>
@@ -92,18 +109,22 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
         );
     }
 
+    // noinspection JSMethodCanBeStatic
     protected componentDidBlur(): void {
         return;
     }
 
+    // noinspection JSMethodCanBeStatic
     protected componentDidFocus(): void {
         return;
     }
 
+    // noinspection JSMethodCanBeStatic
     protected componentWillBlur(): void {
         return;
     }
 
+    // noinspection JSMethodCanBeStatic
     protected componentWillFocus(): void {
         return;
     }
