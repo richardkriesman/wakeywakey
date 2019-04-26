@@ -14,7 +14,7 @@ export interface PasscodeInputProps {
     confirmPasscode: boolean; // whether to confirm, does nothing if verifyPasscode is set
     defaultConfirmText: string;
     defaultPromptText: string;
-    verifyPasscode?(passcode: string): boolean; // checks if passcode is correct
+    verifyPasscode?(passcode: string): Promise<boolean>; // checks if passcode is correct
 
     // required
     handleSuccess(passcode: string): void;
@@ -26,6 +26,8 @@ export interface PasscodeInputState {
     passcode: string;
     promptText: string;
 }
+
+type PasscodeEnteredEvent = ReactNative.NativeSyntheticEvent<ReactNative.TextInputSubmitEditingEventData>;
 
 /**
  * PasscodeInput
@@ -56,10 +58,10 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
         });
     }
 
-    public handleChangeText(passcode: string): void {
+    public async handleChangeText(passcode: string): Promise<void> {
         if (passcode.length === PASSCODE_LENGTH) { // passcode correct length
             if (!this.state.isConfirming) {
-                this.handleChoosingPasscode(passcode);
+                await this.handleChoosingPasscode(passcode);
             } else {
                 this.handleConfirmingPasscode(passcode);
             }
@@ -70,8 +72,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
         }
     }
 
-    public handleSubmitEditing(event:
-            ReactNative.NativeSyntheticEvent<ReactNative.TextInputSubmitEditingEventData>): void {
+    public handleSubmitEditing(event: PasscodeEnteredEvent): void {
         const passcode: string = event.nativeEvent.text;
 
         if (passcode.length !== PASSCODE_LENGTH) { // passcode too short
@@ -86,9 +87,9 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
      * Sets the state to confirming.
      * If verifyPasscode is set, checks if passcode is equal. If not equal, resets.
      */
-    public handleChoosingPasscode(passcode: string): void {
+    public async handleChoosingPasscode(passcode: string): Promise<void> {
         if (this.props.verifyPasscode) {
-            if (this.props.verifyPasscode(passcode)) { // correct passcode
+            if (await this.props.verifyPasscode(passcode)) { // correct passcode
                 this.props.handleSuccess(passcode); // done!
             } else { // incorrect passcode
                 this.setState({

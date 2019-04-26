@@ -368,7 +368,7 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#ffffff",
           "height": 0.5,
           "marginBottom": 20,
           "marginTop": 10,
@@ -710,7 +710,7 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#ffffff",
           "height": 0.5,
           "marginBottom": 20,
           "marginTop": 10,

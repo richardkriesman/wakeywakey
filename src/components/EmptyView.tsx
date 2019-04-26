@@ -35,13 +35,13 @@ export const styles = StyleSheet.create({
         justifyContent: "center"
     },
     subtitle: {
-        color: Colors.subheaderColor,
+        color: Colors.common.text.subheader,
         fontSize: 15
     },
     title: {
         fontSize: 17
     },
     touchableSubtitle: {
-        color: Colors.appleButtonBlue
+        color: Colors.common.tint.constructive
     }
 });

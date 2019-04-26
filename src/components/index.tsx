@@ -8,7 +8,6 @@
 export { Clock, SlideUpIndicator, SnoozeButton } from "./HomeScreen";
 export { ScheduleListItem } from "./MainSettingsScreen";
 export { HeaderIconButton } from "./HeaderIconButton";
-export { HeaderBackButton } from "./HeaderBackButton";
 export { ListHeader } from "./list/ListHeader";
 export { InactivityHandler } from "./InactivityHandler";
 export { PasscodeInput } from "./PasscodeInput";

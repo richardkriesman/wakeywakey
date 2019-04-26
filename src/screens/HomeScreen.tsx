@@ -1,6 +1,7 @@
 /**
  * @module screens
  */
+
 import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -23,6 +24,7 @@ import { AlarmEvent, TimerService } from "../services/TimerService";
 import * as Log from "../utils/Log";
 import { NoHeader, UIScreen } from "../utils/screen";
 import { Time } from "../utils/Time";
+import { PasscodeService } from "../services/PasscodeService";
 
 /**
  * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.
@@ -104,8 +106,14 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         );
     }
 
-    public switchToSettings(): void {
-        this.present("SettingsMain", { screen: this });
+    public async switchToSettings(): Promise<void> {
+        const hasPasscode: boolean = await this.getService(PasscodeService).hasPasscode();
+        this.present("PasscodeGate", {
+            backButtonName: "Home",
+            hasPasscode,
+            screen: this,
+            successScreenKey: "SettingsMain"
+        });
     }
 
     public onSnoozePressed(): void {
@@ -161,7 +169,6 @@ const ExtraStyles = StyleSheet.create({
     clockWrapper: {},
     container: {
         alignItems: "center",
-        flex: 1,
         marginTop: 20,
         padding: 0
     },

@@ -88,12 +88,14 @@ exports[`renders title correctly 1`] = `
       onChange={[Function]}
       onResponderTerminationRequest={[Function]}
       onStartShouldSetResponder={[Function]}
+      onTintColor="#007aff"
       style={
         Object {
           "height": 31,
           "width": 51,
         }
       }
+      tintColor="#e7e7e7"
       value={true}
     />
     <View
@@ -242,12 +244,14 @@ exports[`sets the toggle switch with props correctly disabled 1`] = `
       onChange={[Function]}
       onResponderTerminationRequest={[Function]}
       onStartShouldSetResponder={[Function]}
+      onTintColor="#007aff"
       style={
         Object {
           "height": 31,
           "width": 51,
         }
       }
+      tintColor="#e7e7e7"
       value={false}
     />
     <View
@@ -396,12 +400,14 @@ exports[`sets the toggle switch with props correctly enabled 1`] = `
       onChange={[Function]}
       onResponderTerminationRequest={[Function]}
       onStartShouldSetResponder={[Function]}
+      onTintColor="#007aff"
       style={
         Object {
           "height": 31,
           "width": 51,
         }
       }
+      tintColor="#e7e7e7"
       value={true}
     />
     <View

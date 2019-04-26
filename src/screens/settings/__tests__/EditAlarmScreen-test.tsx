@@ -13,19 +13,25 @@ jest.mock("../../../services/ScheduleService");
 let alarm: Alarm;
 let env: TestEnvironment;
 let schedule: Schedule;
-beforeEach(async (done) => {
-    env = await TestEnvironment.init();
-    env.timing.date = 0;
-
-    // create a new alarm
-    schedule = await env.db.getService(ScheduleService).create("Test schedule");
-    alarm = await env.db.getService(AlarmService).create(schedule,
-        Time.createFromTotalSeconds(72000),
-        Time.createFromTotalSeconds(21600),
-        Time.createFromTotalSeconds(25200),
-        AlarmDay.Monday | AlarmDay.Wednesday | AlarmDay.Friday);
-
-    done();
+beforeEach((done) => {
+    TestEnvironment.init() // create new test env
+        .then((newEnv) => {
+            env = newEnv;
+            env.timing.date = 0;
+            return env.db.getService(ScheduleService).create("Test schedule"); // create new test schedule
+        })
+        .then((newSchedule) => {
+            schedule = newSchedule;
+            return env.db.getService(AlarmService).create(schedule, // create new test alarm
+                Time.createFromTotalSeconds(72000),
+                Time.createFromTotalSeconds(21600),
+                Time.createFromTotalSeconds(25200),
+                AlarmDay.Monday | AlarmDay.Wednesday | AlarmDay.Friday);
+        })
+        .then((newAlarm) => {
+            alarm = newAlarm;
+            done();
+        });
 });
 
 it("renders correctly", () => {
@@ -33,7 +39,9 @@ it("renders correctly", () => {
     // create props
     const props = env.emptyUIScreenProps;
     props.navigation.setParams({
+        activeDays: 0,
         alarm,
+        is24HourTime: false,
         schedule
     });
 

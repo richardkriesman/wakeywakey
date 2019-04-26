@@ -15,7 +15,6 @@ import Colors from "../../constants/Colors";
 import { Alarm, AlarmDay } from "../../models/Alarm";
 import { Schedule } from "../../models/Schedule";
 import { AlarmService } from "../../services/AlarmService";
-import { PreferencesService } from "../../services/PreferencesService";
 import * as AlarmUtils from "../../utils/AlarmUtils";
 import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
@@ -49,14 +48,19 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     public constructor(props: NavigationScreenProps) {
         super(props);
 
-        // build initial state
+        // build disabledDays characteristic vector from activeDays, excluding out current days
         const alarm: Alarm | undefined = this.props.navigation.getParam("alarm");
+        const days: number = alarm ? alarm.days : 0;
+        const activeDays: number = this.props.navigation.getParam("activeDays"); // vector of active days in schedule
+        const disabledDays: number = activeDays & ~days;
+
+        // build initial state
         this.state = {
             alarm,
-            days: alarm ? alarm.days : 0,
-            disabledDays: 0,
+            days,
+            disabledDays,
             getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
-            is24HourTime: false,
+            is24HourTime: this.props.navigation.getParam("is24HourTime"),
             isGetUpTimeValid: true,
             isSleepTimeValid: true,
             isWakeTimeValid: true,
@@ -64,40 +68,6 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
             sleepTime: alarm ? alarm.sleepTime : Time.createFromTotalSeconds(72000), // 8:00 PM
             wakeTime: alarm ? alarm.wakeTime : Time.createFromTotalSeconds(21600) // 6:00 AM
         };
-    }
-
-    public componentWillMount(): void {
-
-        // disable days used in other schedules
-        this.getService(AlarmService).getBySchedule(this.state.schedule)
-            .then((alarms: Alarm[]) => {
-
-                // build characteristic vector of days in use in other alarms
-                let disabledDays: number = 0;
-                for (const alarm of alarms) {
-                    if (this.state.alarm && this.state.alarm.id === alarm.id) { // this is the current alarm, skip it
-                        continue;
-                    }
-
-                    // add days in the alarm to the characteristic vector
-                    disabledDays |= alarm.days;
-                }
-
-                // update state with disabled days
-                this.setState({
-                    disabledDays
-                });
-
-            });
-
-        // determine whether 12 or 24 hour time should be displayed
-        this.getService(PreferencesService).get24HourTime()
-            .then((is24HourTime: boolean) => {
-                this.setState({
-                    is24HourTime
-                });
-            });
-
     }
 
     public renderContent(): ReactNode {
@@ -304,7 +274,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
 const styles = StyleSheet.create({
     alarmTitleError: {
-        color: Colors.appleButtonRed
+        color: Colors.common.tint.destructive
     },
     daySelector: {
         flexDirection: "row",
@@ -312,7 +282,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     divider: {
-        backgroundColor: Colors.headerBackground,
+        backgroundColor: Colors.common.screen.background,
         marginBottom: 20,
         marginTop: 10
     },
@@ -322,15 +292,9 @@ const styles = StyleSheet.create({
         padding: 20
     },
     saveButton: {
-        color: Colors.appleButtonBlue,
+        color: Colors.common.tint.constructive,
         fontWeight: "500",
         marginRight: 10
-    },
-    textSectionHeader: {
-        color: Colors.subheaderColor,
-        fontSize: 17,
-        fontWeight: "600",
-        marginBottom: 10
     },
     viewScroller: {
         flex: 1

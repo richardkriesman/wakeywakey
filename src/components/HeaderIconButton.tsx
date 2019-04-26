@@ -26,7 +26,7 @@ export class HeaderIconButton extends React.Component<HeaderButtonProps> {
     }
 
     public render(): ReactNode {
-        const color: string = this.props.color || Colors.appleButtonBlue;
+        const color: string = this.props.color || Colors.common.tint.constructive;
         const iconSet: string = this.props.iconSet || "ionicons";
         const style: StyleProp<ViewStyle> = this.props.position === "left" ? styles.topLeftButton :
             styles.topRightButton;

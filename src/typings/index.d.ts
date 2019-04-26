@@ -32,5 +32,8 @@ declare module "@expo/samples" {
 // getting an error on my end. hoping to clear it up. sL
 declare module "@expo/vector-icons";
 
+// Getting an error, pls work
+declare module "react-native-vertical-swipe";
+
 declare type InstanceType<T extends new(...args: any[]) => any> =
     T extends new(...args: any[]) => infer R ? R : any;

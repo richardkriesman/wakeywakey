@@ -43,23 +43,20 @@ describe("PasscodeInput", () => {
         expect(setState).toBeCalled();
     });
 
-    it("choosing passcode with verify", () => {
+    it("choosing passcode with verify", async (done) => {
         props = {
             handleSuccess: jest.fn(),
-            verifyPasscode: jest.fn().mockImplementation((passcode) => {
-                if (passcode === "1234") {
-                    return true;
-                }
-                return false;
-            })
+            verifyPasscode: jest.fn().mockImplementation(async (passcode) => passcode === "1234")
         };
         component = renderer.create(<PasscodeInput {...props} />).getInstance();
         const setState = jest.spyOn(component, "setState");
-        component.handleChoosingPasscode("1234"); // correct passcode
+        await component.handleChoosingPasscode("1234"); // correct passcode
         expect(props.handleSuccess).toBeCalled();
-        component.handleChoosingPasscode("5555"); // incorrect passcode
+        await component.handleChoosingPasscode("5555"); // incorrect passcode
         expect(setState).toBeCalled();
         expect(props.verifyPasscode).toBeCalled();
+
+        done();
     });
 
     it("choosing passcode without confirm", () => {
