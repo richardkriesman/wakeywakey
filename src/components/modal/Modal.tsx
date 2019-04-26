@@ -53,7 +53,7 @@ export const style = StyleSheet.create({
         padding: 24
     },
     footer: {
-        borderTopColor: Colors.alertFooterSeparator,
+        borderTopColor: Colors.common.alert.separator,
         borderTopWidth: 1,
         flexDirection: "row",
         justifyContent: "flex-end",

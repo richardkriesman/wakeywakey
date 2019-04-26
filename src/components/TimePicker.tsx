@@ -65,11 +65,12 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
      * modal in the view hierarchy with the iOS "spinner" design.
      *
      * @param time Time of day
+     * @param is24HourTime Whether to display the time picker in 24-hour time. Only works on Android.
      *
      * @return A Promise that resolves when the {@link TimePicker} is closed with the {@link Time} or
      *         undefined` if the TimePicker was cancelled.
      */
-    public present(time: Time): Promise<Time|undefined> {
+    public present(time: Time, is24HourTime: boolean): Promise<Time|undefined> {
         return new Promise((resolve, reject) => {
             if (Platform.OS === "ios") { // iOS
                 this.setState({
@@ -93,7 +94,7 @@ export class TimePicker extends React.Component<{}, TimePickerState> {
             } else { // android, use native time picker
                 TimePickerAndroid.open({
                     hour: this.state.time.hour,
-                    is24Hour: false, // TODO: read this from system locale
+                    is24Hour: is24HourTime,
                     minute: this.state.time.minute
                 })
                     .then((result: TimePickerAndroidOpenReturn) => { // time picker was shown and closed

@@ -332,6 +332,13 @@ exports[`renders the screen 1`] = `
       </View>
     </Modal>
     <View
+      accessible={true}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
           "alignItems": "center",
@@ -352,13 +359,18 @@ exports[`renders the screen 1`] = `
       </Text>
       <Text
         style={
-          Object {
-            "color": "#5e5e5e",
-            "fontSize": 15,
-          }
+          Array [
+            Object {
+              "color": "#5e5e5e",
+              "fontSize": 15,
+            },
+            Object {
+              "color": "#007aff",
+            },
+          ]
         }
       >
-        Create a schedule to set alarms
+        Tap here to create one!
       </Text>
     </View>
   </View>

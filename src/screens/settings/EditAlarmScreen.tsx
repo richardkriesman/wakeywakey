@@ -7,6 +7,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Divider } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
+import { DestructiveButton } from "../../components/DestructiveButton";
 import { ListHeader, ListItem } from "../../components/list";
 import { TimePicker } from "../../components/TimePicker";
 import { ToggleButton } from "../../components/ToggleButton";
@@ -23,6 +24,7 @@ export interface EditAlarmScreenState {
     alarm?: Alarm;
     days: number;
     disabledDays: number;
+    is24HourTime: boolean;
     isSleepTimeValid: boolean;
     isWakeTimeValid: boolean;
     isGetUpTimeValid: boolean;
@@ -46,13 +48,19 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     public constructor(props: NavigationScreenProps) {
         super(props);
 
-        // build initial state
+        // build disabledDays characteristic vector from activeDays, excluding out current days
         const alarm: Alarm | undefined = this.props.navigation.getParam("alarm");
+        const days: number = alarm ? alarm.days : 0;
+        const activeDays: number = this.props.navigation.getParam("activeDays"); // vector of active days in schedule
+        const disabledDays: number = activeDays & ~days;
+
+        // build initial state
         this.state = {
             alarm,
-            days: alarm ? alarm.days : 0,
-            disabledDays: 0,
+            days,
+            disabledDays,
             getUpTime: alarm ? alarm.getUpTime : Time.createFromTotalSeconds(25200), // 7:00 AM
+            is24HourTime: this.props.navigation.getParam("is24HourTime"),
             isGetUpTimeValid: true,
             isSleepTimeValid: true,
             isWakeTimeValid: true,
@@ -62,43 +70,18 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
         };
     }
 
-    public componentWillMount(): void {
-
-        // disable days used in other schedules
-        this.getService(AlarmService).getBySchedule(this.state.schedule)
-            .then((alarms: Alarm[]) => {
-
-                // build characteristic vector of days in use in other alarms
-                let disabledDays: number = 0;
-                for (const alarm of alarms) {
-                    if (this.state.alarm && this.state.alarm.id === alarm.id) { // this is the current alarm, skip it
-                        continue;
-                    }
-
-                    // add days in the alarm to the characteristic vector
-                    disabledDays |= alarm.days;
-                }
-
-                // update state with disabled days
-                this.setState({
-                    disabledDays
-                });
-
-            });
-
-    }
-
     public renderContent(): ReactNode {
 
         // render delete button if the alarm already exists
         let deleteButton: ReactNode | undefined;
         if (this.state.alarm) {
-            deleteButton = <Button
-                buttonStyle={styles.deleteButton}
-                containerStyle={styles.deleteButtonContainer}
-                onPress={this.onDeletePress.bind(this)}
-                titleStyle={styles.deleteButtonTitle}
-                title="Delete alarm"/>;
+            deleteButton = (
+                <View style={styles.footer}>
+                    <DestructiveButton
+                        onPress={this.onDeletePress.bind(this)}
+                        title="Delete alarm" />
+                </View>
+            );
         }
 
         return (
@@ -151,19 +134,19 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
                 <ListItem key={0}
                           title="Sleep"
                           titleStyle={[!this.state.isSleepTimeValid && styles.alarmTitleError]}
-                          subtitle={AlarmUtils.formatTime(this.state.sleepTime)}
+                          subtitle={AlarmUtils.formatTime(this.state.sleepTime, this.state.is24HourTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeSleepPress.bind(this)}/>
                 <ListItem key={1}
                           title="Wake up"
                           titleStyle={[!this.state.isWakeTimeValid && styles.alarmTitleError]}
-                          subtitle={AlarmUtils.formatTime(this.state.wakeTime)}
+                          subtitle={AlarmUtils.formatTime(this.state.wakeTime, this.state.is24HourTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeWakePress.bind(this)}/>
                 <ListItem key={2}
                           title="Get up"
                           titleStyle={[!this.state.isGetUpTimeValid && styles.alarmTitleError]}
-                          subtitle={AlarmUtils.formatTime(this.state.getUpTime)}
+                          subtitle={AlarmUtils.formatTime(this.state.getUpTime, this.state.is24HourTime)}
                           rightIcon={{ name: "arrow-forward" }}
                           onPress={this.onTimeGetUpPress.bind(this)}/>
 
@@ -249,7 +232,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeGetUpPress(): void {
-        this.timePicker.present(this.state.getUpTime)
+        this.timePicker.present(this.state.getUpTime, this.state.is24HourTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
@@ -262,7 +245,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeSleepPress(): void {
-        this.timePicker.present(this.state.sleepTime)
+        this.timePicker.present(this.state.sleepTime, this.state.is24HourTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
@@ -275,7 +258,7 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
     }
 
     private onTimeWakePress(): void {
-        this.timePicker.present(this.state.wakeTime)
+        this.timePicker.present(this.state.wakeTime, this.state.is24HourTime)
             .then((time: Time | undefined) => {
                 if (time) {
                     this.setState({
@@ -291,37 +274,27 @@ export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> 
 
 const styles = StyleSheet.create({
     alarmTitleError: {
-        color: Colors.appleButtonRed
+        color: Colors.common.tint.destructive
     },
     daySelector: {
         flexDirection: "row",
         justifyContent: "space-around",
         paddingHorizontal: 20
     },
-    deleteButton: {
-        backgroundColor: Colors.appleButtonRed
-    },
-    deleteButtonContainer: {
-        padding: 20
-    },
-    deleteButtonTitle: {
-        color: "#fff"
-    },
     divider: {
-        backgroundColor: Colors.headerBackground,
+        backgroundColor: Colors.common.screen.background,
         marginBottom: 20,
         marginTop: 10
     },
+    footer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        padding: 20
+    },
     saveButton: {
-        color: Colors.appleButtonBlue,
+        color: Colors.common.tint.constructive,
         fontWeight: "500",
         marginRight: 10
-    },
-    textSectionHeader: {
-        color: Colors.subheaderColor,
-        fontSize: 17,
-        fontWeight: "600",
-        marginBottom: 10
     },
     viewScroller: {
         flex: 1

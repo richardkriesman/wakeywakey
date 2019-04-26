@@ -12,6 +12,11 @@ declare module "expo" {
     // add the Icon module from @expo/vector-icons - it isn't defined in the DefinitelyTyped typedefs
     export { default as Icon } from "@expo/vector-icons";
 
+    export namespace SplashScreen {
+        function preventAutoHide(): void;
+        function hide(): void;
+    }
+
     // we're extending the DefinitelyTyped typedefs
     export * from "@types/expo";
 }

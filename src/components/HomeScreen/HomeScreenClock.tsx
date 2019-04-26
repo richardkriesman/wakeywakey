@@ -9,6 +9,7 @@ import { Text } from "react-native";
 
 interface HomeScreenClockProps {
     wrapperStyle?: ViewStyle;
+    twentyFourHour: boolean;
 }
 
 interface HomeScreenClockState {
@@ -37,16 +38,10 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
     }
 
     /**
-     * Get a 12-hour formatted time string - HH:mm xx
+     * Get a 12- or 24-hour formatted time string, based on twentyFourHour prop
      */
     public get timeString(): string {
-        let hours = this.hours;
-        const ampm = this.hours >= 12 ? "pm" : "am";
-
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-
-        return `${HomeScreenClock.pad(hours)}:${HomeScreenClock.pad(this.minutes)} ${ampm}`;
+        return this.props.twentyFourHour ? this.get24hString() : this.get12hString();
     }
 
     /**
@@ -63,6 +58,7 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
         }
         return result;
     }
+
     public constructor(props: HomeScreenClockProps) {
         super(props);
 
@@ -100,6 +96,20 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
      */
     public setDate(date: Date, callback: () => void): void {
         this.setState({ date }, callback);
+    }
+
+    private get24hString(): string {
+        return `${HomeScreenClock.pad(this.hours)}:${HomeScreenClock.pad(this.minutes)}`;
+    }
+
+    private get12hString(): string {
+        let hours = this.hours;
+        const ampm = this.hours >= 12 ? "pm" : "am";
+
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+
+        return `${hours}:${HomeScreenClock.pad(this.minutes)} ${ampm}`;
     }
 
     /**

@@ -54,6 +54,6 @@ export class ConfirmationModal extends React.Component<ConfirmationModalProps> {
 
 const destructiveTheme: Theme = {
     colors: {
-        primary: Colors.appleButtonRed
+        primary: Colors.common.tint.destructive
     }
 };

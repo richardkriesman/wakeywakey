@@ -4,7 +4,7 @@
 
 import React, { ReactNode } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
-import { NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
+import { NavigationEvents, NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
 import * as Log from "../Log";
 import { Service } from "../Service";
@@ -12,7 +12,7 @@ import { Service } from "../Service";
 export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & NavigationScreenProps, S> {
 
     // noinspection UnterminatedStatementJS - keeps WebStorm from giving a suggestion that conflicts with TSLint
-    public static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
+    public static navigationOptions = ({navigation}: NavigationScreenProps) => ({
         title: navigation.getParam("title", "Untitled")
     })
 
@@ -22,19 +22,19 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
         super(props);
 
         // extract the database from the navigation props
-        this.db = this.props.navigation.getParam("db");
-        if (this.db) {
-            delete this.props.navigation.state.params.db;
-        } else { // database has not yet been opened, initialize it
+        this.db = this.props.screenProps.db;
+
+        if (!this.db) {
+            // database has not yet been opened, initialize it
             if (AppDatabase.initCount > 0) {
                 Log.warning("UIScreen",
                     `Database was not passed to route ${this.props.navigation.state.routeName}! ` +
                     `Did you use UIScreen.present()?`);
             }
-            AppDatabase.init()
-                .then((db) => {
-                    this.db = db;
-                });
+
+            AppDatabase.init().then((db) => {
+                this.db = db;
+            });
         }
 
         // add this screen to its own navigation params - this is nasty but it's needed for the decorators
@@ -47,7 +47,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * Dismisses this {@link Screen}, revealing the screen below it.
      */
     public dismiss(): void {
-        this.props.navigation.dispatch(StackActions.pop({ n: 1 }));
+        this.props.navigation.dispatch(StackActions.pop({n: 1}));
     }
 
     /**
@@ -56,7 +56,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @param service The {@link Service} class to retrieve.
      */
     public getService<T extends Service>(service: new(db: AppDatabase) => T): T {
-        return this.db.getService(service);
+        return this.db ? this.db.getService(service) : null;
     }
 
     /**
@@ -79,9 +79,44 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     public render(): ReactNode {
         return (
             <SafeAreaView style={styles.container}>
+                <NavigationEvents
+                    onDidBlur={this.componentDidBlur.bind(this)}
+                    onDidFocus={this.componentDidFocus.bind(this)}
+                    onWillBlur={this.componentWillBlur.bind(this)}
+                    onWillFocus={this.componentWillFocus.bind(this)}
+                    navigation={this.props.navigation}/>
                 {this.renderContent()}
             </SafeAreaView>
         );
+    }
+
+    protected componentDidBlur(): void {
+        return;
+    }
+
+    protected componentDidFocus(): void {
+        return;
+    }
+
+    protected componentWillBlur(): void {
+        return;
+    }
+
+    protected componentWillFocus(): void {
+        return;
+    }
+
+    /**
+     * Update just a few keys in the screen's state, with an optional callback.
+     * Preserves RN's state-render pipeline by calling setState underneath.
+     *
+     * @param newValues A new set of values to copy into the state
+     * @param cb Optional callback for setState
+     */
+    protected updateState(newValues: object, cb?: () => void): void {
+        const temp = Object.assign({}, this.state);
+        const newState = Object.assign(temp, newValues);
+        this.setState(newState, cb);
     }
 
     /**

@@ -368,7 +368,7 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#ffffff",
           "height": 0.5,
           "marginBottom": 20,
           "marginTop": 10,
@@ -411,7 +411,7 @@ exports[`renders correctly 1`] = `
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": "rgba(255, 255, 255, 1)",
+              "backgroundColor": "rgba(0, 122, 255, 1)",
               "borderRadius": 22,
               "height": 44,
               "justifyContent": "center",
@@ -422,7 +422,7 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               Object {
-                "color": "rgba(0, 0, 0, 1)",
+                "color": "rgba(255, 255, 255, 1)",
               }
             }
           >
@@ -503,7 +503,7 @@ exports[`renders correctly 1`] = `
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": "rgba(255, 255, 255, 1)",
+              "backgroundColor": "rgba(0, 122, 255, 1)",
               "borderRadius": 22,
               "height": 44,
               "justifyContent": "center",
@@ -514,7 +514,7 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               Object {
-                "color": "rgba(0, 0, 0, 1)",
+                "color": "rgba(255, 255, 255, 1)",
               }
             }
           >
@@ -595,7 +595,7 @@ exports[`renders correctly 1`] = `
           style={
             Object {
               "alignItems": "center",
-              "backgroundColor": "rgba(255, 255, 255, 1)",
+              "backgroundColor": "rgba(0, 122, 255, 1)",
               "borderRadius": 22,
               "height": 44,
               "justifyContent": "center",
@@ -606,7 +606,7 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               Object {
-                "color": "rgba(0, 0, 0, 1)",
+                "color": "rgba(255, 255, 255, 1)",
               }
             }
           >
@@ -710,7 +710,7 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "#fff",
+          "backgroundColor": "#ffffff",
           "height": 0.5,
           "marginBottom": 20,
           "marginTop": 10,
@@ -915,7 +915,7 @@ exports[`renders correctly 1`] = `
               }
             }
           >
-            
+            8:00 pm
           </Text>
         </View>
         <View
@@ -1098,7 +1098,7 @@ exports[`renders correctly 1`] = `
               }
             }
           >
-            
+            6:00 am
           </Text>
         </View>
         <View
@@ -1281,7 +1281,7 @@ exports[`renders correctly 1`] = `
               }
             }
           >
-            
+            7:00 am
           </Text>
         </View>
         <View
@@ -1343,53 +1343,70 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "borderRadius": 3,
+          "flex": 1,
+          "justifyContent": "flex-end",
           "padding": 20,
         }
       }
     >
       <View
-        accessible={true}
-        isTVSelectable={true}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
         style={
           Object {
-            "opacity": 1,
+            "backgroundColor": "#fff",
+            "borderRadius": 3,
+            "shadowColor": "rgba(0,0,0, .4)",
+            "shadowOffset": Object {
+              "height": 1,
+              "width": 1,
+            },
+            "shadowOpacity": 1,
+            "shadowRadius": 1,
           }
         }
       >
         <View
+          accessible={true}
+          isTVSelectable={true}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
             Object {
-              "alignItems": "center",
-              "backgroundColor": "#ff3b30",
-              "borderColor": "#2089dc",
-              "borderRadius": 3,
-              "borderWidth": 0,
-              "flexDirection": "row",
-              "justifyContent": "center",
-              "padding": 8,
+              "opacity": 1,
             }
           }
         >
-          <Text
+          <View
             style={
               Object {
-                "color": "#fff",
-                "fontSize": 18,
-                "paddingBottom": 1,
-                "paddingTop": 2,
-                "textAlign": "center",
+                "alignItems": "center",
+                "backgroundColor": "#ff3b30",
+                "borderColor": "#ff3b30",
+                "borderRadius": 3,
+                "borderWidth": 0,
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "padding": 8,
               }
             }
           >
-            Delete alarm
-          </Text>
+            <Text
+              style={
+                Object {
+                  "color": "white",
+                  "fontSize": 18,
+                  "paddingBottom": 1,
+                  "paddingTop": 2,
+                  "textAlign": "center",
+                }
+              }
+            >
+              Delete alarm
+            </Text>
+          </View>
         </View>
       </View>
     </View>

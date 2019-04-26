@@ -4,15 +4,16 @@
 
 import React, { ReactNode } from "react";
 import { SectionList, StyleSheet, View } from "react-native";
+import { Button } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
-import { HeaderIconButton, ScheduleListItem } from "../../components";
+import { ScheduleListItem } from "../../components";
 import { EmptyView } from "../../components/EmptyView";
 import { ListHeader } from "../../components/list/ListHeader";
 import { TextInputModal } from "../../components/modal";
 import { Schedule } from "../../models";
 import { ScheduleService } from "../../services";
-import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
+import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher";
 
@@ -38,18 +39,9 @@ export interface ScheduleListItemData {
  * Main Settings screen.
  * @author Shawn Lutch, Miika Raina
  */
-@HeaderButtonRight((screen) =>
-    <View style={styles.header}>
-        <HeaderIconButton
-            icon="lock"
-            onPress={() => screen.present("PasscodeChange")}/>
-        <HeaderIconButton
-            icon="add"
-            onPress={() => screen.setState({
-                isCreateModalVisible: true
-            })}/>
-    </View>)
-export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenState> {
+@Title("Schedules")
+@BottomTabBarIcon("ios-calendar")
+export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreenState> {
 
     private dataSetChangedHandler: (data: Schedule[]) => void;
     private watcher: Watcher<Schedule> = this.getService(ScheduleService).watchAll();
@@ -131,29 +123,39 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
         let content: ReactNode;
         if (this.state.schedules.size > 0) { // schedules exist, render the list
             content = (
-                <SectionList
-                    keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
-                    renderItem={({ item }) => (
-                        <ScheduleListItem
-                            ref={(me: ScheduleListItem) => {
-                                item.listItemRef = me;
-                            }}
-                            onPress={this.onScheduleItemPressed.bind(this, item.schedule)}
-                            onSwitchToggled={this.onScheduleItemToggled.bind(this, item.schedule)}
-                            title={item.schedule.name}
-                            enabled={item.schedule.isEnabled}
+                <View style={styles.viewScroller}>
+                    <SectionList
+                        keyExtractor={(item: ScheduleListItemData) => item.schedule.id.toString()}
+                        renderItem={({ item }) => (
+                            <ScheduleListItem
+                                ref={(me: ScheduleListItem) => {
+                                    item.listItemRef = me;
+                                }}
+                                onPress={this.onScheduleItemPressed.bind(this, item.schedule)}
+                                onSwitchToggled={this.onScheduleItemToggled.bind(this, item.schedule)}
+                                title={item.schedule.name}
+                                enabled={item.schedule.isEnabled}
+                            />
+                        )}
+                        renderSectionHeader={({ section }) => <ListHeader title={section.title}/>}
+                        sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
+                    />
+                    <View style={styles.footer}>
+                        <Button
+                            title="Add schedule"
+                            onPress={this.showModal.bind(this)}
                         />
-                    )}
-                    renderSectionHeader={({ section }) => <ListHeader title={section.title}/>}
-                    sections={[{ data: Array.from(this.state.schedules.values()), title: "Schedules" }]}
-                />
+                    </View>
+                </View>
             );
         } else { // schedules do not exist, render empty message
             content = (
                 <EmptyView
                     icon="ios-calendar"
                     title="No schedules yet"
-                    subtitle="Create a schedule to set alarms"/>
+                    subtitle="Tap here to create one!"
+                    onPress={this.showModal.bind(this)}
+                />
             );
         }
 
@@ -169,6 +171,12 @@ export default class MainSettingsScreen extends UIScreen<{}, MainSettingsScreenS
                 {content}
             </View>
         );
+    }
+
+    private showModal(): void {
+        this.setState({
+            isCreateModalVisible: true
+        });
     }
 
     private onModalCancelled(): void {
@@ -193,7 +201,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
+    footer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        padding: 20
+    },
     header: {
         flexDirection: "row"
+    },
+    viewScroller: {
+        flex: 1
     }
 });

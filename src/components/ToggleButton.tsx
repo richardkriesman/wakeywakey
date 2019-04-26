@@ -41,10 +41,10 @@ export class ToggleButton extends React.Component<ToggleButtonProps, ToggleButto
     public render(): ReactNode {
 
         // determine colors based on current state
-        const backgroundColor: string = this.props.isDisabled ? Colors.alertFooterSeparator :
-            (this.props.backgroundColor || Colors.appleButtonBlue);
+        const backgroundColor: string = this.props.isDisabled ? Colors.common.alert.separator :
+            (this.props.backgroundColor || Colors.common.tint.constructive);
         const textColorIn = this.props.isDisabled ? Colors.white : (this.props.textColorIn || Colors.white);
-        const textColorOut = this.props.isDisabled ? Colors.alertFooterSeparator :
+        const textColorOut = this.props.isDisabled ? Colors.common.alert.separator :
             (this.props.textColorOut || Colors.black);
 
         // build dynamic styles based on current state

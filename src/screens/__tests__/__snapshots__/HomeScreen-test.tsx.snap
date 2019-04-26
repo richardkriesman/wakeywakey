@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`App snapshot renders the screen 1`] = `
+exports[`app snapshot renders the screen 1`] = `
 <RCTSafeAreaView
   style={
     Object {
@@ -52,100 +52,44 @@ exports[`App snapshot renders the screen 1`] = `
         }
       >
         <View
+          accessible={true}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
             Object {
+              "alignItems": "center",
               "flex": 1,
-              "flexBasis": "100%",
               "justifyContent": "center",
-              "width": "85%",
             }
           }
         >
+          <Text />
           <Text
             style={
               Object {
-                "fontSize": 30,
-                "textAlign": "center",
+                "fontSize": 17,
               }
             }
           >
-            Hello, world!
+            Loading
           </Text>
-          <View
-            style={Object {}}
-          >
-            <View
-              style={
-                Object {
-                  "marginBottom": 20,
-                  "marginTop": 20,
-                }
-              }
-            >
-              <Text
-                style={
-                  Object {
-                    "fontSize": 60,
-                    "textAlign": "center",
-                  }
-                }
-              >
-                12:22 pm
-              </Text>
-            </View>
-          </View>
-          <View
+          <Text
             style={
-              Object {
-                "borderRadius": 3,
-              }
+              Array [
+                Object {
+                  "color": "#5e5e5e",
+                  "fontSize": 15,
+                },
+                undefined,
+              ]
             }
           >
-            <View
-              accessible={true}
-              isTVSelectable={true}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "opacity": 1,
-                }
-              }
-            >
-              <View
-                style={
-                  Object {
-                    "alignItems": "center",
-                    "backgroundColor": "black",
-                    "borderColor": "#2089dc",
-                    "borderRadius": 3,
-                    "borderWidth": 0,
-                    "flexDirection": "row",
-                    "justifyContent": "center",
-                    "padding": 15,
-                  }
-                }
-              >
-                <Text
-                  style={
-                    Object {
-                      "color": "white",
-                      "fontSize": 18,
-                      "paddingBottom": 1,
-                      "paddingTop": 2,
-                      "textAlign": "center",
-                    }
-                  }
-                >
-                  Snooze
-                </Text>
-              </View>
-            </View>
-          </View>
+            Just a sec!
+          </Text>
         </View>
         <View
           style={
@@ -185,7 +129,7 @@ exports[`App snapshot renders the screen 1`] = `
                 style={
                   Object {
                     "alignItems": "center",
-                    "backgroundColor": "black",
+                    "backgroundColor": "#000000",
                     "borderColor": "#2089dc",
                     "borderRadius": 3,
                     "borderWidth": 0,

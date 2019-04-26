@@ -1,4 +1,4 @@
-import { NavigationParams, NavigationRoute, NavigationScreenProp } from "react-navigation";
+import { NavigationParams, NavigationRoute, NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 import NavigationTestUtils from "react-navigation/NavigationTestUtils";
 import { AppDatabase } from "../AppDatabase";
 import { TimeMachine } from "./TimeMachine";
@@ -43,26 +43,42 @@ export class TestEnvironment {
     }
 
     /**
+     * A mock for props that should be passed to every UIScreen
+     */
+    public get emptyUIScreenProps(): NavigationScreenProps {
+        return {
+            navigation: this.navigationProp,
+            screenProps: { db: this.db }
+        };
+    }
+
+    /**
      * A mock for the navigation property used in screens.
      */
     public get navigationProp(): NavigationScreenProp<NavigationRoute<NavigationParams>, NavigationParams> {
+        const params: any = {
+            db: this.db
+        };
         return {
             addListener: jest.fn(),
             dispatch: jest.fn(),
             getParam: (name: string) => {
-                if (name === "db") {
-                    return this.db;
+                if (params.hasOwnProperty(name)) {
+                    return params[name];
                 } else {
-                    return jest.fn();
+                    throw new Error(`TestEnvironment: Param ${name} was requested but is not defined`);
                 }
             },
             navigate: jest.fn(),
             navigation: jest.fn(),
-            setParams: jest.fn(),
-            state: {
-                params: {
-                    db: this.db
+            setParams: (newParams: Partial<NavigationParams>): boolean => {
+                for (const key of Object.keys(newParams)) {
+                    params[key] = newParams[key];
                 }
+                return true;
+            },
+            state: {
+                params
             }
         } as any;
     }

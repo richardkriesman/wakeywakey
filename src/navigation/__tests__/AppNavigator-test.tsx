@@ -17,6 +17,6 @@ beforeEach((done) => {
 });
 
 it("renders properly", () => {
-    const tree = Renderer.create(<AppNavigator/>);
+    const tree = Renderer.create(<AppNavigator screenProps={{ db: env.db }}/>);
     expect(tree.toJSON()).toMatchSnapshot();
 });
