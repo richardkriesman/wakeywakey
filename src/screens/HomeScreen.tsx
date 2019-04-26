@@ -2,6 +2,7 @@
  * @module screens
  */
 
+import { PasscodeService } from "../services/PasscodeService";
 import * as Log from "../utils/Log";
 
 import { KeepAwake, SplashScreen } from "expo";
@@ -79,9 +80,11 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         );
     }
 
-    public switchToSettings(): void {
+    public async switchToSettings(): Promise<void> {
+        const hasPasscode: boolean = await this.getService(PasscodeService).hasPasscode();
         this.present("PasscodeGate", {
             backButtonName: "Home",
+            hasPasscode,
             screen: this,
             successScreenKey: "SettingsMain"
         });

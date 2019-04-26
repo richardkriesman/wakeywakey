@@ -8,6 +8,7 @@ import { NoHeader, Title } from "../utils/screen/NavigationOptions";
 import { UIScreen } from "../utils/screen/UIScreen";
 
 export interface PasscodeGateScreenState {
+    hasPasscode: boolean;
     verified: boolean;
     successScreenKey: string;
 }
@@ -37,6 +38,7 @@ export default class PasscodeGateScreen extends UIScreen<{}, PasscodeGateScreenS
     public constructor(props: NavigationScreenProps) {
         super(props);
         this.state = {
+            hasPasscode: props.navigation.getParam("hasPasscode"),
             successScreenKey: props.navigation.getParam("successScreenKey"),
             verified: false
         };
@@ -45,10 +47,22 @@ export default class PasscodeGateScreen extends UIScreen<{}, PasscodeGateScreenS
     protected renderContent(): React.ReactNode {
         return (
             <View style={styles.mainContainer}>
-                <PasscodeInput
-                    handleSuccess={this.onSuccess.bind(this)}
-                    verifyPasscode={this.verifyPasscode.bind(this)}
-                />
+                {
+                    this.state.hasPasscode
+                        ?
+                        // a passcode exists. prompt for it
+                        <PasscodeInput
+                            handleSuccess={this.onSuccess.bind(this)}
+                            verifyPasscode={this.verifyPasscode.bind(this)}
+                        />
+                        :
+                        // no passcode exists. require user to create one.
+                        <PasscodeInput
+                            confirmPasscode={true}
+                            defaultPromptText={"Enter new Settings passcode:"}
+                            handleSuccess={this.onSuccess.bind(this)}
+                        />
+                }
             </View>
         );
     }

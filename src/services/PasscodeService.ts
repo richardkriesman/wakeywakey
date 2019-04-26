@@ -26,4 +26,11 @@ export class PasscodeService extends Service {
         return (await this.db.getPreference(PREF_NAME)) === attempt;
     }
 
+    /**
+     * Determines whether a passcode has been set.
+     */
+    public async hasPasscode(): Promise<boolean> {
+        return (await this.db.getPreference(PREF_NAME)) !== null;
+    }
+
 }

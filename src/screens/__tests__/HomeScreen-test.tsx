@@ -35,7 +35,7 @@ describe("app snapshot", () => {
 
 describe("screen instance methods", () => {
 
-    it("switches to settings", () => {
+    it("switches to settings", async (done) => {
         // mock component
         const component = renderer.create(
             <HomeScreen initialMessageText={initialMessageText} {...env.emptyUIScreenProps}/>
@@ -49,10 +49,13 @@ describe("screen instance methods", () => {
         const present = jest.spyOn(instance, "present");
 
         // switch to settings
-        instance.switchToSettings();
+        await instance.switchToSettings();
 
         // check that everything was called correctly
         expect(present).toBeCalled();
+
+        // done
+        done();
     });
 
     it("snoozes the alarm", () => {
