@@ -5,10 +5,9 @@
 import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
-
 import { NavigationScreenProps } from "react-navigation";
-import { EmptyView } from "../components/EmptyView";
 
+import { EmptyView } from "../components/EmptyView";
 import {
     Clock,
     HomeScreenAlarmState,
@@ -17,14 +16,13 @@ import {
     SnoozeButton
 } from "../components/HomeScreen";
 import { AlarmState } from "../components/HomeScreen/AlarmState";
-
 import { InactivityHandler } from "../components/InactivityHandler";
+import { PasscodeService } from "../services/PasscodeService";
 import { PreferencesService } from "../services/PreferencesService";
 import { AlarmEvent, TimerService } from "../services/TimerService";
 import * as Log from "../utils/Log";
 import { NoHeader, UIScreen } from "../utils/screen";
 import { Time } from "../utils/Time";
-import { PasscodeService } from "../services/PasscodeService";
 
 /**
  * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.
