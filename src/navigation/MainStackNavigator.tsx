@@ -5,6 +5,7 @@ import { Platform } from "react-native";
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
 import HomeScreen from "../screens/HomeScreen";
+import PasscodeGateScreen from "../screens/PasscodeGateScreen";
 import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
 import PasscodeChangeScreen from "../screens/settings/PasscodeChangeScreen";
 import DefaultSettingsNavigator from "./DefaultSettingsNavigator";
@@ -26,6 +27,10 @@ export default createStackNavigator(
 
         PasscodeChange: {
             screen: PasscodeChangeScreen
+        },
+
+        PasscodeGate: {
+            screen: PasscodeGateScreen
         },
 
         SettingsMain: {

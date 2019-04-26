@@ -2,6 +2,8 @@
  * @module screens
  */
 
+import * as Log from "../utils/Log";
+
 import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -78,7 +80,11 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     public switchToSettings(): void {
-        this.present("SettingsMain", { screen: this });
+        this.present("PasscodeGate", {
+            backButtonName: "Home",
+            screen: this,
+            successScreenKey: "SettingsMain"
+        });
     }
 
     public onSnoozePressed(): void {
@@ -86,7 +92,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     protected componentWillFocus(): void {
-        this.refresh();
+        this.refresh().catch(Log.error.bind(this, "HomeScreen"));
     }
 
     private async refresh(): Promise<void> {
