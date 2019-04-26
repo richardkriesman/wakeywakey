@@ -32,7 +32,7 @@ export interface PasscodeGateScreenState {
 */
 
 @NoHeader
-@Title("Home")
+@Title("Home") // DON'T DO THIS NEVER DO THIS
 export default class PasscodeGateScreen extends UIScreen<{}, PasscodeGateScreenState> {
     public constructor(props: NavigationScreenProps) {
         super(props);
