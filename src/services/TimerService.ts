@@ -135,6 +135,11 @@ export class TimerService extends Service {
      * @param alarmEvent An optional {@link AlarmEvent} to pass along to each handler, if appropriate
      */
     private fireAll(event: TimerEvent, date?: Date, alarmEvent?: AlarmEvent) {
+        if (alarmEvent) { // log when alarms are fired
+            Log.info("TimerService", `Firing ${alarmEvent.type} alarm for Alarm ${alarmEvent.alarm.id}`);
+        }
+
+        // TODO: remove this later
         const timeNow = date ? Time.createFromDate(date) : null;
         Log.debug("TimerService", `firing event ${event} at ${timeNow || "(?)"} with alarmEvent: ${alarmEvent}`);
 
@@ -190,6 +195,7 @@ export class TimerService extends Service {
      * Check active alarms and see whether we need to fire any of them.
      */
     private async checkActiveAlarms(now: Date): Promise<void> {
+        Log.info("TimerService", "Checking for new alarms");
         const alarms: Alarm[] = await this.fetchActiveAlarms();
         alarms.forEach(this.checkAlarm.bind(this, now));
     }
