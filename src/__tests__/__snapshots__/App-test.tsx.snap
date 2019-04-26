@@ -122,7 +122,6 @@ exports[`renders the root without loading screen 1`] = `
                       style={
                         Object {
                           "alignItems": "center",
-                          "flex": 1,
                           "marginTop": 20,
                           "padding": 0,
                         }

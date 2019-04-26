@@ -4,7 +4,7 @@
 
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { NavigationScreenProps, StackActions } from "react-navigation";
+import { NavigationScreenProps } from "react-navigation";
 
 import { PasscodeInput } from "../../components/PasscodeInput";
 import { PasscodeService } from "../../services/PasscodeService";

@@ -2,6 +2,9 @@
  * @module screens
  */
 
+import { PasscodeService } from "../services/PasscodeService";
+import * as Log from "../utils/Log";
+
 import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -77,8 +80,14 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         );
     }
 
-    public switchToSettings(): void {
-        this.present("SettingsMain", { screen: this });
+    public async switchToSettings(): Promise<void> {
+        const hasPasscode: boolean = await this.getService(PasscodeService).hasPasscode();
+        this.present("PasscodeGate", {
+            backButtonName: "Home",
+            hasPasscode,
+            screen: this,
+            successScreenKey: "SettingsMain"
+        });
     }
 
     public onSnoozePressed(): void {
@@ -86,7 +95,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     protected componentWillFocus(): void {
-        this.refresh();
+        this.refresh().catch(Log.error.bind(this, "HomeScreen"));
     }
 
     private async refresh(): Promise<void> {
@@ -121,7 +130,6 @@ const ExtraStyles = StyleSheet.create({
     clockWrapper: {},
     container: {
         alignItems: "center",
-        flex: 1,
         marginTop: 20,
         padding: 0
     },

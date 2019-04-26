@@ -1,7 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "build": "yarn tsc",
+    "build": "yarn clean && yarn tsc",
     "build:android": "yarn build && yarn expo build:android --release-channel dev",
     "build:clean": "yarn clean && yarn tsc",
     "build:docs": "typedoc src --options typedoc.js",
@@ -31,6 +31,7 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
+    "react-native-vertical-swipe": "^1.1.1",
     "react-native-modal": "^9.0.0",
     "react-navigation": "^3.0.9"
   },
