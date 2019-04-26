@@ -134,7 +134,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @param newValues A new set of values to copy into the state
      * @param cb Optional callback for setState
      */
-    protected updateState(newValues: Partial<P>, cb?: () => void): void {
+    protected updateState(newValues: Partial<S>, cb?: () => void): void {
         const temp = Object.assign({}, this.state);
         const newState = Object.assign(temp, newValues);
         this.setState(newState, cb);
