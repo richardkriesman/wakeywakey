@@ -76,6 +76,23 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
         }));
     }
 
+    /**
+     * Replaces this {@link Screen} with another Screen.
+     *
+     * @author Miika Raina, Shawn Lutch
+     * @param routeName The name of the screen to present.
+     * @param params Additional parameters to pass through to the new Screen.
+     */
+    public replace(routeName: string, params?: NavigationParams): void {
+        this.props.navigation.dispatch(StackActions.replace({
+            params: {
+                db: this.db,
+                ...params
+            },
+            routeName
+        }));
+    }
+
     public render(): ReactNode {
         return (
             <SafeAreaView style={styles.container}>
@@ -90,18 +107,22 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
         );
     }
 
+    // noinspection JSMethodCanBeStatic
     protected componentDidBlur(): void {
         return;
     }
 
+    // noinspection JSMethodCanBeStatic
     protected componentDidFocus(): void {
         return;
     }
 
+    // noinspection JSMethodCanBeStatic
     protected componentWillBlur(): void {
         return;
     }
 
+    // noinspection JSMethodCanBeStatic
     protected componentWillFocus(): void {
         return;
     }
@@ -113,7 +134,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @param newValues A new set of values to copy into the state
      * @param cb Optional callback for setState
      */
-    protected updateState(newValues: object, cb?: () => void): void {
+    protected updateState(newValues: Partial<S>, cb?: () => void): void {
         const temp = Object.assign({}, this.state);
         const newState = Object.assign(temp, newValues);
         this.setState(newState, cb);
