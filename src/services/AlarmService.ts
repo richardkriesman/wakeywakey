@@ -13,8 +13,6 @@ import { Watcher } from "../utils/watcher/Watcher";
 @ServiceName("AlarmService")
 export class AlarmService extends Service {
 
-    public static readonly serviceName: string = "AlarmService";
-
     /**
      * Creates a new Alarm.
      *
