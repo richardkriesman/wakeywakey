@@ -2,13 +2,12 @@
  * @module utils
  */
 
-import {FileSystem, SQLite} from "expo";
+import { FileSystem, SQLite } from "expo";
 import { TimerService } from "../services/TimerService";
 import * as Log from "./Log";
 import { Model } from "./Model";
-import {Service, ServiceStaticBase} from "./service/Service";
+import { Service, ServiceStaticBase } from "./service/Service";
 import { EmitterSet } from "./watcher/EmitterSet";
-import {AlarmService} from "../services/AlarmService";
 
 const DATABASE_NAME: string = "app";
 const DATABASE_LOG_TAG: string = "Database";
