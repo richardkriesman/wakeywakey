@@ -7,7 +7,7 @@ import { SafeAreaView, StyleSheet } from "react-native";
 import { NavigationEvents, NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
 import * as Log from "../Log";
-import { Service } from "../Service";
+import { Service } from "../service/Service";
 
 export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & NavigationScreenProps, S> {
 
@@ -101,7 +101,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
                     onDidFocus={this.componentDidFocus.bind(this)}
                     onWillBlur={this.componentWillBlur.bind(this)}
                     onWillFocus={this.componentWillFocus.bind(this)}
-                    navigation={this.props.navigation}/>
+                    navigation={this.props.navigation as any}/>
                 {this.renderContent()}
             </SafeAreaView>
         );

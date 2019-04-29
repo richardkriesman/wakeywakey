@@ -4,12 +4,16 @@
 
 import { Alarm } from "../models";
 import { Schedule } from "../models/Schedule";
-import { Service } from "../utils/Service";
+import { Service } from "../utils/service/Service";
+import { ServiceName } from "../utils/service/ServiceOptions";
 import { Time } from "../utils/Time";
 import { Emitter } from "../utils/watcher/Emitter";
 import { Watcher } from "../utils/watcher/Watcher";
 
+@ServiceName("AlarmService")
 export class AlarmService extends Service {
+
+    public static readonly serviceName: string = "AlarmService";
 
     /**
      * Creates a new Alarm.

@@ -4,7 +4,8 @@
 import { Alarm } from "../models/Alarm";
 import { Schedule } from "../models/Schedule";
 import * as Log from "../utils/Log";
-import { Service } from "../utils/Service";
+import { Service } from "../utils/service/Service";
+import { ServiceName } from "../utils/service/ServiceOptions";
 import { Time } from "../utils/Time";
 import { AlarmService } from "./AlarmService";
 import { ScheduleService } from "./ScheduleService";
@@ -44,6 +45,7 @@ export type TimerEventStr = "start" | "second" | "minute" | "hour" | "stop" | "a
  *
  * Register a {@link TimerHandler} to listen for {@link TimerEvent}s by using {@link on}
  */
+@ServiceName("TimerService")
 export class TimerService extends Service {
 
     /**

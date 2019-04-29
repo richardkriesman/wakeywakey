@@ -13,7 +13,7 @@ import { NavigationScreenProps } from "react-navigation";
 import { EmptyView } from "../components/EmptyView";
 import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { InactivityHandler } from "../components/InactivityHandler";
-import { PreferencesService } from "../services/PreferencesService";
+import { PreferenceService } from "../services/PreferenceService";
 import { NoHeader, UIScreen } from "../utils/screen";
 
 /**
@@ -99,7 +99,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     private async refresh(): Promise<void> {
-        if (!this.getService(PreferencesService)) {
+        if (!this.getService(PreferenceService)) {
             this.setState({ messageText: this.props.initialMessageText });
             this.forceUpdate();
             return;
@@ -109,7 +109,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     private async fullDatabaseRead(): Promise<HomeScreenState> {
-        const pref: PreferencesService = this.getService(PreferencesService);
+        const pref: PreferenceService = this.getService(PreferenceService);
         return {
             loaded: true,
             messageText: "Hello, world!",
