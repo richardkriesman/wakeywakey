@@ -161,35 +161,37 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         });
     }
 
-    private async startAlarm(): Promise<void> {
-
-        // set the audio mode to prevent interruptions by other apps
-        try {
-            await Audio.setAudioModeAsync({
+    private startAlarm(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            Audio.setAudioModeAsync({
                 allowsRecordingIOS: false, // we're not recording anything
                 interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX, // interrupt other apps on iOS
                 interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX, // interrupt other apps' audio on iOS
+                playThroughEarpieceAndroid: false, // don't play through the earpiece on android
                 playsInSilentModeIOS: true, // ignore silent mode on iOS
                 shouldDuckAndroid: false // don't duck on android for other apps,
-            });
-        } catch (ex) {
-            Log.error("HomeScreen", "Audio mode configuration was rejected by the OS");
-        }
-
-        // play audio
-        const sound = new Audio.Sound();
-        this.setState({
-            activeSound: sound
-        }, () => {
-            // FIXME: proper async
-            sound.loadAsync(require("../../assets/audio/MusicBox.mp3")).then(() => {
-                return sound.setStatusAsync({
-                    isLooping: true,
-                    shouldPlay: true
+            })
+                .catch((err) => {
+                    reject(err);
+                })
+                .then(() => { // audio mode has been set, play the alarm
+                    const sound = new Audio.Sound();
+                    this.setState({
+                        activeSound: sound
+                    }, () => { // active sound has been updated, load and play the alarm
+                        sound.loadAsync(require("../../assets/audio/MusicBox.mp3"))
+                            .then(() => {
+                                return sound.setStatusAsync({
+                                    isLooping: true,
+                                    shouldPlay: true
+                                });
+                            })
+                            .catch((err) => {
+                                reject(err);
+                            });
+                    });
                 });
-            });
         });
-
     }
 
     private async stopAudio(): Promise<void> {
@@ -202,7 +204,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
                         accept();
                     });
                 })
-                .catch((err) => reject);
+                .catch(reject);
         });
     }
 }
