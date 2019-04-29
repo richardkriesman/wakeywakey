@@ -3,9 +3,11 @@
  */
 
 import { Schedule } from "../models";
-import { Service } from "../utils/Service";
+import { Service } from "../utils/service/Service";
+import { ServiceName } from "../utils/service/ServiceOptions";
 import { Emitter, Watcher } from "../utils/watcher";
 
+@ServiceName("ScheduleService")
 export class ScheduleService extends Service {
 
     /**

@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { BooleanPreference } from "../../components/AppSettingsScreen/BooleanPreference";
 import { TouchPreference } from "../../components/AppSettingsScreen/TouchPreference";
 import { ListHeader } from "../../components/list/ListHeader";
-import { PreferencesService } from "../../services/PreferencesService";
+import { PreferenceService } from "../../services/PreferenceService";
 import * as Log from "../../utils/Log";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
@@ -54,7 +54,7 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
     private async readAll(): Promise<AppSettingsScreenState> {
         this.updateState({ loading: true });
 
-        const pref: PreferencesService = this.getService(PreferencesService);
+        const pref: PreferenceService = this.getService(PreferenceService);
 
         return {
             loading: false,
@@ -63,7 +63,7 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
     }
 
     private async set24hTime(enabled: boolean): Promise<void> {
-        await this.getService(PreferencesService).set24HourTime(enabled);
+        await this.getService(PreferenceService).set24HourTime(enabled);
         this.updateState({ twentyFourHour: enabled });
     }
 

@@ -2,10 +2,12 @@
  * @module services
  */
 
-import { Service } from "../utils/Service";
+import { Service } from "../utils/service/Service";
+import { ServiceName } from "../utils/service/ServiceOptions";
 
 const PREF_NAME = "passcode";
 
+@ServiceName("PasscodeService")
 export class PasscodeService extends Service {
 
     /**

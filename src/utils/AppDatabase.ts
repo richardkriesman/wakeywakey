@@ -2,11 +2,11 @@
  * @module utils
  */
 
-import {FileSystem, SQLite} from "expo";
+import { FileSystem, SQLite } from "expo";
 import { TimerService } from "../services/TimerService";
 import * as Log from "./Log";
 import { Model } from "./Model";
-import { Service } from "./Service";
+import { Service, ServiceStaticBase } from "./service/Service";
 import { EmitterSet } from "./watcher/EmitterSet";
 
 const DATABASE_NAME: string = "app";
@@ -155,10 +155,15 @@ export class AppDatabase {
      * @param service The {@link Service} class to retrieve.
      */
     public getService<T extends Service>(service: new(db: AppDatabase) => T): T {
-        if (!this.services.has(service.name)) {
-            this.services.set(service.name, new service(this));
+        if (!service.hasOwnProperty("SERVICE_NAME")) { // service name is not set, throw exception
+            throw new Error("The Service cannot be resolved because it does not have a name set.");
         }
-        return this.services.get(service.name) as any;
+        const serviceName: string = ((service as unknown) as ServiceStaticBase).SERVICE_NAME;
+
+        if (!this.services.has(serviceName)) {
+            this.services.set(serviceName, new service(this));
+        }
+        return this.services.get(serviceName) as any;
     }
 
     /**
