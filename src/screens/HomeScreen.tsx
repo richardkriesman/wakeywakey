@@ -7,11 +7,12 @@ import * as Log from "../utils/Log";
 
 import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {Dimensions, LayoutChangeEvent, LayoutRectangle, ScrollView, StyleSheet, Text, View} from "react-native";
 
 import { NavigationScreenProps } from "react-navigation";
 import { EmptyView } from "../components/EmptyView";
-import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
+import { Clock, SnoozeButton } from "../components/HomeScreen";
+import { PasscodeGateSlider } from "../components/HomeScreen/PasscodeGateSlider";
 import { InactivityHandler } from "../components/InactivityHandler";
 import { PreferenceService } from "../services/PreferenceService";
 import { NoHeader, UIScreen } from "../utils/screen";
@@ -29,9 +30,9 @@ export interface HomeScreenProps {
  * @author Richard Kriesman
  */
 interface HomeScreenState {
+    indicatorLayout?: LayoutRectangle;
     messageText: string;
     twentyFourHour: boolean;
-    loaded: boolean;
 }
 
 /**
@@ -45,7 +46,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
 
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
-        this.state = { loaded: false, messageText: "", twentyFourHour: false };
+        this.state = { messageText: "", twentyFourHour: false };
     }
 
     public componentWillMount(): void {
@@ -55,27 +56,46 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     public renderContent(): ReactNode {
-        const loadedContent = (
-            <View style={ExtraStyles.contentWrapper}>
-                <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
-                <Clock wrapperStyle={ExtraStyles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
-                <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
-            </View>
-        );
 
-        const notLoadedContent = <EmptyView icon="ios-cog" title="Loading" subtitle="Just a sec!"/>;
+        // render passcode slider once the layout has become available
+        let passcodeSlider: ReactNode;
+        if (this.height > 0) { // once the screen height is known, it should be greater than 0
+            // FIXME: Why are we having to add +11 here? Because I have no idea
+            const initialTop: number = this.height -
+                (this.state.indicatorLayout ? this.state.indicatorLayout.height : 0) + 11;
+            passcodeSlider = (
+                <PasscodeGateSlider
+                    onIndicatorLayout={this.onIndicatorLayout.bind(this)}
+                    initialTop={initialTop}>
+                    <View style={ExtraStyles.passcodeContainer}>
+                        <ScrollView>
+                            <Text style={ExtraStyles.passcodeInnerText}>
+                                Spongebob me boy, enter that password! Arghegegegegegh
+                            </Text>
+                            <Text style={ExtraStyles.passcodeInnerText}>
+                                Spongebob me boy, enter that password! Arghegegegegegh
+                            </Text>
+                        </ScrollView>
+                    </View>
+                </PasscodeGateSlider>
+            );
+        }
 
+        // render screen
         return (
             <InactivityHandler
                 idleTime={15000}
                 navigation={this.props.navigation}>
                 <KeepAwake/>
                 <View style={ExtraStyles.container}>
-                    {this.state.loaded ? loadedContent : notLoadedContent}
-                    <View style={ExtraStyles.bottom}>
-                        <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
+                    <View style={ExtraStyles.contentWrapper}>
+                        <Text style={ExtraStyles.message}>{this.state.messageText}</Text>
+                        <Clock wrapperStyle={ExtraStyles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
+                        <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
                     </View>
+                    {passcodeSlider}
                 </View>
+
             </InactivityHandler>
         );
     }
@@ -94,8 +114,18 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
         this.updateState({ messageText: "Alarm snoozed!" });
     }
 
+    protected componentDidLayoutChange(layout: LayoutRectangle): void {
+        this.forceUpdate(); // some components depend on the height of the screen - force an update when it changes
+    }
+
     protected componentWillFocus(): void {
         this.refresh().catch(Log.error.bind(this, "HomeScreen"));
+    }
+
+    private onIndicatorLayout(event: LayoutChangeEvent): void {
+        this.setState({
+            indicatorLayout: event.nativeEvent.layout
+        });
     }
 
     private async refresh(): Promise<void> {
@@ -111,7 +141,6 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     private async fullDatabaseRead(): Promise<HomeScreenState> {
         const pref: PreferenceService = this.getService(PreferenceService);
         return {
-            loaded: true,
             messageText: "Hello, world!",
             twentyFourHour: await pref.get24HourTime()
         };
@@ -142,5 +171,18 @@ const ExtraStyles = StyleSheet.create({
     message: {
         fontSize: 30,
         textAlign: "center"
+    },
+    passcodeContainer: {
+        alignSelf: "center",
+        backgroundColor: "black",
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
+        height: 600,
+        width: 300,
+        zIndex: 2
+    },
+    passcodeInnerText: {
+        color: "white",
+        padding: 50
     }
 });

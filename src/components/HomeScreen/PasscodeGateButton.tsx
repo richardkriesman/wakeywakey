@@ -21,7 +21,7 @@ export interface SlideUpIndicatorProps {
  * Indicator at the bottom of the screen to slide up.
  * @author Shawn Lutch
  */
-export class SlideUpIndicator extends React.Component<SlideUpIndicatorProps> {
+export class PasscodeGateButton extends React.Component<SlideUpIndicatorProps> {
 
     protected onSwitch: VoidFunction;
 

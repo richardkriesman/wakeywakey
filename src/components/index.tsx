@@ -5,7 +5,7 @@
  * Complex items to be displayed
  */
 
-export { Clock, SlideUpIndicator, SnoozeButton } from "./HomeScreen";
+export { Clock, PasscodeGateButton, PasscodeGateSlider, SnoozeButton } from "./HomeScreen";
 export { ScheduleListItem } from "./MainSettingsScreen";
 export { HeaderIconButton } from "./HeaderIconButton";
 export { ListHeader } from "./list/ListHeader";

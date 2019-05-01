@@ -66,7 +66,6 @@ export default class App extends React.Component<AppProps, AppState> {
         } else {
             return (
                 <View style={styles.container}>
-                    {Platform.OS === "ios" && <StatusBar barStyle="default"/>}
                     <AppNavigator screenProps={{ db: this.state.db }}/>
                 </View>
             );
