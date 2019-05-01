@@ -84,6 +84,7 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                     <View style={styles.footer}>
                         <Button
                             disabled={this.state.isAddButtonDisabled}
+                            raised={true}
                             title="Add alarm"
                             onPress={this.onCreateAlarmPressed.bind(this)}
                         />
