@@ -142,6 +142,7 @@ export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreen
                     />
                     <View style={styles.footer}>
                         <Button
+                            raised={true}
                             title="Add schedule"
                             onPress={this.showModal.bind(this)}
                         />
