@@ -67,13 +67,13 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @param params Additional parameters to pass through to the new Screen.
      */
     public present(routeName: string, params?: NavigationParams): void {
-        this.props.navigation.dispatch(StackActions.push({
+        this.props.navigation.navigate({
             params: {
                 db: this.db,
                 ...params
             },
             routeName
-        }));
+        });
     }
 
     /**
