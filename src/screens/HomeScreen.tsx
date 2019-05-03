@@ -7,13 +7,11 @@ import * as Log from "../utils/Log";
 
 import { KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
-import {Dimensions, LayoutChangeEvent, LayoutRectangle, ScrollView, StyleSheet, Text, View} from "react-native";
+import { LayoutChangeEvent, LayoutRectangle, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { NavigationScreenProps } from "react-navigation";
-import { EmptyView } from "../components/EmptyView";
+import { InactivityHandler, Slider } from "../components";
 import { Clock, SnoozeButton } from "../components/HomeScreen";
-import { PasscodeGateSlider } from "../components/HomeScreen/PasscodeGateSlider";
-import { InactivityHandler } from "../components/InactivityHandler";
 import { PreferenceService } from "../services/PreferenceService";
 import { NoHeader, UIScreen } from "../utils/screen";
 
@@ -64,7 +62,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
             const initialTop: number = this.height -
                 (this.state.indicatorLayout ? this.state.indicatorLayout.height : 0) + 11;
             passcodeSlider = (
-                <PasscodeGateSlider
+                <Slider
                     onIndicatorLayout={this.onIndicatorLayout.bind(this)}
                     initialTop={initialTop}>
                     <View style={ExtraStyles.passcodeContainer}>
@@ -77,7 +75,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
                             </Text>
                         </ScrollView>
                     </View>
-                </PasscodeGateSlider>
+                </Slider>
             );
         }
 
