@@ -13,7 +13,7 @@ import Colors from "../../constants/Colors";
 import { Schedule } from "../../models";
 import { Alarm, AlarmDay } from "../../models/Alarm";
 import { AlarmService } from "../../services/AlarmService";
-import { PreferencesService } from "../../services/PreferencesService";
+import { PreferenceService } from "../../services/PreferenceService";
 import AlarmUtils from "../../utils/AlarmUtils";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
@@ -46,7 +46,7 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
     public componentWillMount(): void {
 
         // check if 24-hour time is enabled
-        this.getService(PreferencesService).get24HourTime()
+        this.getService(PreferenceService).get24HourTime()
             .then((is24HourTime: boolean) => {
                 this.setState({
                     is24HourTime
@@ -84,6 +84,7 @@ export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenS
                     <View style={styles.footer}>
                         <Button
                             disabled={this.state.isAddButtonDisabled}
+                            raised={true}
                             title="Add alarm"
                             onPress={this.onCreateAlarmPressed.bind(this)}
                         />

@@ -1,5 +1,5 @@
 import { Model } from "../Model";
-import { Service } from "../Service";
+import { Service } from "../service/Service";
 import { MockDatabase } from "../testing/MockDatabase";
 import { EmitterSet } from "../watcher";
 

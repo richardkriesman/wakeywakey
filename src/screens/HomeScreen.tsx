@@ -8,14 +8,10 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
 import { EmptyView } from "../components/EmptyView";
-import {
-    Clock,
-    SlideUpIndicator,
-    SnoozeButton
-} from "../components/HomeScreen";
+import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { InactivityHandler } from "../components/InactivityHandler";
+import { PreferenceService } from "../services/PreferenceService";
 import { PasscodeService } from "../services/PasscodeService";
-import { PreferencesService } from "../services/PreferencesService";
 import { AlarmEvent, AlarmEventType, TimerService } from "../services/TimerService";
 import * as Log from "../utils/Log";
 import { getEnumKeyByValue } from "../utils/ObjectUtils";
@@ -125,7 +121,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     private async refresh(): Promise<void> {
-        if (!this.getService(PreferencesService)) {
+        if (!this.getService(PreferenceService)) {
             this.setState({ messageText: this.props.initialMessageText });
             this.forceUpdate(); // FIXME: this shouldn't do anything - test it and remove if so?
             return;
@@ -135,7 +131,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     }
 
     private async fullDatabaseRead(): Promise<Partial<HomeScreenState>> {
-        const pref: PreferencesService = this.getService(PreferencesService);
+        const pref: PreferenceService = this.getService(PreferenceService);
         return {
             loaded: true,
             messageText: "Hello, world!",
