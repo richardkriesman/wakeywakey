@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Button, Theme, ThemeProvider } from "react-native-elements";
-import Colors from "../../constants/Colors";
+import { Colors } from "../../constants/Colors";
 import { Modal } from "./Modal";
 
 export interface ConfirmationModalProps {

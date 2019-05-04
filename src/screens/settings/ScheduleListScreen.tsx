@@ -21,7 +21,7 @@ import { Watcher } from "../../utils/watcher";
  * Main settings screen state. Includes schedule states.
  * @author Shawn Lutch
  */
-export interface MainSettingsScreenState {
+export interface ScheduleListScreenState {
     isCreateModalVisible: boolean;
     schedules: Map<number, ScheduleListItemData>;
 }
@@ -41,7 +41,7 @@ export interface ScheduleListItemData {
  */
 @Title("Schedules")
 @BottomTabBarIcon("ios-calendar")
-export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreenState> {
+export class ScheduleListScreen extends UIScreen<{}, ScheduleListScreenState> {
 
     private dataSetChangedHandler: (data: Schedule[]) => void;
     private watcher: Watcher<Schedule> = this.getService(ScheduleService).watchAll();
@@ -106,11 +106,11 @@ export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreen
     public onScheduleItemPressed(schedule: Schedule): void {
         /*
          * Okay, explanation as to why `screen` is being passed in here:
-         * EditSchedule is a bottom tab navigator, which isn't a UIScreen. However, it needs a UIScreen object so it can
+         * Schedule is a bottom tab navigator, which isn't a UIScreen. However, it needs a UIScreen object so it can
          * call `present` when the "add alarm" button is pressed. This is a horrible hack, but I don't have a better
          * solution at this precise moment in time.
          */
-        this.present("EditSchedule", {
+        this.present("Schedule", {
             schedule,
             screen: this,
             title: schedule.name

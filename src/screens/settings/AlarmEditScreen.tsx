@@ -11,7 +11,7 @@ import { DestructiveButton } from "../../components/DestructiveButton";
 import { ListHeader, ListItem } from "../../components/list";
 import { TimePicker } from "../../components/TimePicker";
 import { ToggleButton } from "../../components/ToggleButton";
-import Colors from "../../constants/Colors";
+import { Colors } from "../../constants/Colors";
 import { Alarm, AlarmDay } from "../../models/Alarm";
 import { Schedule } from "../../models/Schedule";
 import { AlarmService } from "../../services/AlarmService";
@@ -20,7 +20,7 @@ import { UIScreen } from "../../utils/screen";
 import { HeaderButtonRight } from "../../utils/screen/NavigationOptions";
 import { Time } from "../../utils/Time";
 
-export interface EditAlarmScreenState {
+export interface AlarmEditScreenState {
     alarm?: Alarm;
     days: number;
     disabledDays: number;
@@ -35,8 +35,8 @@ export interface EditAlarmScreenState {
 }
 
 @HeaderButtonRight((screen) => <Button type="clear" titleStyle={styles.saveButton} title="Save"
-                                       onPress={() => (screen as EditAlarmScreen).onSavePress()}/>)
-export default class EditAlarmScreen extends UIScreen<{}, EditAlarmScreenState> {
+                                       onPress={() => (screen as AlarmEditScreen).onSavePress()}/>)
+export class AlarmEditScreen extends UIScreen<{}, AlarmEditScreenState> {
 
     /**
      * Whether the results of a validation check are part of a pending state update.

@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import renderer from "react-test-renderer";
 import {TestEnvironment} from "../../utils/testing";
-import SchedulesListScreen from "../settings/SchedulesListScreen";
+import { ScheduleListScreen } from "../settings/ScheduleListScreen";
 
 let env: TestEnvironment;
 beforeEach((done) => {
@@ -15,7 +15,7 @@ beforeEach((done) => {
 
 it("renders the screen", async () => {
     const tree = renderer.create(
-        <SchedulesListScreen {...env.emptyUIScreenProps} />
+        <ScheduleListScreen {...env.emptyUIScreenProps} />
     ).toJSON();
     expect(tree).toMatchSnapshot();
 });

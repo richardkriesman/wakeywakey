@@ -4,19 +4,19 @@ import React from "react";
 import { Platform } from "react-native";
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
-import AboutScreen from "../screens/AboutScreen";
-import HomeScreen from "../screens/HomeScreen";
-import PasscodeGateScreen from "../screens/PasscodeGateScreen";
-import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
-import PasscodeChangeScreen from "../screens/settings/PasscodeChangeScreen";
-import DefaultSettingsNavigator from "./DefaultSettingsNavigator";
-import ScheduleDetailsNavigator from "./ScheduleDetailsNavigator";
+import { AboutScreen } from "../screens/AboutScreen";
+import { HomeScreen } from "../screens/HomeScreen";
+import { PasscodeGateScreen } from "../screens/PasscodeGateScreen";
+import { AlarmEditScreen } from "../screens/settings/AlarmEditScreen";
+import { PasscodeEditScreen } from "../screens/settings/PasscodeEditScreen";
+import { ScheduleTabNavigator } from "./ScheduleTabNavigator";
+import { SettingsTabNavigator } from "./SettingsTabNavigator";
 
 /**
  * Main StackNavigator that handles navigation throughout the app.
  * @author Shawn Lutch, Miika Raina
  */
-export default createStackNavigator(
+export const AppStackNavigator = createStackNavigator(
     // screen stack
     {
         About: {
@@ -33,28 +33,28 @@ export default createStackNavigator(
             screen: HomeScreen
         },
 
-        PasscodeChange: {
-            screen: PasscodeChangeScreen
+        PasscodeEdit: {
+            screen: PasscodeEditScreen
         },
 
         PasscodeGate: {
             screen: PasscodeGateScreen
         },
 
-        SettingsMain: {
+        Settings: {
             navigationOptions: { title: "Settings" },
-            screen: DefaultSettingsNavigator
+            screen: SettingsTabNavigator
         },
 
-        EditSchedule: {
+        Schedule: {
             navigationOptions: ({ navigation }: NavigationScreenProps) => ({
                 title: navigation.getParam("title", "Edit Schedule")
             }),
-            screen: ScheduleDetailsNavigator
+            screen: ScheduleTabNavigator
         },
 
-        EditAlarm: {
-            screen: EditAlarmScreen
+        AlarmEdit: {
+            screen: AlarmEditScreen
         }
 
     },

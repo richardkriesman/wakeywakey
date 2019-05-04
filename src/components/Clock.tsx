@@ -7,12 +7,12 @@ import { StyleSheet, View, ViewStyle } from "react-native";
 
 import { Text } from "react-native";
 
-interface HomeScreenClockProps {
+interface ClockProps {
     wrapperStyle?: ViewStyle;
     twentyFourHour: boolean;
 }
 
-interface HomeScreenClockState {
+interface ClockState {
     date?: Date;
 }
 
@@ -21,7 +21,7 @@ interface HomeScreenClockState {
  *
  * @author Shawn Lutch
  */
-export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeScreenClockState> {
+export class Clock extends React.Component<ClockProps, ClockState> {
 
     /**
      * Get the number of hours past midnight
@@ -59,7 +59,7 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
         return result;
     }
 
-    public constructor(props: HomeScreenClockProps) {
+    public constructor(props: ClockProps) {
         super(props);
 
         this.state = { date: new Date() };
@@ -99,7 +99,7 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
     }
 
     private get24hString(): string {
-        return `${HomeScreenClock.pad(this.hours)}:${HomeScreenClock.pad(this.minutes)}`;
+        return `${Clock.pad(this.hours)}:${Clock.pad(this.minutes)}`;
     }
 
     private get12hString(): string {
@@ -109,7 +109,7 @@ export class HomeScreenClock extends React.Component<HomeScreenClockProps, HomeS
         hours = hours % 12;
         hours = hours ? hours : 12;
 
-        return `${hours}:${HomeScreenClock.pad(this.minutes)} ${ampm}`;
+        return `${hours}:${Clock.pad(this.minutes)} ${ampm}`;
     }
 
     /**

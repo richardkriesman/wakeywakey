@@ -5,11 +5,13 @@
 import { Audio, KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
+import { Clock, SlideUpIndicator } from "../components";
 import { EmptyView } from "../components/EmptyView";
-import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { InactivityHandler } from "../components/InactivityHandler";
+import { Colors } from "../constants/Colors";
 import { PasscodeService } from "../services/PasscodeService";
 import { PreferenceService } from "../services/PreferenceService";
 import { AlarmEvent, AlarmEventType, TimerService } from "../services/TimerService";
@@ -42,7 +44,7 @@ interface HomeScreenState {
  * @author Shawn Lutch, Miika Raina
  */
 @NoHeader
-export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
+export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
     public static defaultInitialMessageText: string = "Hello, world!";
 
@@ -75,7 +77,11 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
             <View style={styles.contentWrapper}>
                 <Text style={styles.message}>{this.state.messageText}</Text>
                 <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
-                <SnoozeButton onPress={this.onSnoozePressed.bind(this)}/>
+                <Button
+                    buttonStyle={styles.snoozeButton}
+                    title="Snooze"
+                    onPress={this.onSnoozePressed.bind(this)}
+                />
             </View>
         );
 
@@ -103,7 +109,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
             backButtonName: "Home",
             hasPasscode,
             screen: this,
-            successScreenKey: "SettingsMain"
+            successScreenKey: "Settings"
         });
     }
 
@@ -127,7 +133,9 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
             return;
         }
 
-        return this.fullDatabaseRead().then(this.updateState.bind(this));
+        return this.fullDatabaseRead().then((partial: Partial<HomeScreenState>) => {
+            this.updateState(partial);
+        });
     }
 
     private async fullDatabaseRead(): Promise<Partial<HomeScreenState>> {
@@ -236,5 +244,9 @@ const styles = StyleSheet.create({
     message: {
         fontSize: 30,
         textAlign: "center"
+    },
+    snoozeButton: {
+        backgroundColor: Colors.black,
+        padding: 15
     }
 });

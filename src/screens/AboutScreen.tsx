@@ -6,9 +6,8 @@ import React, { ReactNode } from "react";
 import { Image, ScrollView, StyleSheet, Text } from "react-native";
 
 import { UIScreen } from "../utils/screen";
-import { NoHeader } from "../utils/screen/NavigationOptions";
 
-export default class AboutScreen extends UIScreen<{}, {}> {
+export class AboutScreen extends UIScreen<{}, {}> {
 
     public title: string = "Wakey Wakey";
     public authors: string = `Created by:
