@@ -13,6 +13,7 @@ import {
 
 import { Button, Icon } from "react-native-elements";
 import Colors from "../constants/Colors";
+import { RigidBody } from "../utils/RigidBody";
 
 enum SliderPosition {
     Collapsed = 0,
@@ -42,6 +43,7 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
     private contentHeight: number = 0; // computed height of the content
     private motion: SliderMotion = SliderMotion.Idle; // how the slider is moving
     private position: SliderPosition = SliderPosition.Collapsed; // where the slider is
+    private rigidBody: RigidBody;
     private yDragStart: number = 0; // y value when the drag was started
     private yOffset: number = 0; // offset from the point of the user's touch - prevents jumping during responder grant
 
@@ -177,6 +179,7 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
         // set y offset for drag
         this.yOffset = event.nativeEvent.pageY - this.yDrag;
         this.yDragStart = event.nativeEvent.pageY;
+        this.rigidBody = new RigidBody(0, this.yDrag);
 
         // by default, we're going to consider this a press - if it's dragged too far, we'll consider it a drag
         this.motion = SliderMotion.Press;
@@ -204,6 +207,9 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
             newY = this.props.initialTop - this.contentHeight;
         }
 
+        // update the position of the rigid body
+        this.rigidBody.moveTo(0, newY);
+
         // update y
         this.setState({
             yDrag: newY
@@ -219,27 +225,47 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
             return;
         }
 
-        // drag, animate the reset of the way
-        const distanceToExpanded = this.yDrag - (this.props.initialTop - this.contentHeight);
-        const distanceToCollapsed = this.props.initialTop - this.yDrag;
-        if (this.position === SliderPosition.Collapsed) { // dragging to expanded
-            if (distanceToExpanded * 0.40 <= distanceToCollapsed) {
-                this.animate(SliderPosition.Expanded);
-            } else {
-                this.animate(SliderPosition.Collapsed);
-            }
-        } else { // dragging to collapsed
-            if (distanceToCollapsed * 0.40 <= distanceToExpanded) {
-                this.animate(SliderPosition.Collapsed);
-            } else {
-                this.animate(SliderPosition.Expanded);
-            }
-        }
+        // start applying a deceleration
+        setTimeout(this.doVelocityTick.bind(this), 10);
+
+        // drag, animate the rest of the way
+        // const distanceToExpanded = this.yDrag - (this.props.initialTop - this.contentHeight);
+        // const distanceToCollapsed = this.props.initialTop - this.yDrag;
+        // if (this.position === SliderPosition.Collapsed) { // dragging to expanded
+        //     if (distanceToExpanded * 0.40 <= distanceToCollapsed) {
+        //         this.animate(SliderPosition.Expanded);
+        //     } else {
+        //         this.animate(SliderPosition.Collapsed);
+        //     }
+        // } else { // dragging to collapsed
+        //     if (distanceToCollapsed * 0.40 <= distanceToExpanded) {
+        //         this.animate(SliderPosition.Collapsed);
+        //     } else {
+        //         this.animate(SliderPosition.Expanded);
+        //     }
+        // }
     }
 
     private onIndicatorLayout(event: LayoutChangeEvent): void {
         if (this.props.onIndicatorLayout) {
             this.props.onIndicatorLayout(event);
+        }
+    }
+
+    private doVelocityTick(): void {
+        console.log("y: " + this.rigidBody.y);
+        console.log("vel: " + this.rigidBody.yVelocity / 100);
+        const newY: number = this.rigidBody.y +
+            ((this.rigidBody.yVelocity / 100) + (this.rigidBody.yVelocity > 0 ? -0.0 : 0.0));
+        this.rigidBody.moveTo(0, newY);
+        this.setState({
+            yDrag: newY
+        });
+        console.log(this.rigidBody.yVelocity);
+
+        // noinspection JSSuspiciousNameCombination
+        if (Math.abs(this.rigidBody.yVelocity) > 0) {
+            setTimeout(this.doVelocityTick.bind(this), 10);
         }
     }
 
