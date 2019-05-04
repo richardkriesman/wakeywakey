@@ -4,10 +4,18 @@
 
 import React, { ReactNode } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
-import { NavigationEvents, NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
+import {
+    NavigationEvents,
+    NavigationParams,
+    NavigationRoute, NavigationScreenProp,
+    NavigationScreenProps,
+    StackActions
+} from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
 import * as Log from "../Log";
 import { Service } from "../service/Service";
+
+type UIScreenUpdateStateCallback = () => void;
 
 export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & NavigationScreenProps, S> {
 
@@ -134,7 +142,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @param newValues A new set of values to copy into the state
      * @param cb Optional callback for setState
      */
-    protected updateState(newValues: Partial<S>, cb?: () => void): void {
+    protected updateState(newValues: Partial<S>, cb?: UIScreenUpdateStateCallback): void {
         const temp = Object.assign({}, this.state);
         const newState = Object.assign(temp, newValues);
         this.setState(newState, cb);

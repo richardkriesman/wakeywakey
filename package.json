@@ -32,20 +32,19 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
     "react-native-modal": "^9.0.0",
-    "react-navigation": "^3.0.9"
+    "react-navigation": "^3.9.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "^7.3.3",
-    "@types/expo": "^32.0.3",
+    "@types/expo": "^32.0.11",
     "@types/jest": "^24.0.9",
     "@types/mockdate": "^2.0.0",
     "@types/react": "^16.8.5",
     "@types/react-dom": "^16.8.2",
     "@types/react-native": "^0.57.38",
-    "@types/react-navigation": "^3.0.4",
+    "@types/react-navigation": "^3.0.6",
     "@types/react-test-renderer": "^16.8.1",
-    "@types/typescript": "^2.0.0",
     "babel-preset-expo": "^5.0.0",
     "concurrently": "^4.1.0",
     "coveralls": "^3.0.3",
