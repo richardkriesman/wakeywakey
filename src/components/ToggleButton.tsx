@@ -4,7 +4,7 @@
 
 import React, { ReactNode } from "react";
 import { Animated, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
-import Colors from "../constants/Colors";
+import { Colors } from "../constants/Colors";
 
 export interface ToggleButtonProps {
     backgroundColor?: string;

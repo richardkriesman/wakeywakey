@@ -5,7 +5,7 @@
 import { Icon } from "expo";
 import React, { ReactNode } from "react";
 
-import Colors from "../constants/Colors";
+import { Colors } from "../constants/Colors";
 
 export interface TabBarIconProps {
     name: string;

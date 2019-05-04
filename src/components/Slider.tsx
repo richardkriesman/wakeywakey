@@ -12,7 +12,7 @@ import {
     View} from "react-native";
 
 import { Button, Icon } from "react-native-elements";
-import Colors from "../constants/Colors";
+import { Colors } from "../constants/Colors";
 
 enum SliderPosition {
     Collapsed = 0,

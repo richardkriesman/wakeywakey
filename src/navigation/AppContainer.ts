@@ -3,10 +3,10 @@
 
 import { createAppContainer } from "react-navigation";
 
-import MainStackNavigator from "./MainStackNavigator";
+import { AppStackNavigator } from "./AppStackNavigator";
 
 /**
  * Default app container. Connects the MainStackNavigator.
  * @author Shawn Lutch, Miika Raina
  */
-export default createAppContainer(MainStackNavigator);
+export const AppContainer = createAppContainer(AppStackNavigator);

@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import renderer, { ReactTestInstance } from "react-test-renderer";
 import { TestEnvironment } from "../../utils/testing";
-import HomeScreen from "../HomeScreen";
+import { HomeScreen } from "../HomeScreen";
 
 const fakeDateMillis = 1551896555862;
 const initialMessageText: string = "Lorem ipsum dolar sit amet";
@@ -56,26 +56,6 @@ describe("screen instance methods", () => {
 
         // done
         done();
-    });
-
-    it("snoozes the alarm", () => {
-        // mock component
-        const component = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} {...env.emptyUIScreenProps}/>
-        );
-
-        // get instance
-        const instance: (ReactTestInstance & HomeScreen) | null = component.getInstance() as any;
-        expect(instance).toBeDefined();
-
-        // spy on setState
-        const setState = jest.spyOn(instance, "setState");
-
-        // switch to settings
-        instance.onSnoozePressed();
-
-        // check that everything was called correctly
-        expect(setState).toBeCalled();
     });
 
 });

@@ -6,7 +6,7 @@ const primaryConstructive: string = "#007aff";
 const primaryDestructive: string = "#ff3b30";
 const white: string = "#ffffff";
 
-export default {
+export const Colors = {
     android: {
         switch: {
             thumb: {

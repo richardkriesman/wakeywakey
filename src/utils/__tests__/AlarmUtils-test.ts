@@ -1,7 +1,7 @@
 import { Schedule } from "../../models";
 import { Alarm, AlarmDay } from "../../models/Alarm";
 import { AlarmService, ScheduleService } from "../../services";
-import AlarmUtils from "../AlarmUtils";
+import * as AlarmUtils from "../AlarmUtils";
 import { TestEnvironment } from "../testing";
 import { Time } from "../Time";
 

@@ -87,6 +87,8 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="utils.appdatabase.html#db" class="tsd-kind-icon">db</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="utils.appdatabase.html#emitters" class="tsd-kind-icon">emitters</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="utils.appdatabase.html#services" class="tsd-kind-icon">services</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="utils.appdatabase.html#_initcount" class="tsd-kind-icon">_init<wbr>Count</a></li>
 							</ul>
 						</section>
@@ -101,7 +103,9 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="utils.appdatabase.html#doestableexist" class="tsd-kind-icon">does<wbr>Table<wbr>Exist</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="utils.appdatabase.html#execute" class="tsd-kind-icon">execute</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="utils.appdatabase.html#getemitterset" class="tsd-kind-icon">get<wbr>Emitter<wbr>Set</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="utils.appdatabase.html#getpreference" class="tsd-kind-icon">get<wbr>Preference</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="utils.appdatabase.html#getservice" class="tsd-kind-icon">get<wbr>Service</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="utils.appdatabase.html#setpreference" class="tsd-kind-icon">set<wbr>Preference</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="utils.appdatabase.html#init" class="tsd-kind-icon">init</a></li>
 							</ul>
@@ -121,7 +125,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L46">utils/AppDatabase.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L87">utils/AppDatabase.ts:87</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="utils.appdatabase.html" class="tsd-signature-type">AppDatabase</a></h4>
@@ -137,7 +141,27 @@
 					<div class="tsd-signature tsd-kind-icon">db<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Database</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L46">utils/AppDatabase.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L85">utils/AppDatabase.ts:85</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="emitters" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> emitters</h3>
+					<div class="tsd-signature tsd-kind-icon">emitters<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="_utils_watcher_emitterset_.emitterset.html" class="tsd-signature-type">EmitterSet</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Map()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L87">utils/AppDatabase.ts:87</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="services" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> services</h3>
+					<div class="tsd-signature tsd-kind-icon">services<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="services.service.html" class="tsd-signature-type">Service</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Map()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L86">utils/AppDatabase.ts:86</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -147,7 +171,7 @@
 					<div class="tsd-signature tsd-kind-icon">_init<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L44">utils/AppDatabase.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L83">utils/AppDatabase.ts:83</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -170,7 +194,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L13">utils/AppDatabase.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L17">utils/AppDatabase.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -190,7 +214,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L58">utils/AppDatabase.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L102">utils/AppDatabase.ts:102</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -221,7 +245,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L99">utils/AppDatabase.ts:99</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L175">utils/AppDatabase.ts:175</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -248,6 +272,44 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="getemitterset" class="tsd-anchor"></a>
+					<h3>get<wbr>Emitter<wbr>Set</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Emitter<wbr>Set&lt;T&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_utils_watcher_emitterset_.emitterset.html" class="tsd-signature-type">EmitterSet</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L118">utils/AppDatabase.ts:118</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets an <a href="_utils_watcher_emitterset_.emitterset.html">EmitterSet</a> for the specified <a href="_utils_model_.model.html">Model</a> class. The EmitterSet persists for the life of the
+									<a href="utils.appdatabase.html">AppDatabase</a>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="_utils_model_.model.html" class="tsd-signature-type">Model</a></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name of the EmitterSet</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_utils_watcher_emitterset_.emitterset.html" class="tsd-signature-type">EmitterSet</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="getpreference" class="tsd-anchor"></a>
 					<h3>get<wbr>Preference</h3>
@@ -258,7 +320,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L76">utils/AppDatabase.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L135">utils/AppDatabase.ts:135</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -281,6 +343,45 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="getservice" class="tsd-anchor"></a>
+					<h3>get<wbr>Service</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Service&lt;T&gt;<span class="tsd-signature-symbol">(</span>service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L157">utils/AppDatabase.ts:157</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets a <a href="services.service.html">Service</a>. Service instances persist for the life of the <a href="utils.appdatabase.html">AppDatabase</a>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="services.service.html" class="tsd-signature-type">Service</a></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>service: <span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <a href="services.service.html">Service</a> class to retrieve.</p>
+									</div>
+									<ul class="tsd-parameters">
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="setpreference" class="tsd-anchor"></a>
 					<h3>set<wbr>Preference</h3>
@@ -291,7 +392,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L122">utils/AppDatabase.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L208">utils/AppDatabase.ts:208</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -330,7 +431,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/AppDatabase.ts#L20">utils/AppDatabase.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/AppDatabase.ts#L24">utils/AppDatabase.ts:24</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -350,24 +451,6 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/app.html">app</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/components.html">components</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/constants.html">constants</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/models.html">models</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/screens.html">screens</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/services.html">services</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/utils.html">utils</a>
 					</li>
@@ -375,6 +458,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
+						<a href="../enums/utils.alarmeventtype.html" class="tsd-kind-icon">Alarm<wbr>Event<wbr>Type</a>
+					</li>
 					<li class=" tsd-kind-enum tsd-parent-kind-external-module">
 						<a href="../enums/utils.timerevent.html" class="tsd-kind-icon">Timer<wbr>Event</a>
 					</li>
@@ -389,6 +475,12 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="utils.appdatabase.html#db" class="tsd-kind-icon">db</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="utils.appdatabase.html#emitters" class="tsd-kind-icon">emitters</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="utils.appdatabase.html#services" class="tsd-kind-icon">services</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static">
 								<a href="utils.appdatabase.html#_initcount" class="tsd-kind-icon">_init<wbr>Count</a>
 							</li>
@@ -401,8 +493,14 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="utils.appdatabase.html#execute" class="tsd-kind-icon">execute</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="utils.appdatabase.html#getemitterset" class="tsd-kind-icon">get<wbr>Emitter<wbr>Set</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="utils.appdatabase.html#getpreference" class="tsd-kind-icon">get<wbr>Preference</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="utils.appdatabase.html#getservice" class="tsd-kind-icon">get<wbr>Service</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="utils.appdatabase.html#setpreference" class="tsd-kind-icon">set<wbr>Preference</a>
@@ -415,13 +513,13 @@
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="utils.apptimer.html" class="tsd-kind-icon">App<wbr>Timer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="utils.testenvironment.html" class="tsd-kind-icon">Test<wbr>Environment</a>
+						<a href="utils.timerservice.html" class="tsd-kind-icon">Timer<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="utils.uiscreen.html" class="tsd-kind-icon">UIScreen</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/utils.alarmevent.html" class="tsd-kind-icon">Alarm<wbr>Event</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 						<a href="../modules/utils.html#timereventstr" class="tsd-kind-icon">Timer<wbr>Event<wbr>Str</a>
@@ -445,6 +543,9 @@
 						<a href="../modules/utils.html#noheader" class="tsd-kind-icon">No<wbr>Header</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/utils.html#servicename" class="tsd-kind-icon">Service<wbr>Name</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/utils.html#title" class="tsd-kind-icon">Title</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
@@ -457,9 +558,6 @@
 						<a href="../modules/utils.html#error" class="tsd-kind-icon">error</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="../modules/utils.html#findcomponentwithtestid" class="tsd-kind-icon">find<wbr>Component<wbr>With<wbr>Test<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/utils.html#formattime" class="tsd-kind-icon">format<wbr>Time</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
@@ -467,6 +565,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/utils.html#getalarmtitle" class="tsd-kind-icon">get<wbr>Alarm<wbr>Title</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/utils.html#getenumkeybyvalue" class="tsd-kind-icon">get<wbr>Enum<wbr>Key<wbr>ByValue</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/utils.html#info" class="tsd-kind-icon">info</a>

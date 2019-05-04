@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import renderer from "react-test-renderer";
 import {TestEnvironment} from "../../../utils/testing";
-import PasscodeChangeScreen from "../PasscodeChangeScreen";
+import { PasscodeEditScreen } from "../PasscodeEditScreen";
 
 let env: TestEnvironment;
 beforeEach((done) => {
@@ -15,13 +15,13 @@ beforeEach((done) => {
 
 it("renders correctly", () => {
     const tree = renderer.create(
-        <PasscodeChangeScreen {...env.emptyUIScreenProps} />);
+        <PasscodeEditScreen {...env.emptyUIScreenProps} />);
     expect(tree.toJSON()).toMatchSnapshot();
 });
 
 it("passcode is set successfully", (done) => {
     const component: any = renderer.create(
-        <PasscodeChangeScreen {...env.emptyUIScreenProps} />)
+        <PasscodeEditScreen {...env.emptyUIScreenProps} />)
         .getInstance();
 
     component.handleSuccess("1234")

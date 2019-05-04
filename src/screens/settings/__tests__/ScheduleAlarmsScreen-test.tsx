@@ -3,7 +3,7 @@ import renderer from "react-test-renderer";
 import { Schedule } from "../../../models";
 import { ScheduleService } from "../../../services";
 import { TestEnvironment } from "../../../utils/testing";
-import ScheduleAlarmsScreen from "../ScheduleAlarmsScreen";
+import { AlarmListScreen } from "../AlarmListScreen";
 
 jest.mock("../../../services/ScheduleService");
 
@@ -30,7 +30,7 @@ it("renders correctly", () => {
     props.navigation.setParams({ schedule });
 
     // render tree
-    const tree = renderer.create(<ScheduleAlarmsScreen {...props}/>);
+    const tree = renderer.create(<AlarmListScreen {...props}/>);
     expect(tree.toJSON()).toMatchSnapshot();
 
 });

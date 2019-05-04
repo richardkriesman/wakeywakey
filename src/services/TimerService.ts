@@ -4,6 +4,7 @@
 import { Alarm } from "../models/Alarm";
 import { Schedule } from "../models/Schedule";
 import * as Log from "../utils/Log";
+import { getEnumKeyByValue } from "../utils/ObjectUtils";
 import { Service } from "../utils/service/Service";
 import { ServiceName } from "../utils/service/ServiceOptions";
 import { Time } from "../utils/Time";
@@ -49,6 +50,28 @@ export type TimerEventStr = "start" | "second" | "minute" | "hour" | "stop" | "a
 export class TimerService extends Service {
 
     /**
+     * Getter for {@link NodeJS.Timeout} ID.
+     *
+     * Can be undefined if no {@link NodeJS.Timeout} is scheduled for this {@TimerService} instance.
+     */
+    public get timeoutId(): number {
+        return this.timeout;
+    }
+
+    /**
+     * Convert the {@link Alarm} {@link Time}s to a {@link Map}.
+     *
+     * @param alarm The {@link Alarm} whose {@link Time}s we are dealing with.
+     */
+    private static alarmTimesAsMap(alarm: Alarm): Map<AlarmEventType, Time> {
+        return new Map<AlarmEventType, Time>([
+            [ AlarmEventType.SLEEP, alarm.sleepTime ],
+            [ AlarmEventType.WAKE, alarm.wakeTime ],
+            [ AlarmEventType.GET_UP, alarm.getUpTime ]
+        ]);
+    }
+
+    /**
      * An instance field containing this service's {@link NodeJS.Timeout}'s ID.
      *
      * Can be undefined if no {@link NodeJS.Timeout} is scheduled for this {@TimerService} instance.
@@ -61,15 +84,6 @@ export class TimerService extends Service {
      * Updated on each tick.
      */
     private lastTick?: Date = undefined;
-
-    /**
-     * Getter for {@link NodeJS.Timeout} ID.
-     *
-     * Can be undefined if no {@link NodeJS.Timeout} is scheduled for this {@TimerService} instance.
-     */
-    public get timeoutId(): number {
-        return this.timeout;
-    }
 
     /**
      * A map to register {@link TimerEvent}s and their respective lists of {@link TimerHandler}s.
@@ -124,6 +138,12 @@ export class TimerService extends Service {
      * @param alarmEvent An optional {@link AlarmEvent} to pass along to each handler, if appropriate
      */
     private fireAll(event: TimerEvent, date?: Date, alarmEvent?: AlarmEvent) {
+        if (alarmEvent) { // log when alarms are fired
+            const eventName: string = getEnumKeyByValue(AlarmEventType, alarmEvent.type);
+            Log.info("TimerService",
+                `Firing ${eventName} event for Alarm ${alarmEvent.alarm.id}`);
+        }
+
         const handlersArr = this.handlers.get(event);
 
         // bail out if no handlers are registered
@@ -176,42 +196,40 @@ export class TimerService extends Service {
      * Check active alarms and see whether we need to fire any of them.
      */
     private async checkActiveAlarms(now: Date): Promise<void> {
+        Log.info("TimerService", "Checking for new alarms");
         const alarms: Alarm[] = await this.fetchActiveAlarms();
         alarms.forEach(this.checkAlarm.bind(this, now));
     }
 
     /**
      * Check to see whether this alarm needs to be fired, and fire the alarm if so.
+     *
      * @param now Date object passed, should only be from {@link fireAll}
      * @param alarm The alarm to check and possibly fire
      */
     private checkAlarm(now: Date, alarm: Alarm): void {
+
+        // get day of week as a characteristic vector
+        let dayOfWeek: number = now.getDay() - 1;
+        if (dayOfWeek < 0) { // now.getDay() starts on sunday, but we start with monday - normalize this
+            dayOfWeek = 6;
+        }
+        const today: number = 1 << dayOfWeek;
+
         // bail out if this alarm is not active today
-        if (!alarm.isDayActive(1 << now.getDay())) {
+        if (!alarm.isDayActive(today)) {
             return;
         }
 
+        // fire any alarms that should be going off right this minute
         const nowTime: Time = Time.createFromDate(now);
-
-        // TODO don't fire alarms more than once per day
-
-        // check sleep time first
-        if (alarm.sleepTime.greaterThanOrEquals(nowTime)) {
-            this.fireAll(TimerEvent.ALARM, now, { alarm, type: AlarmEventType.SLEEP });
-            return;
-        }
-
-        // check get-up time next
-        if (alarm.getUpTime.greaterThanOrEquals(nowTime)) {
-            this.fireAll(TimerEvent.ALARM, now, { alarm, type: AlarmEventType.GET_UP });
-            return;
-        }
-
-        // check wake time last
-        if (alarm.wakeTime.greaterThanOrEquals(nowTime)) {
-            this.fireAll(TimerEvent.ALARM, now, { alarm, type: AlarmEventType.WAKE });
-            return;
-        }
+        const timesMap = TimerService.alarmTimesAsMap(alarm);
+        Array.from(timesMap.entries()).forEach((e: [AlarmEventType, Time]) => {
+            // ignore seconds, in case this fires a second too early or late
+            if (e[1].equals(nowTime, true)) {
+                this.fireAll(TimerEvent.ALARM, now, { alarm, type: e[0] });
+            }
+        });
     }
 
     /**

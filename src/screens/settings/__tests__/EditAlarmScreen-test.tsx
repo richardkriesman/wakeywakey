@@ -5,7 +5,7 @@ import { AlarmDay } from "../../../models/Alarm";
 import { AlarmService, ScheduleService } from "../../../services";
 import { TestEnvironment } from "../../../utils/testing";
 import { Time } from "../../../utils/Time";
-import EditAlarmScreen from "../EditAlarmScreen";
+import { AlarmEditScreen } from "../AlarmEditScreen";
 
 jest.mock("../../../services/AlarmService");
 jest.mock("../../../services/ScheduleService");
@@ -46,7 +46,7 @@ it("renders correctly", () => {
     });
 
     // render tree
-    const tree = renderer.create(<EditAlarmScreen {...props} />);
+    const tree = renderer.create(<AlarmEditScreen {...props} />);
     expect(tree.toJSON()).toMatchSnapshot();
 
 });

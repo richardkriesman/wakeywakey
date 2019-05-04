@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import RNModal from "react-native-modal";
-import Colors from "../../constants/Colors";
+import { Colors } from "../../constants/Colors";
 
 export interface ModalProps {
     buttons?: ReactNode[];

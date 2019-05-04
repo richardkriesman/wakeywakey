@@ -97,6 +97,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="services.passcodeservice.html#haspasscode" class="tsd-kind-icon">has<wbr>Passcode</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="services.passcodeservice.html#setpasscode" class="tsd-kind-icon">set<wbr>Passcode</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="services.passcodeservice.html#verifypasscode" class="tsd-kind-icon">verify<wbr>Passcode</a></li>
 							</ul>
@@ -117,7 +118,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="services.service.html">Service</a>.<a href="services.service.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/Service.ts#L9">utils/Service.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/service/Service.ts#L14">utils/service/Service.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -140,13 +141,35 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="services.service.html">Service</a>.<a href="services.service.html#db">db</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/utils/Service.ts#L9">utils/Service.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/utils/service/Service.ts#L14">utils/service/Service.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="haspasscode" class="tsd-anchor"></a>
+					<h3>has<wbr>Passcode</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Passcode<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/services/PasscodeService.ts#L34">services/PasscodeService.ts:34</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Determines whether a passcode has been set.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="setpasscode" class="tsd-anchor"></a>
 					<h3>set<wbr>Passcode</h3>
@@ -157,7 +180,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/services/PasscodeService.ts#L16">services/PasscodeService.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/services/PasscodeService.ts#L18">services/PasscodeService.ts:18</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -188,7 +211,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/82fc119/src/services/PasscodeService.ts#L25">services/PasscodeService.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/richardkriesman/wakeywakey/blob/67d1e1d/src/services/PasscodeService.ts#L27">services/PasscodeService.ts:27</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -217,31 +240,19 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/app.html">app</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/components.html">components</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/constants.html">constants</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/models.html">models</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/screens.html">screens</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/services.html">services</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/utils.html">utils</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="services.alarmservice.html" class="tsd-kind-icon">Alarm<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="services.mockservice.html" class="tsd-kind-icon">Mock<wbr>Service</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
@@ -254,6 +265,9 @@
 								<a href="services.passcodeservice.html#db" class="tsd-kind-icon">db</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="services.passcodeservice.html#haspasscode" class="tsd-kind-icon">has<wbr>Passcode</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="services.passcodeservice.html#setpasscode" class="tsd-kind-icon">set<wbr>Passcode</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -264,7 +278,13 @@
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="services.scheduleservice.html" class="tsd-kind-icon">Schedule<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="services.service.html" class="tsd-kind-icon">Service</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/services.servicestaticbase.html" class="tsd-kind-icon">Service<wbr>Static<wbr>Base</a>
 					</li>
 				</ul>
 			</nav>

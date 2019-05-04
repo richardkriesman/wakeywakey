@@ -53,12 +53,3 @@ export function formatTime(time: Time, is24HourTime: boolean): string {
 export function padTime(time: number): string {
     return ("0" + time).slice(-2);
 }
-
-const AlarmUtils = {
-    formatTime,
-    getAlarmSubtitle,
-    getAlarmTitle,
-    padTime
-};
-
-export default AlarmUtils;

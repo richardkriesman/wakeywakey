@@ -1,29 +1,29 @@
 import * as React from "react";
-
 import { StyleSheet, View } from "react-native";
-import { BooleanPreference } from "../../components/AppSettingsScreen/BooleanPreference";
-import { TouchPreference } from "../../components/AppSettingsScreen/TouchPreference";
+
 import { ListHeader } from "../../components/list/ListHeader";
+import { BooleanPreference } from "../../components/preference/BooleanPreference";
+import { TouchPreference } from "../../components/preference/TouchPreference";
 import { PreferenceService } from "../../services/PreferenceService";
 import * as Log from "../../utils/Log";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
-export interface AppSettingsScreenState {
+export interface PreferenceListScreenState {
     loading: boolean;
     twentyFourHour: boolean;
 }
 
 @Title("Preferences")
 @BottomTabBarIcon("ios-cog")
-export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
+export class PreferenceListScreen extends UIScreen<{}, PreferenceListScreenState> {
 
     private static onPasscodeChanged(): void {
-        Log.info("AppSettingsScreen", "passcode changed?");
+        Log.debug("PreferenceListScreen", "passcode changed?");
     }
 
     public componentWillMount(): void {
-        this.readAll().then((newState: AppSettingsScreenState) => {
+        this.readAll().then((newState: PreferenceListScreenState) => {
             this.updateState(newState);
         });
     }
@@ -43,15 +43,22 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
                 <TouchPreference
                     disabled={this.state.loading}
                     title="Change passcode"
-                    onValueChange={AppSettingsScreen.onPasscodeChanged.bind(this)}
+                    onValueChange={PreferenceListScreen.onPasscodeChanged.bind(this)}
                     onPress={this.changePasscode.bind(this)}
                     rightIcon={{ name: "arrow-forward" }}
+                />
+
+                <TouchPreference
+                    disabled={this.state.loading}
+                    title="About WakeyWakey"
+                    onPress={() => this.present("About")}
+                    rightIcon={{ name: "info" }}
                 />
             </View>
         );
     }
 
-    private async readAll(): Promise<AppSettingsScreenState> {
+    private async readAll(): Promise<PreferenceListScreenState> {
         this.updateState({ loading: true });
 
         const pref: PreferenceService = this.getService(PreferenceService);
@@ -74,7 +81,7 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
     }
 
     private changePasscode(): void {
-        this.present("PasscodeChange");
+        this.present("PasscodeEdit");
     }
 }
 
