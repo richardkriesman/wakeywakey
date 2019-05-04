@@ -104,7 +104,7 @@ export class AlarmListScreen extends UIScreen<{}, AlarmListScreenState> {
 
     public onAlarmPressed(key: number): void {
         this.getActiveDays().then((activeDays: number) => {
-            this.present("EditAlarm", {
+            this.present("AlarmEdit", {
                 activeDays,
                 alarm: this.state.alarms.get(key),
                 schedule: this.state.schedule,
@@ -147,7 +147,7 @@ export class AlarmListScreen extends UIScreen<{}, AlarmListScreenState> {
 
         // present the edit alarm screen
         this.getActiveDays().then((activeDays: number) => {
-            this.present("EditAlarm", {
+            this.present("AlarmEdit", {
                 activeDays,
                 is24HourTime: this.state.is24HourTime,
                 schedule: this.state.schedule,

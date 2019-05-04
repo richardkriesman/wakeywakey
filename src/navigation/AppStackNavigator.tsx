@@ -33,7 +33,7 @@ export const AppStackNavigator = createStackNavigator(
             screen: HomeScreen
         },
 
-        PasscodeChange: {
+        PasscodeEdit: {
             screen: PasscodeEditScreen
         },
 
@@ -41,19 +41,19 @@ export const AppStackNavigator = createStackNavigator(
             screen: PasscodeGateScreen
         },
 
-        SettingsMain: {
+        Settings: {
             navigationOptions: { title: "Settings" },
             screen: SettingsTabNavigator
         },
 
-        EditSchedule: {
+        Schedule: {
             navigationOptions: ({ navigation }: NavigationScreenProps) => ({
                 title: navigation.getParam("title", "Edit Schedule")
             }),
             screen: ScheduleTabNavigator
         },
 
-        EditAlarm: {
+        AlarmEdit: {
             screen: AlarmEditScreen
         }
 

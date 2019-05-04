@@ -4,17 +4,17 @@ import { AlarmListScreen } from "../screens/settings/AlarmListScreen";
 import { OptionsListScreen } from "../screens/settings/OptionsListScreen";
 
 const ScheduleDetailScreens = {
-    ScheduleAlarms: {
+    AlarmList: {
         screen: AlarmListScreen
     },
 
-    ScheduleOptions: {
+    OptionsList: {
         screen: OptionsListScreen
     }
 };
 
 const ScheduleDetailParams: BottomTabNavigatorConfig = {
-    initialRouteName: "ScheduleAlarms"
+    initialRouteName: "AlarmList"
 };
 
 export const ScheduleTabNavigator = createBottomTabNavigator(ScheduleDetailScreens, ScheduleDetailParams);

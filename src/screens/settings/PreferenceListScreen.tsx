@@ -81,7 +81,7 @@ export class PreferenceListScreen extends UIScreen<{}, PreferenceListScreenState
     }
 
     private changePasscode(): void {
-        this.present("PasscodeChange");
+        this.present("PasscodeEdit");
     }
 }
 

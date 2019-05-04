@@ -109,7 +109,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
             backButtonName: "Home",
             hasPasscode,
             screen: this,
-            successScreenKey: "SettingsMain"
+            successScreenKey: "Settings"
         });
     }
 

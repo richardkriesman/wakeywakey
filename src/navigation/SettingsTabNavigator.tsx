@@ -5,17 +5,17 @@ import { PreferenceListScreen } from "../screens/settings/PreferenceListScreen";
 import { ScheduleListScreen } from "../screens/settings/ScheduleListScreen";
 
 const DefaultSettingsScreens = {
-    SchedulesList: {
+    ScheduleList: {
         screen: ScheduleListScreen
     },
 
-    AppSettings: {
+    PreferenceList: {
         screen: PreferenceListScreen
     }
 };
 
 const params: BottomTabNavigatorConfig = {
-    initialRouteName: "SchedulesList"
+    initialRouteName: "ScheduleList"
 };
 
 export const SettingsTabNavigator = createBottomTabNavigator(DefaultSettingsScreens, params);
