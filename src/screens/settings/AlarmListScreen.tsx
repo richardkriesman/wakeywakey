@@ -9,17 +9,17 @@ import { NavigationScreenProps } from "react-navigation";
 import { Button } from "react-native-elements";
 import { EmptyView } from "../../components/EmptyView";
 import { ListHeader, ListItem } from "../../components/list";
-import Colors from "../../constants/Colors";
+import { Colors } from "../../constants/Colors";
 import { Schedule } from "../../models";
 import { Alarm, AlarmDay } from "../../models/Alarm";
 import { AlarmService } from "../../services/AlarmService";
 import { PreferenceService } from "../../services/PreferenceService";
-import AlarmUtils from "../../utils/AlarmUtils";
+import * as AlarmUtils from "../../utils/AlarmUtils";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 import { Watcher } from "../../utils/watcher/Watcher";
 
-export interface EditScheduleScreenState {
+export interface AlarmListScreenState {
     alarms: Map<number, Alarm>;
     isAddButtonDisabled: boolean;
     is24HourTime: boolean;
@@ -28,7 +28,7 @@ export interface EditScheduleScreenState {
 
 @Title("Alarms")
 @BottomTabBarIcon("ios-alarm")
-export default class EditScheduleScreen extends UIScreen<{}, EditScheduleScreenState> {
+export class AlarmListScreen extends UIScreen<{}, AlarmListScreenState> {
 
     private dataSetChangedHandler: (alarms: Alarm[]) => void;
     private watcher: Watcher<Alarm>;

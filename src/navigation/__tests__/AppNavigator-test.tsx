@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Renderer from "react-test-renderer";
 import { TestEnvironment } from "../../utils/testing";
-import AppNavigator from "../AppNavigator";
+import AppNavigator from "../AppContainer";
 
 const fakeDateMillis = 1551896555862;
 

@@ -14,7 +14,7 @@ import { NoHeader, UIScreen } from "../../utils/screen";
 const PASSCODE_LOG_TAG: string = "Security";
 
 @NoHeader
-export default class PasscodeChangeScreen extends UIScreen<{}, {}> {
+export class PasscodeEditScreen extends UIScreen<{}, {}> {
 
     public constructor(props: NavigationScreenProps) {
         super(props);

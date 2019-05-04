@@ -6,7 +6,7 @@ import React, { ReactNode } from "react";
 import { StyleSheet } from "react-native";
 
 import { Button, Icon } from "react-native-elements";
-import Colors from "../../constants/Colors";
+import { Colors } from "../../constants/Colors";
 
 /**
  * Properties that must be passed to <SlideUpIndicator />

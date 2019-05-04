@@ -6,7 +6,7 @@ import { AppLoading, Font, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import { ErrorHandlerCallback, Platform, StatusBar, StyleSheet, View } from "react-native";
 
-import AppNavigator from "./navigation/AppNavigator";
+import { AppContainer } from "./navigation/AppContainer";
 import { AppDatabase } from "./utils/AppDatabase";
 import * as Log from "./utils/Log";
 
@@ -20,7 +20,7 @@ export interface AppState {
     isLoadingComplete: boolean;
 }
 
-export default class App extends React.Component<AppProps, AppState> {
+export class App extends React.Component<AppProps, AppState> {
 
     private static async loadResources(): Promise<void> {
         await Font.loadAsync({
@@ -67,7 +67,7 @@ export default class App extends React.Component<AppProps, AppState> {
             return (
                 <View style={styles.container}>
                     {Platform.OS === "ios" && <StatusBar barStyle="default"/>}
-                    <AppNavigator screenProps={{ db: this.state.db }}/>
+                    <AppContainer screenProps={{ db: this.state.db }}/>
                 </View>
             );
         }

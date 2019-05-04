@@ -42,7 +42,7 @@ interface HomeScreenState {
  * @author Shawn Lutch, Miika Raina
  */
 @NoHeader
-export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
+export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
     public static defaultInitialMessageText: string = "Hello, world!";
 

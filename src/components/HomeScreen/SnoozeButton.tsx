@@ -5,7 +5,7 @@
 import React, { ReactNode } from "react";
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-elements";
-import Colors from "../../constants/Colors";
+import { Colors } from "../../constants/Colors";
 
 export interface SnoozeButtonProps {
     onPress: VoidFunction;

@@ -6,7 +6,7 @@ import React, { ReactNode } from "react";
 import {StyleProp, StyleSheet, ViewStyle} from "react-native";
 import { Button, Icon } from "react-native-elements";
 
-import Colors from "../constants/Colors";
+import { Colors } from "../constants/Colors";
 
 export interface HeaderButtonProps {
     color?: string;

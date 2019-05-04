@@ -5,18 +5,18 @@ import { Platform } from "react-native";
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
 import AboutScreen from "../screens/AboutScreen";
-import HomeScreen from "../screens/HomeScreen";
-import PasscodeGateScreen from "../screens/PasscodeGateScreen";
-import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
-import PasscodeChangeScreen from "../screens/settings/PasscodeChangeScreen";
-import DefaultSettingsNavigator from "./DefaultSettingsNavigator";
-import ScheduleDetailsNavigator from "./ScheduleDetailsNavigator";
+import { HomeScreen } from "../screens/HomeScreen";
+import { PasscodeGateScreen } from "../screens/PasscodeGateScreen";
+import { AlarmEditScreen } from "../screens/settings/AlarmEditScreen";
+import { PasscodeEditScreen } from "../screens/settings/PasscodeEditScreen";
+import { ScheduleTabNavigator } from "./ScheduleTabNavigator";
+import { SettingsTabNavigator } from "./SettingsTabNavigator";
 
 /**
  * Main StackNavigator that handles navigation throughout the app.
  * @author Shawn Lutch, Miika Raina
  */
-export default createStackNavigator(
+export const AppStackNavigator = createStackNavigator(
     // screen stack
     {
         About: {
@@ -34,7 +34,7 @@ export default createStackNavigator(
         },
 
         PasscodeChange: {
-            screen: PasscodeChangeScreen
+            screen: PasscodeEditScreen
         },
 
         PasscodeGate: {
@@ -43,18 +43,18 @@ export default createStackNavigator(
 
         SettingsMain: {
             navigationOptions: { title: "Settings" },
-            screen: DefaultSettingsNavigator
+            screen: SettingsTabNavigator
         },
 
         EditSchedule: {
             navigationOptions: ({ navigation }: NavigationScreenProps) => ({
                 title: navigation.getParam("title", "Edit Schedule")
             }),
-            screen: ScheduleDetailsNavigator
+            screen: ScheduleTabNavigator
         },
 
         EditAlarm: {
-            screen: EditAlarmScreen
+            screen: AlarmEditScreen
         }
 
     },

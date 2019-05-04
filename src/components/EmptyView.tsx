@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import Colors from "../constants/Colors";
+
+import { Colors } from "../constants/Colors";
 
 export interface EmptyViewProps {
     icon: string;

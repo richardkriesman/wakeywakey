@@ -3,7 +3,7 @@ import renderer from "react-test-renderer";
 import { Schedule } from "../../../models";
 import { ScheduleService } from "../../../services";
 import { TestEnvironment } from "../../../utils/testing";
-import ScheduleAlarmsScreen from "../ScheduleAlarmsScreen";
+import ScheduleAlarmsScreen from "../AlarmListScreen";
 
 jest.mock("../../../services/ScheduleService");
 

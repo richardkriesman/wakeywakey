@@ -10,18 +10,18 @@ import { DestructiveButton } from "../../components/DestructiveButton";
 import { ListHeader } from "../../components/list/ListHeader";
 import { ListItem } from "../../components/list/ListItem";
 import { ConfirmationModal } from "../../components/modal/ConfirmationModal";
-import Colors from "../../constants/Colors";
+import { Colors } from "../../constants/Colors";
 import { Schedule } from "../../models/Schedule";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
-export interface ScheduleOptionsScreenState {
+export interface OptionsListScreenState {
     isDeleteModalVisible: boolean;
 }
 
 @BottomTabBarIcon("ios-cog")
 @Title("Options")
-export class ScheduleOptionsScreen extends UIScreen<{}, ScheduleOptionsScreenState> {
+export class OptionsListScreen extends UIScreen<{}, OptionsListScreenState> {
 
     private readonly schedule: Schedule;
 

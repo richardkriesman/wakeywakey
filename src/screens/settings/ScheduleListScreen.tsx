@@ -21,7 +21,7 @@ import { Watcher } from "../../utils/watcher";
  * Main settings screen state. Includes schedule states.
  * @author Shawn Lutch
  */
-export interface MainSettingsScreenState {
+export interface ScheduleListScreenState {
     isCreateModalVisible: boolean;
     schedules: Map<number, ScheduleListItemData>;
 }
@@ -41,7 +41,7 @@ export interface ScheduleListItemData {
  */
 @Title("Schedules")
 @BottomTabBarIcon("ios-calendar")
-export default class SchedulesListScreen extends UIScreen<{}, MainSettingsScreenState> {
+export class ScheduleListScreen extends UIScreen<{}, ScheduleListScreenState> {
 
     private dataSetChangedHandler: (data: Schedule[]) => void;
     private watcher: Watcher<Schedule> = this.getService(ScheduleService).watchAll();

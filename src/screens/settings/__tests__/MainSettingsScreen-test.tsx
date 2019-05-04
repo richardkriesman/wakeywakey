@@ -1,7 +1,7 @@
 import * as React from "react";
 import Renderer from "react-test-renderer";
 import { TestEnvironment } from "../../../utils/testing";
-import SchedulesListScreen from "../SchedulesListScreen";
+import ScheduleListScreen from "../ScheduleListScreen";
 
 let env: TestEnvironment;
 beforeEach(async (done) => {
@@ -10,6 +10,6 @@ beforeEach(async (done) => {
 });
 
 it("renders properly", () => {
-    const tree = Renderer.create(<SchedulesListScreen {...env.emptyUIScreenProps}/>);
+    const tree = Renderer.create(<ScheduleListScreen {...env.emptyUIScreenProps}/>);
     expect(tree.toJSON()).toMatchSnapshot();
 });
