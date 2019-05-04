@@ -10,8 +10,8 @@ import { NavigationScreenProps } from "react-navigation";
 import { EmptyView } from "../components/EmptyView";
 import { Clock, SlideUpIndicator, SnoozeButton } from "../components/HomeScreen";
 import { InactivityHandler } from "../components/InactivityHandler";
-import { PreferenceService } from "../services/PreferenceService";
 import { PasscodeService } from "../services/PasscodeService";
+import { PreferenceService } from "../services/PreferenceService";
 import { AlarmEvent, AlarmEventType, TimerService } from "../services/TimerService";
 import * as Log from "../utils/Log";
 import { getEnumKeyByValue } from "../utils/ObjectUtils";
@@ -110,7 +110,7 @@ export default class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenStat
     public onSnoozePressed(): void {
         this.stopAudio()
             .then(() => {
-                this.updateState({
+                this.setState({
                     messageText: "Alarm snoozed!"
                 });
             });

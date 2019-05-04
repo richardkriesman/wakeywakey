@@ -58,24 +58,4 @@ describe("screen instance methods", () => {
         done();
     });
 
-    it("snoozes the alarm", () => {
-        // mock component
-        const component = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} {...env.emptyUIScreenProps}/>
-        );
-
-        // get instance
-        const instance: (ReactTestInstance & HomeScreen) | null = component.getInstance() as any;
-        expect(instance).toBeDefined();
-
-        // spy on setState
-        const setState = jest.spyOn(instance, "setState");
-
-        // switch to settings
-        instance.onSnoozePressed();
-
-        // check that everything was called correctly
-        expect(setState).toBeCalled();
-    });
-
 });
