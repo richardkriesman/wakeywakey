@@ -5,7 +5,7 @@ import { AlarmDay } from "../../../models/Alarm";
 import { AlarmService, ScheduleService } from "../../../services";
 import { TestEnvironment } from "../../../utils/testing";
 import { Time } from "../../../utils/Time";
-import AlarmEditScreen from "../AlarmEditScreen";
+import { AlarmEditScreen } from "../AlarmEditScreen";
 
 jest.mock("../../../services/AlarmService");
 jest.mock("../../../services/ScheduleService");

@@ -3,7 +3,7 @@
  */
 
 import React, { ReactNode } from "react";
-import { ListItem } from "../list/ListItem";
+import { ListItem } from "./list/ListItem";
 
 export interface ScheduleListItemProps {
     enabled: boolean;

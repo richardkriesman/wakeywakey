@@ -1,7 +1,7 @@
 import * as React from "react";
 import renderer from "react-test-renderer";
-import { TestEnvironment } from "../../../utils/testing";
-import { HomeScreenClock } from "../HomeScreenClock";
+import { TestEnvironment } from "../../utils/testing";
+import { Clock } from "../Clock";
 
 describe("HomeScreenClock", () => {
 
@@ -13,13 +13,13 @@ describe("HomeScreenClock", () => {
     });
 
     it("renders the correct (fake) initial time", () => {
-        const tree = renderer.create(<HomeScreenClock/>).toJSON();
+        const tree = renderer.create(<Clock twentyFourHour={false} />).toJSON();
         expect(tree).toMatchSnapshot();
     });
 
     it("renders the correct (fake) later time", () => {
         env.timing.date = 1555810244489;
-        const tree = renderer.create(<HomeScreenClock/>).toJSON();
+        const tree = renderer.create(<Clock twentyFourHour={false} />).toJSON();
         expect(tree).toMatchSnapshot();
     });
 

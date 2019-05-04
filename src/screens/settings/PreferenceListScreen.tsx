@@ -1,9 +1,9 @@
 import * as React from "react";
-
 import { StyleSheet, View } from "react-native";
-import { BooleanPreference } from "../../components/AppSettingsScreen/BooleanPreference";
-import { TouchPreference } from "../../components/AppSettingsScreen/TouchPreference";
+
 import { ListHeader } from "../../components/list/ListHeader";
+import { BooleanPreference } from "../../components/preference/BooleanPreference";
+import { TouchPreference } from "../../components/preference/TouchPreference";
 import { PreferenceService } from "../../services/PreferenceService";
 import * as Log from "../../utils/Log";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";

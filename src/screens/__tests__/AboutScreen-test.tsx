@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import renderer, { ReactTestInstance } from "react-test-renderer";
 import {TestEnvironment} from "../../utils/testing";
-import AboutScreen from "../AboutScreen";
+import { AboutScreen } from "../AboutScreen";
 
 let env: TestEnvironment;
 beforeEach((done) => {

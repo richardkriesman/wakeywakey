@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Renderer from "react-test-renderer";
 import { TestEnvironment } from "../../utils/testing";
-import AppNavigator from "../AppContainer";
+import { AppContainer } from "../AppContainer";
 
 const fakeDateMillis = 1551896555862;
 
@@ -17,6 +17,6 @@ beforeEach((done) => {
 });
 
 it("renders properly", () => {
-    const tree = Renderer.create(<AppNavigator screenProps={{ db: env.db }}/>);
+    const tree = Renderer.create(<AppContainer screenProps={{ db: env.db }}/>);
     expect(tree.toJSON()).toMatchSnapshot();
 });

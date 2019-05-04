@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import renderer from "react-test-renderer";
 import {TestEnvironment} from "../../utils/testing";
-import ScheduleListScreen from "../settings/ScheduleListScreen";
+import { ScheduleListScreen } from "../settings/ScheduleListScreen";
 
 let env: TestEnvironment;
 beforeEach((done) => {

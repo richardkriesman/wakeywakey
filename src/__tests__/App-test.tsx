@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import renderer from "react-test-renderer";
 
-import App from "../App";
+import { App } from "../App";
 import { TestEnvironment } from "../utils/testing";
 
 const fakeDateMillis = 1551896555862;

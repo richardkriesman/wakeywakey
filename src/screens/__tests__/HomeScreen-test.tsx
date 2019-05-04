@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import renderer, { ReactTestInstance } from "react-test-renderer";
 import { TestEnvironment } from "../../utils/testing";
-import HomeScreen from "../HomeScreen";
+import { HomeScreen } from "../HomeScreen";
 
 const fakeDateMillis = 1551896555862;
 const initialMessageText: string = "Lorem ipsum dolar sit amet";

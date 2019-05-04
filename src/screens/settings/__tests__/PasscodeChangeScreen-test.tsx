@@ -2,7 +2,7 @@ import React from "react";
 import "react-native";
 import renderer from "react-test-renderer";
 import {TestEnvironment} from "../../../utils/testing";
-import PasscodeEditScreen from "../PasscodeEditScreen";
+import { PasscodeEditScreen } from "../PasscodeEditScreen";
 
 let env: TestEnvironment;
 beforeEach((done) => {
