@@ -36,7 +36,7 @@ export default class PasscodeChangeScreen extends UIScreen<{}, {}> {
             <View style={styles.mainContainer}>
                 <PasscodeInput
                     confirmPasscode={true}
-                    defaultPromptText={"Enter new Settings passcode:"}
+                    defaultPromptText={"New passcode:"}
                     handleSuccess={this.handleSuccess.bind(this)}
                 />
             </View>

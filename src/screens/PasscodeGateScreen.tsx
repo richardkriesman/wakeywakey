@@ -1,10 +1,12 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
+import { FloatingDismissButton } from "../components/FloatingDismissButton";
 import { PasscodeInput } from "../components/PasscodeInput";
 import { PasscodeService } from "../services/PasscodeService";
+import * as Log from "../utils/Log";
 
-import { NoHeader, Title } from "../utils/screen/NavigationOptions";
+import { NoHeader } from "../utils/screen/NavigationOptions";
 import { UIScreen } from "../utils/screen/UIScreen";
 
 export interface PasscodeGateScreenState {
@@ -12,27 +14,9 @@ export interface PasscodeGateScreenState {
     successScreenKey: string;
 }
 
-/*  README BELOW README BELOW README BELOW README BELOW README BELOW README BELOW README BELOW README BELOW
-*
-*   this is an absolute hack and i would prefer to instead have this screen remove itself from the stack;
-*   however, react-navigation does not have a way to do this natively and i really don't feel like hacking
-*   around the Router, especially with all of the work Richard did on UIScreen's navigation handling.
-*
-*   eventually we can refactor this into a Modal, which would probably be the best option, but this is all
-*   i have time to do right now. sorry for this terrible hack.
-*
-*   should ABSOLUTELY UNDER NO CIRCUMSTANCES hard-code the title like this for something of this nature,
-*   but since we're only using this in one specific instance i've done it to save time.
-*
-*   jesus christ this hack is god awful
-*
-*   - shawn, 25 apr 2019 (23:30, night before demo)
-*
-*   README ABOVE README ABOVE README ABOVE README ABOVE README ABOVE README ABOVE README ABOVE README ABOVE
-*/
+/* hey remember that long readme block comment i had about this being a hack? miika saved it and it's good now - sL */
 
 @NoHeader
-@Title("Home") // DON'T DO THIS NEVER DO THIS
 export default class PasscodeGateScreen extends UIScreen<{}, PasscodeGateScreenState> {
     public constructor(props: NavigationScreenProps) {
         super(props);
@@ -45,24 +29,32 @@ export default class PasscodeGateScreen extends UIScreen<{}, PasscodeGateScreenS
     protected renderContent(): React.ReactNode {
         return (
             <View style={styles.mainContainer}>
-                {
-                    this.state.hasPasscode
-                        ?
-                        // a passcode exists. prompt for it
-                        <PasscodeInput
-                            handleSuccess={this.onSuccess.bind(this)}
-                            verifyPasscode={this.verifyPasscode.bind(this)}
-                        />
-                        :
-                        // no passcode exists. require user to create one.
-                        <PasscodeInput
-                            confirmPasscode={true}
-                            defaultPromptText={"Enter new Settings passcode:"}
-                            handleSuccess={this.onSuccess.bind(this)}
-                        />
-                }
+                <FloatingDismissButton onPress={this.onDismiss.bind(this)}/>
+                <View style={styles.centered}>
+                    {
+                        this.state.hasPasscode
+                            ?
+                            // a passcode exists. prompt for it
+                            <PasscodeInput
+                                handleSuccess={this.onSuccess.bind(this)}
+                                verifyPasscode={this.verifyPasscode.bind(this)}
+                            />
+                            :
+                            // no passcode exists. require user to create one.
+                            <PasscodeInput
+                                confirmPasscode={true}
+                                defaultPromptText={"Enter new Settings passcode:"}
+                                handleSuccess={this.onSuccess.bind(this)}
+                            />
+                    }
+                </View>
             </View>
         );
+    }
+
+    private onDismiss(): void {
+        Log.info("PasscodeGateScreen", "dismiss button pressed");
+        this.dismiss();
     }
 
     private async onSuccess(passcode: string): Promise<void> {
@@ -76,10 +68,13 @@ export default class PasscodeGateScreen extends UIScreen<{}, PasscodeGateScreenS
 }
 
 const styles = StyleSheet.create({
-    mainContainer: {
+    centered: {
         alignItems: "center",
-        backgroundColor: "lightsteelblue",
         flex: 1,
         justifyContent: "center"
+    },
+    mainContainer: {
+        backgroundColor: "lightsteelblue",
+        flex: 1
     }
 });
