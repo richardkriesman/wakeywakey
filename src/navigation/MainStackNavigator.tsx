@@ -4,6 +4,7 @@ import React from "react";
 import { Platform } from "react-native";
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
+import AboutScreen from "../screens/AboutScreen";
 import HomeScreen from "../screens/HomeScreen";
 import PasscodeGateScreen from "../screens/PasscodeGateScreen";
 import EditAlarmScreen from "../screens/settings/EditAlarmScreen";
@@ -18,6 +19,13 @@ import ScheduleDetailsNavigator from "./ScheduleDetailsNavigator";
 export default createStackNavigator(
     // screen stack
     {
+        About: {
+            navigationOptions: {
+                title: "About WakeyWakey"
+            },
+            screen: AboutScreen
+        },
+
         Home: {
             navigationOptions: {
                 title: "Home"

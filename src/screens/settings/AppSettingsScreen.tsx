@@ -47,6 +47,13 @@ export class AppSettingsScreen extends UIScreen<{}, AppSettingsScreenState> {
                     onPress={this.changePasscode.bind(this)}
                     rightIcon={{ name: "arrow-forward" }}
                 />
+
+                <TouchPreference
+                    disabled={this.state.loading}
+                    title="About WakeyWakey"
+                    onPress={() => this.present("About")}
+                    rightIcon={{ name: "info" }}
+                />
             </View>
         );
     }
