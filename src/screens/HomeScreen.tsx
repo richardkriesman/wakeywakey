@@ -133,7 +133,9 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
             return;
         }
 
-        return this.fullDatabaseRead().then(this.updateState.bind(this));
+        return this.fullDatabaseRead().then((partial: Partial<HomeScreenState>) => {
+            this.updateState(partial);
+        });
     }
 
     private async fullDatabaseRead(): Promise<Partial<HomeScreenState>> {
