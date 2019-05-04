@@ -3,22 +3,21 @@
  */
 
 import React, { ReactNode } from "react";
-import { Animated, GestureResponderEvent, LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
+import { Animated, Easing, GestureResponderEvent, LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
 
 import { Button, Icon } from "react-native-elements";
 import Colors from "../constants/Colors";
-import Timeout = NodeJS.Timeout;
 
-enum SliderAnimationDirection {
-    Bottom = 0,
-    Top = 1
+enum SliderPosition {
+    Collapsed = 0,
+    Expanded = 1
 }
 
-enum SliderMotionState {
+enum SliderMotion {
     Idle = 0,
     Dragging = 1,
-    Press = 3,
-    Animating = 2
+    Press = 2,
+    Animating = 3
 }
 
 interface PasscodeGateSliderState {
@@ -31,13 +30,13 @@ export interface PasscodeGateSliderProps {
     onIndicatorLayout?: (event: LayoutChangeEvent) => void;
 }
 
-// TODO: tapping to expand/contract, rotating the arrow, and test on iOS
+// TODO: rotating the arrow, and test on iOS
 
 export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGateSliderState> {
 
     private contentHeight: number = 0; // computed height of the content
-    private motionState: SliderMotionState = SliderMotionState.Idle; // whether the slider is moving or idle
-    private pressTimeout?: Timeout;
+    private motion: SliderMotion = SliderMotion.Idle; // how the slider is moving
+    private position: SliderPosition = SliderPosition.Collapsed; // where the slider is
     private yDragStart: number = 0; // y value when the drag was started
     private yOffset: number = 0; // offset from the point of the user's touch - prevents jumping during responder grant
 
@@ -50,7 +49,7 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
 
         // create dynamic style for parent view, allowing us to set the x and y coords
         const posStyle = {
-            top: this.motionState === SliderMotionState.Animating ? this.state.yAnim : this.yDrag
+            top: this.motion === SliderMotion.Animating ? this.state.yAnim : this.yDrag
         };
 
         return (
@@ -83,11 +82,11 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
         );
     }
 
-    private animate(direction: SliderAnimationDirection): Promise<void> {
+    private animate(position: SliderPosition): Promise<void> {
         return new Promise<void>((resolve) => {
 
             // update motion state
-            this.motionState = SliderMotionState.Animating;
+            this.motion = SliderMotion.Animating;
 
             // update yAnim
             this.setState({
@@ -95,22 +94,27 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
             }, () => { // yAnim has been updated
 
                 // determine which bound to animate to
+                let duration: number;
                 let toValue: number;
-                if (direction === SliderAnimationDirection.Top) {
+                if (position === SliderPosition.Expanded) { // animate to expanded
+                    duration = 250;
                     toValue = (this.props.initialTop - this.contentHeight);
-                } else { // animate to bottom
+                } else { // animate to collapsed
+                    duration = 200;
                     toValue = this.props.initialTop;
                 }
 
                 // start the animation
                 Animated.timing(this.state.yAnim, {
-                    duration: 250, // TODO: use a timing curve from material design for this, they look way better
+                    duration,
+                    easing: Easing.bezier(0.4, 0.0, 0.2, 1),
                     toValue
                 }).start(() => {
                     this.setState({ // update yDrag so dragging starts from the correct position
                         yDrag: toValue
                     }, () => { // yDrag has been updated, set motion state to idle so we can drag again
-                        this.motionState = SliderMotionState.Idle;
+                        this.position = position;
+                        this.motion = SliderMotion.Idle;
                         resolve();
                     });
                 });
@@ -120,12 +124,10 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
     }
 
     private onPress(): void {
-        const distanceToTop = this.yDrag - (this.props.initialTop - this.contentHeight);
-        const distanceToBottom = this.props.initialTop - this.yDrag;
-        if (distanceToTop >= distanceToBottom) { // move in the direction opposite to where we currently are
-            this.animate(SliderAnimationDirection.Top);
+        if (this.position === SliderPosition.Collapsed) { // move in the direction opposite to the current pos
+            this.animate(SliderPosition.Expanded);
         } else {
-            this.animate(SliderAnimationDirection.Bottom);
+            this.animate(SliderPosition.Collapsed);
         }
     }
 
@@ -134,7 +136,9 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
     }
 
     private onResponderGrant(event: GestureResponderEvent): void {
-        if (this.motionState !== SliderMotionState.Idle) { // only allow dragging if slider is idle
+
+        // only allow touches if the slider is idle
+        if (this.motion !== SliderMotion.Idle) {
             return;
         }
 
@@ -143,20 +147,19 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
         this.yDragStart = event.nativeEvent.pageY;
 
         // by default, we're going to consider this a press - if it's dragged too far, we'll consider it a drag
-        this.motionState = SliderMotionState.Press;
+        this.motion = SliderMotion.Press;
 
     }
 
     private onResponderMove(event: GestureResponderEvent): void {
 
-        // if the slider was dragged too far, we should consider it a drag
-        if (this.motionState === SliderMotionState.Press
-                && Math.abs(event.nativeEvent.pageY - this.yDragStart) > 20) {
-            this.motionState = SliderMotionState.Dragging;
+        // if the slider was dragged too far, we'll consider it a drag
+        if (this.motion === SliderMotion.Press && Math.abs(event.nativeEvent.pageY - this.yDragStart) > 20) {
+            this.motion = SliderMotion.Dragging;
         }
 
         // only move the slider if it's draggable
-        if (this.motionState !== SliderMotionState.Dragging) {
+        if (this.motion !== SliderMotion.Dragging) {
             return;
         }
 
@@ -176,23 +179,32 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
     }
 
     private onResponderRelease(event: GestureResponderEvent): void {
-        if (this.motionState === SliderMotionState.Press) { // press, fire the press handler
-            this.motionState = SliderMotionState.Idle;
+
+        // press, fire the press handler
+        if (this.motion === SliderMotion.Press) {
+            this.motion = SliderMotion.Idle;
             this.onPress();
             return;
         }
 
-        if (this.yDrag >= this.props.initialTop || this.yDrag <= this.props.initialTop - this.contentHeight) { // bounds
-            this.motionState = SliderMotionState.Idle;
-        } else { // slider is not at bounds, animate to bounds
-            const distanceToTop = this.yDrag - (this.props.initialTop - this.contentHeight);
-            const distanceToBottom = this.props.initialTop - this.yDrag;
-
-            // TODO: adjust this to bias in the opposite direction?
-            if (distanceToTop <= distanceToBottom) {
-                this.animate(SliderAnimationDirection.Top);
-            } else {
-                this.animate(SliderAnimationDirection.Bottom);
+        // drag, animate the reset of the way
+        if (this.yDrag >= this.props.initialTop || this.yDrag <= this.props.initialTop - this.contentHeight) { // bound
+            this.motion = SliderMotion.Animating;
+        } else { // slider is not at bound, animate to bound
+            const distanceToExpanded = this.yDrag - (this.props.initialTop - this.contentHeight);
+            const distanceToCollapsed = this.props.initialTop - this.yDrag;
+            if (this.position === SliderPosition.Collapsed) { // dragging to expanded
+                if (distanceToExpanded * 0.40 <= distanceToCollapsed) {
+                    this.animate(SliderPosition.Expanded);
+                } else {
+                    this.animate(SliderPosition.Collapsed);
+                }
+            } else { // dragging to collapsed
+                if (distanceToCollapsed * 0.40 <= distanceToExpanded) {
+                    this.animate(SliderPosition.Collapsed);
+                } else {
+                    this.animate(SliderPosition.Expanded);
+                }
             }
         }
     }
