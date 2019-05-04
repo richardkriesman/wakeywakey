@@ -71,28 +71,30 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
 
         return (
             <Animated.View
-                onStartShouldSetResponder={() => true}
-                onStartShouldSetResponderCapture={() => true}
-                onResponderGrant={this.onResponderGrant.bind(this)}
-                onResponderMove={this.onResponderMove.bind(this)}
-                onResponderRelease={this.onResponderRelease.bind(this)}
                 style={[posStyle, styles.container]}>
-                <Button
-                    buttonStyle={styles.indicator}
-                    onLayout={this.onIndicatorLayout.bind(this)}
-                    onPress={() => { return; }}
-                    icon={
-                        <Animated.View
-                            style={indicatorStyle}>
-                            <Icon
-                                name="up"
-                                type="antdesign"
-                                size={32}
-                                color="white"
-                            />
-                        </Animated.View>
-                    }
-                />
+                <View
+                    onStartShouldSetResponder={() => true}
+                    onStartShouldSetResponderCapture={() => true}
+                    onResponderGrant={this.onResponderGrant.bind(this)}
+                    onResponderMove={this.onResponderMove.bind(this)}
+                    onResponderRelease={this.onResponderRelease.bind(this)}>
+                    <Button
+                        buttonStyle={styles.indicator}
+                        onLayout={this.onIndicatorLayout.bind(this)}
+                        onPress={() => { return; }}
+                        icon={
+                            <Animated.View
+                                style={indicatorStyle}>
+                                <Icon
+                                    name="up"
+                                    type="antdesign"
+                                    size={32}
+                                    color="white"
+                                />
+                            </Animated.View>
+                        }
+                    />
+                </View>
                 <View
                     onLayout={this.onContentLayout.bind(this)}
                     style={styles.content}>
