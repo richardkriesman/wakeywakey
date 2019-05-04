@@ -103,8 +103,10 @@ export class Time {
         return this.totalSeconds >= rel.totalSeconds;
     }
 
-    public equals(time: Time): boolean {
-        return this.totalSeconds === time.totalSeconds;
+    public equals(time: Time, ignoreSeconds: boolean = false): boolean {
+        return ignoreSeconds
+            ? this.hour === time.hour && this.minute === time.minute
+            : this.totalSeconds === time.totalSeconds;
     }
 
     public isInRange(minTime: Time, maxTime: Time, isInclusive: boolean = true): boolean {
@@ -152,5 +154,10 @@ export class Time {
         }
 
         return Time.createFromTotalSeconds(totalSeconds);
+    }
+
+    /** Converts this {@link Time} object into a string. */
+    public toString(): string {
+        return `${this.hour}:${this.minute}:${this.second}`;
     }
 }
