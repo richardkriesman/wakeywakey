@@ -4,7 +4,7 @@ import React from "react";
 import { Platform } from "react-native";
 import { createStackNavigator, NavigationScreenProps } from "react-navigation";
 
-import AboutScreen from "../screens/AboutScreen";
+import { AboutScreen } from "../screens/AboutScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { PasscodeGateScreen } from "../screens/PasscodeGateScreen";
 import { AlarmEditScreen } from "../screens/settings/AlarmEditScreen";
