@@ -3,19 +3,18 @@
  */
 
 import React, { ReactNode } from "react";
-import { Image, StyleSheet, ScrollView, Text } from "react-native";
+import { Image, ScrollView, StyleSheet, Text } from "react-native";
 
 import { UIScreen } from "../utils/screen";
 import { NoHeader } from "../utils/screen/NavigationOptions";
 
-
 export default class AboutScreen extends UIScreen<{}, {}> {
 
-    public title:string = "Wakey Wakey"
-    public authors:string = `Created by:
+    public title: string = "Wakey Wakey";
+    public authors: string = `Created by:
 Chelsea Greer, Richard Kriesman,
 Cody Kyrk, Shawn Lutch, Miika Raina`;
-    public body:string = `Conventional alarm systems provide few alarm customization \
+    public body: string = `Conventional alarm systems provide few alarm customization \
 options and use jarring noises that may startle small children. These systems can \
 be reconfigured by children, whether accidentally or intentionally, which results \
 in unintended behavior. Parents and guardians have little control over options such \
@@ -59,6 +58,6 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "center"
     }
 });
