@@ -3,7 +3,13 @@
  */
 
 import React, { ReactNode } from "react";
-import { Animated, Easing, GestureResponderEvent, LayoutChangeEvent, StyleSheet, View, ViewStyle } from "react-native";
+import {
+    Animated,
+    Easing,
+    GestureResponderEvent,
+    LayoutChangeEvent,
+    StyleSheet,
+    View} from "react-native";
 
 import { Button, Icon } from "react-native-elements";
 import Colors from "../constants/Colors";
@@ -21,6 +27,7 @@ enum SliderMotion {
 }
 
 interface PasscodeGateSliderState {
+    indicatorRotation: Animated.Value; // indicator rotation
     yAnim?: Animated.Value; // y value used when animating
     yDrag?: number;         // y value used when dragging and idle
 }
@@ -29,8 +36,6 @@ export interface PasscodeGateSliderProps {
     initialTop: number;
     onIndicatorLayout?: (event: LayoutChangeEvent) => void;
 }
-
-// TODO: rotating the arrow, and test on iOS
 
 export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGateSliderState> {
 
@@ -42,14 +47,26 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
 
     public constructor(props: PasscodeGateSliderProps) {
         super(props);
-        this.state = {};
+        this.state = {
+            indicatorRotation: new Animated.Value(0)
+        };
     }
 
     public render(): ReactNode {
 
-        // create dynamic style for parent view, allowing us to set the x and y coords
+        // create dynamic style for parent view, allowing us to set the y coord
         const posStyle = {
             top: this.motion === SliderMotion.Animating ? this.state.yAnim : this.yDrag
+        };
+
+        // create dynamic style for indicator, allowing us to set the rotation
+        const indicatorStyle = {
+            transform: [{
+                rotate: this.state.indicatorRotation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ["0deg", "180deg"]
+                })
+            }]
         };
 
         return (
@@ -65,12 +82,15 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
                     onLayout={this.onIndicatorLayout.bind(this)}
                     onPress={() => { return; }}
                     icon={
-                        <Icon
-                            name="up"
-                            type="antdesign"
-                            size={32}
-                            color="white"
-                        />
+                        <Animated.View
+                            style={indicatorStyle}>
+                            <Icon
+                                name="up"
+                                type="antdesign"
+                                size={32}
+                                color="white"
+                            />
+                        </Animated.View>
                     }
                 />
                 <View
@@ -95,23 +115,33 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
 
                 // determine which bound to animate to
                 let duration: number;
-                let toValue: number;
+                let indicatorToValue: number;
+                let yToValue: number;
                 if (position === SliderPosition.Expanded) { // animate to expanded
                     duration = 250;
-                    toValue = (this.props.initialTop - this.contentHeight);
+                    indicatorToValue = 1;
+                    yToValue = (this.props.initialTop - this.contentHeight);
                 } else { // animate to collapsed
                     duration = 200;
-                    toValue = this.props.initialTop;
+                    indicatorToValue = 0;
+                    yToValue = this.props.initialTop;
                 }
 
                 // start the animation
-                Animated.timing(this.state.yAnim, {
-                    duration,
-                    easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-                    toValue
-                }).start(() => {
+                Animated.parallel([
+                    Animated.timing(this.state.yAnim, {
+                        duration,
+                        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+                        toValue: yToValue
+                    }),
+                    Animated.timing(this.state.indicatorRotation, {
+                        duration,
+                        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+                        toValue: indicatorToValue
+                    })
+                ]).start(() => {
                     this.setState({ // update yDrag so dragging starts from the correct position
-                        yDrag: toValue
+                        yDrag: yToValue
                     }, () => { // yDrag has been updated, set motion state to idle so we can drag again
                         this.position = position;
                         this.motion = SliderMotion.Idle;
@@ -188,23 +218,19 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
         }
 
         // drag, animate the reset of the way
-        if (this.yDrag >= this.props.initialTop || this.yDrag <= this.props.initialTop - this.contentHeight) { // bound
-            this.motion = SliderMotion.Animating;
-        } else { // slider is not at bound, animate to bound
-            const distanceToExpanded = this.yDrag - (this.props.initialTop - this.contentHeight);
-            const distanceToCollapsed = this.props.initialTop - this.yDrag;
-            if (this.position === SliderPosition.Collapsed) { // dragging to expanded
-                if (distanceToExpanded * 0.40 <= distanceToCollapsed) {
-                    this.animate(SliderPosition.Expanded);
-                } else {
-                    this.animate(SliderPosition.Collapsed);
-                }
-            } else { // dragging to collapsed
-                if (distanceToCollapsed * 0.40 <= distanceToExpanded) {
-                    this.animate(SliderPosition.Collapsed);
-                } else {
-                    this.animate(SliderPosition.Expanded);
-                }
+        const distanceToExpanded = this.yDrag - (this.props.initialTop - this.contentHeight);
+        const distanceToCollapsed = this.props.initialTop - this.yDrag;
+        if (this.position === SliderPosition.Collapsed) { // dragging to expanded
+            if (distanceToExpanded * 0.40 <= distanceToCollapsed) {
+                this.animate(SliderPosition.Expanded);
+            } else {
+                this.animate(SliderPosition.Collapsed);
+            }
+        } else { // dragging to collapsed
+            if (distanceToCollapsed * 0.40 <= distanceToExpanded) {
+                this.animate(SliderPosition.Collapsed);
+            } else {
+                this.animate(SliderPosition.Expanded);
             }
         }
     }
