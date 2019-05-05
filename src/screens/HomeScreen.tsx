@@ -4,13 +4,19 @@
 
 import { Audio, KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+    LayoutChangeEvent,
+    LayoutRectangle,
+    StyleSheet,
+    Text,
+    View
+} from "react-native";
 import { Button } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
-import { Clock, SlideUpIndicator } from "../components";
-import { EmptyView } from "../components/EmptyView";
-import { InactivityHandler } from "../components/InactivityHandler";
+import { Clock, InactivityHandler, Slider } from "../components";
+import { PasscodeInput } from "../components/PasscodeInput";
+import { SliderPosition } from "../components/Slider";
 import { Colors } from "../constants/Colors";
 import { Schedule } from "../models/Schedule";
 import { PasscodeService } from "../services/PasscodeService";
@@ -38,7 +44,8 @@ interface HomeScreenState {
     activeAlarmEvent?: AlarmEvent;
     activeSchedule?: Schedule;
     activeSound?: Audio.Sound;
-    loaded: boolean;
+    hasPasscode?: boolean;
+    indicatorLayout?: LayoutRectangle;
     messageText: string;
     twentyFourHour: boolean;
 }
@@ -56,10 +63,12 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
         Log.error("HomeScreen", err);
     }
 
+    private passcodeInput: PasscodeInput;
+    private slider: Slider;
+
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
         this.state = {
-            loaded: false,
             messageText: "",
             twentyFourHour: false
         };
@@ -77,53 +86,68 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     }
 
     public renderContent(): ReactNode {
-        const loadedContent = (
-            <View style={styles.contentWrapper}>
-                <Text style={styles.message}>{this.state.messageText}</Text>
-                <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
-                <Button
-                    buttonStyle={styles.snoozeButton}
-                    title="Snooze"
-                    onPress={this.onSnoozePressed.bind(this)}
-                />
-            </View>
-        );
 
-        // thanks to SplashScreen, this should never actually appear to the user. keeping it here just to be safe.
-        const notLoadedContent = <EmptyView icon="ios-cog" title="Loading" subtitle="Just a sec!"/>;
+        // render passcode slider once the layout has become available
+        let passcodeSlider: ReactNode;
+        if (this.height > 0) { // once the screen height is known, it should be greater than 0
 
+            // FIXME: Why are we having to add +11 here? Because I have no idea
+            const initialTop: number = this.height -
+                (this.state.indicatorLayout ? this.state.indicatorLayout.height : 0) + 11;
+            passcodeSlider = (
+                <Slider
+                    ref={(ref) => this.slider = ref}
+                    onIndicatorLayout={this.onIndicatorLayout.bind(this)}
+                    onPositionChanged={this.onSliderPositionChanged.bind(this)}
+                    initialTop={initialTop}>
+                    <View style={styles.passcodeContainer}>
+                        {this.state.hasPasscode ?
+                            // a passcode exists. prompt for it
+                            <PasscodeInput
+                                ref={(ref) => this.passcodeInput = ref}
+                                autoFocus={false}
+                                handleSuccess={this.onPasscodeSuccess.bind(this)}
+                                verifyPasscode={this.onPasscodeVerify.bind(this)}/>
+                            :
+                            // no passcode exists. require user to create one.
+                            <PasscodeInput
+                                ref={(ref) => this.passcodeInput = ref}
+                                autoFocus={false}
+                                confirmPasscode={true}
+                                defaultPromptText="Enter a new passcode:"
+                                handleSuccess={this.onPasscodeSet.bind(this)}
+                            />
+                        }
+
+                    </View>
+                </Slider>
+            );
+        }
+
+        // render screen
         return (
             <InactivityHandler
                 idleTime={15000}
                 navigation={this.props.navigation}>
                 <KeepAwake/>
                 <View style={styles.container}>
-                    {this.state.loaded ? loadedContent : notLoadedContent}
-                    <View style={styles.bottom}>
-                        <SlideUpIndicator onPress={this.switchToSettings.bind(this)}/>
+                    <View style={styles.contentWrapper}>
+                        <Text style={styles.message}>{this.state.messageText}</Text>
+                        <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
+                        <Button
+                            buttonStyle={styles.snoozeButton}
+                            title="Snooze"
+                            onPress={this.onSnoozePressed.bind(this)}
+                        />
                     </View>
+                    {passcodeSlider}
                 </View>
             </InactivityHandler>
         );
     }
 
-    public async switchToSettings(): Promise<void> {
-        const hasPasscode: boolean = await this.getService(PasscodeService).hasPasscode();
-        this.present("PasscodeGate", {
-            backButtonName: "Home",
-            hasPasscode,
-            screen: this,
-            successScreenKey: "Settings"
-        });
-    }
-
-    public onSnoozePressed(): void {
-        this.stopAudio()
-            .then(() => {
-                this.setState({
-                    messageText: "Alarm snoozed!"
-                });
-            });
+    protected componentDidLayoutChange(layout: LayoutRectangle): void {
+        this.forceUpdate(); // some components depend on the height of the screen - force an update when it changes
     }
 
     protected componentWillFocus(): void {
@@ -146,7 +170,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
         const pref: PreferenceService = this.getService(PreferenceService);
         return {
             activeSchedule: await this.getService(ScheduleService).getEnabled(),
-            loaded: true,
+            hasPasscode: await this.getService(PasscodeService).hasPasscode(),
             messageText: "Hello, world!",
             twentyFourHour: await pref.get24HourTime()
         };
@@ -168,6 +192,45 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
             this.startAlarm();
 
         });
+    }
+
+    private onIndicatorLayout(event: LayoutChangeEvent): void {
+        this.setState({
+            indicatorLayout: event.nativeEvent.layout
+        });
+    }
+
+    private onPasscodeSuccess(): void {
+        this.slider.close()
+            .then(() => {
+                this.present("Settings");
+            });
+    }
+
+    private onPasscodeVerify(passcode: string): Promise<boolean> {
+        return this.getService(PasscodeService).verifyPasscode(passcode);
+    }
+
+    private async onPasscodeSet(passcode: string): Promise<void> {
+        await this.getService(PasscodeService).setPasscode(passcode);
+        this.onPasscodeSuccess();
+    }
+
+    private onSliderPositionChanged(position: SliderPosition): void {
+        if (position === SliderPosition.Expanded) {
+            this.passcodeInput.focus();
+        } else {
+            this.passcodeInput.reset();
+        }
+    }
+
+    private onSnoozePressed(): void {
+        this.stopAudio()
+            .then(() => {
+                this.setState({
+                    messageText: "Alarm snoozed!"
+                });
+            });
     }
 
     private startAlarm(): Promise<void> {
@@ -255,6 +318,19 @@ const styles = StyleSheet.create({
     message: {
         fontSize: 30,
         textAlign: "center"
+    },
+    passcodeContainer: {
+        alignItems: "center",
+        backgroundColor: "black",
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
+        height: 600,
+        width: 400,
+        zIndex: 2
+    },
+    passcodeInnerText: {
+        color: "white",
+        padding: 50
     },
     snoozeButton: {
         backgroundColor: Colors.black,

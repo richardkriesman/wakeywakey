@@ -9,12 +9,10 @@ exports[`renders correctly 1`] = `
   }
 >
   <View
+    onLayout={[Function]}
     style={
       Object {
-        "alignItems": "center",
-        "backgroundColor": "lightsteelblue",
         "flex": 1,
-        "justifyContent": "center",
       }
     }
   >
@@ -22,83 +20,75 @@ exports[`renders correctly 1`] = `
       style={
         Object {
           "alignItems": "center",
+          "backgroundColor": "lightsteelblue",
           "flex": 1,
-          "justifyContent": "flex-end",
+          "justifyContent": "center",
         }
       }
     >
-      <Text
-        style={
-          Object {
-            "fontSize": 32,
-            "fontWeight": "bold",
-            "paddingBottom": 20,
-            "textAlign": "center",
-          }
-        }
-        theme={
-          Object {
-            "colors": Object {
-              "disabled": "hsl(208, 8%, 90%)",
-              "divider": "#bcbbc1",
-              "error": "#ff190c",
-              "grey0": "#393e42",
-              "grey1": "#43484d",
-              "grey2": "#5e6977",
-              "grey3": "#86939e",
-              "grey4": "#bdc6cf",
-              "grey5": "#e1e8ee",
-              "greyOutline": "#bbb",
-              "platform": Object {
-                "android": Object {
-                  "error": "#f44336",
-                  "primary": "#2196f3",
-                  "secondary": "#9C27B0",
-                  "success": "#4caf50",
-                  "warning": "#ffeb3b",
-                },
-                "ios": Object {
-                  "error": "#ff3b30",
-                  "primary": "#007aff",
-                  "secondary": "#5856d6",
-                  "success": "#4cd964",
-                  "warning": "#ffcc00",
-                },
-              },
-              "primary": "#2089dc",
-              "searchBg": "#303337",
-              "secondary": "#8F0CE8",
-              "success": "#52c41a",
-              "warning": "#faad14",
-            },
-          }
-        }
-      >
-        Enter new Settings passcode:
-      </Text>
       <View
         style={
           Object {
-            "height": "55%",
-            "paddingHorizontal": 10,
-            "width": "100%",
+            "alignItems": "center",
+            "justifyContent": "flex-end",
           }
         }
       >
+        <Text
+          style={
+            Object {
+              "color": "#ffffff",
+              "fontSize": 32,
+              "paddingBottom": 20,
+              "paddingTop": 40,
+              "textAlign": "center",
+            }
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "disabled": "hsl(208, 8%, 90%)",
+                "divider": "#bcbbc1",
+                "error": "#ff190c",
+                "grey0": "#393e42",
+                "grey1": "#43484d",
+                "grey2": "#5e6977",
+                "grey3": "#86939e",
+                "grey4": "#bdc6cf",
+                "grey5": "#e1e8ee",
+                "greyOutline": "#bbb",
+                "platform": Object {
+                  "android": Object {
+                    "error": "#f44336",
+                    "primary": "#2196f3",
+                    "secondary": "#9C27B0",
+                    "success": "#4caf50",
+                    "warning": "#ffeb3b",
+                  },
+                  "ios": Object {
+                    "error": "#ff3b30",
+                    "primary": "#007aff",
+                    "secondary": "#5856d6",
+                    "success": "#4cd964",
+                    "warning": "#ffcc00",
+                  },
+                },
+                "primary": "#2089dc",
+                "searchBg": "#303337",
+                "secondary": "#8F0CE8",
+                "success": "#52c41a",
+                "warning": "#faad14",
+              },
+            }
+          }
+        >
+          Enter new Settings passcode:
+        </Text>
         <View
           style={
             Object {
-              "alignItems": "center",
-              "backgroundColor": "white",
-              "borderBottomWidth": 1,
-              "borderColor": "#86939e",
-              "flexDirection": "row",
-              "transform": Array [
-                Object {
-                  "translateX": 0,
-                },
-              ],
-              "width": "70%",
+              "paddingHorizontal": 10,
+              "width": "100%",
             }
           }
         >
@@ -106,41 +96,59 @@ exports[`renders correctly 1`] = `
             style={
               Object {
                 "alignItems": "center",
-                "height": 40,
-                "justifyContent": "center",
-                "marginLeft": 15,
+                "backgroundColor": "white",
+                "borderBottomWidth": 1,
+                "borderColor": "#86939e",
+                "flexDirection": "row",
+                "transform": Array [
+                  Object {
+                    "translateX": 0,
+                  },
+                ],
+                "width": "70%",
               }
             }
           >
-            <Text />
-          </View>
-          <TextInput
-            allowFontScaling={true}
-            autoFocus={true}
-            blurOnSubmit={false}
-            caretHidden={true}
-            contextMenuHidden={true}
-            keyboardType="numeric"
-            maxLength={4}
-            onChangeText={[Function]}
-            onSubmitEditing={[Function]}
-            returnKeyType="done"
-            secureTextEntry={true}
-            style={
-              Object {
-                "alignSelf": "center",
-                "color": "black",
-                "flex": 1,
-                "fontSize": 30,
-                "letterSpacing": 20,
-                "marginRight": 32,
-                "minHeight": 40,
-                "textAlign": "center",
+            <View
+              style={
+                Object {
+                  "alignItems": "center",
+                  "height": 40,
+                  "justifyContent": "center",
+                  "marginLeft": 15,
+                }
               }
-            }
-            testID="RNE__Input__text-input"
-            underlineColorAndroid="transparent"
-          />
+            >
+              <Text />
+            </View>
+            <TextInput
+              allowFontScaling={true}
+              autoFocus={true}
+              blurOnSubmit={false}
+              caretHidden={true}
+              contextMenuHidden={true}
+              keyboardType="numeric"
+              maxLength={4}
+              onChangeText={[Function]}
+              onSubmitEditing={[Function]}
+              returnKeyType="done"
+              secureTextEntry={true}
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "color": "black",
+                  "flex": 1,
+                  "fontSize": 30,
+                  "letterSpacing": 20,
+                  "marginRight": 32,
+                  "minHeight": 40,
+                  "textAlign": "center",
+                }
+              }
+              testID="RNE__Input__text-input"
+              underlineColorAndroid="transparent"
+            />
+          </View>
         </View>
       </View>
     </View>

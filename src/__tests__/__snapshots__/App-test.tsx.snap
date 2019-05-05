@@ -86,18 +86,7 @@ exports[`renders the root without loading screen 1`] = `
                 }
               >
                 <View
-                  onMoveShouldSetResponder={[Function]}
-                  onMoveShouldSetResponderCapture={[Function]}
-                  onResponderEnd={[Function]}
-                  onResponderGrant={[Function]}
-                  onResponderMove={[Function]}
-                  onResponderReject={[Function]}
-                  onResponderRelease={[Function]}
-                  onResponderStart={[Function]}
-                  onResponderTerminate={[Function]}
-                  onResponderTerminationRequest={[Function]}
-                  onStartShouldSetResponder={[Function]}
-                  onStartShouldSetResponderCapture={[Function]}
+                  onLayout={[Function]}
                   style={
                     Object {
                       "flex": 1,
@@ -105,13 +94,18 @@ exports[`renders the root without loading screen 1`] = `
                   }
                 >
                   <View
-                    accessible={true}
+                    onMoveShouldSetResponder={[Function]}
+                    onMoveShouldSetResponderCapture={[Function]}
+                    onResponderEnd={[Function]}
                     onResponderGrant={[Function]}
                     onResponderMove={[Function]}
+                    onResponderReject={[Function]}
                     onResponderRelease={[Function]}
+                    onResponderStart={[Function]}
                     onResponderTerminate={[Function]}
                     onResponderTerminationRequest={[Function]}
                     onStartShouldSetResponder={[Function]}
+                    onStartShouldSetResponderCapture={[Function]}
                     style={
                       Object {
                         "flex": 1,
@@ -119,153 +113,120 @@ exports[`renders the root without loading screen 1`] = `
                     }
                   >
                     <View
+                      accessible={true}
+                      onResponderGrant={[Function]}
+                      onResponderMove={[Function]}
+                      onResponderRelease={[Function]}
+                      onResponderTerminate={[Function]}
+                      onResponderTerminationRequest={[Function]}
+                      onStartShouldSetResponder={[Function]}
                       style={
                         Object {
-                          "alignItems": "center",
-                          "marginTop": 20,
-                          "padding": 0,
+                          "flex": 1,
                         }
                       }
                     >
                       <View
-                        accessible={true}
-                        onResponderGrant={[Function]}
-                        onResponderMove={[Function]}
-                        onResponderRelease={[Function]}
-                        onResponderTerminate={[Function]}
-                        onResponderTerminationRequest={[Function]}
-                        onStartShouldSetResponder={[Function]}
                         style={
                           Object {
                             "alignItems": "center",
-                            "flex": 1,
-                            "justifyContent": "center",
-                          }
-                        }
-                      >
-                        <Text />
-                        <Text
-                          style={
-                            Object {
-                              "fontSize": 17,
-                            }
-                          }
-                        >
-                          Loading
-                        </Text>
-                        <Text
-                          style={
-                            Array [
-                              Object {
-                                "color": "#5e5e5e",
-                                "fontSize": 15,
-                              },
-                              undefined,
-                            ]
-                          }
-                        >
-                          Just a sec!
-                        </Text>
-                      </View>
-                      <View
-                        style={
-                          Object {
-                            "alignItems": "center",
-                            "bottom": -10,
-                            "justifyContent": "center",
-                            "position": "absolute",
-                            "width": "100%",
-                            "zIndex": 99,
+                            "marginTop": 20,
+                            "padding": 0,
                           }
                         }
                       >
                         <View
                           style={
                             Object {
-                              "borderRadius": 3,
+                              "flex": 1,
+                              "flexBasis": "100%",
+                              "justifyContent": "center",
+                              "width": "85%",
                             }
                           }
                         >
-                          <View
-                            accessible={true}
-                            isTVSelectable={true}
-                            onResponderGrant={[Function]}
-                            onResponderMove={[Function]}
-                            onResponderRelease={[Function]}
-                            onResponderTerminate={[Function]}
-                            onResponderTerminationRequest={[Function]}
-                            onStartShouldSetResponder={[Function]}
+                          <Text
                             style={
                               Object {
-                                "opacity": 1,
+                                "fontSize": 30,
+                                "textAlign": "center",
                               }
                             }
+                          >
+                            
+                          </Text>
+                          <View
+                            style={Object {}}
                           >
                             <View
                               style={
                                 Object {
-                                  "alignItems": "center",
-                                  "backgroundColor": "#000000",
-                                  "borderColor": "#2089dc",
-                                  "borderRadius": 3,
-                                  "borderWidth": 0,
-                                  "flexDirection": "row",
-                                  "justifyContent": "center",
-                                  "padding": 8,
-                                  "width": "100%",
+                                  "marginBottom": 20,
+                                  "marginTop": 20,
                                 }
                               }
                             >
-                              <View>
-                                <View
+                              <Text
+                                style={
+                                  Object {
+                                    "fontSize": 60,
+                                    "textAlign": "center",
+                                  }
+                                }
+                              >
+                                12:22 pm
+                              </Text>
+                            </View>
+                          </View>
+                          <View
+                            style={
+                              Object {
+                                "borderRadius": 3,
+                              }
+                            }
+                          >
+                            <View
+                              accessible={true}
+                              isTVSelectable={true}
+                              onResponderGrant={[Function]}
+                              onResponderMove={[Function]}
+                              onResponderRelease={[Function]}
+                              onResponderTerminate={[Function]}
+                              onResponderTerminationRequest={[Function]}
+                              onStartShouldSetResponder={[Function]}
+                              style={
+                                Object {
+                                  "opacity": 1,
+                                }
+                              }
+                            >
+                              <View
+                                style={
+                                  Object {
+                                    "alignItems": "center",
+                                    "backgroundColor": "#000000",
+                                    "borderColor": "#2089dc",
+                                    "borderRadius": 3,
+                                    "borderWidth": 0,
+                                    "flexDirection": "row",
+                                    "justifyContent": "center",
+                                    "padding": 15,
+                                  }
+                                }
+                              >
+                                <Text
                                   style={
                                     Object {
-                                      "alignItems": "center",
-                                      "backgroundColor": "transparent",
-                                      "justifyContent": "center",
+                                      "color": "white",
+                                      "fontSize": 18,
+                                      "paddingBottom": 1,
+                                      "paddingTop": 2,
+                                      "textAlign": "center",
                                     }
                                   }
-                                  theme={
-                                    Object {
-                                      "colors": Object {
-                                        "disabled": "hsl(208, 8%, 90%)",
-                                        "divider": "#bcbbc1",
-                                        "error": "#ff190c",
-                                        "grey0": "#393e42",
-                                        "grey1": "#43484d",
-                                        "grey2": "#5e6977",
-                                        "grey3": "#86939e",
-                                        "grey4": "#bdc6cf",
-                                        "grey5": "#e1e8ee",
-                                        "greyOutline": "#bbb",
-                                        "platform": Object {
-                                          "android": Object {
-                                            "error": "#f44336",
-                                            "primary": "#2196f3",
-                                            "secondary": "#9C27B0",
-                                            "success": "#4caf50",
-                                            "warning": "#ffeb3b",
-                                          },
-                                          "ios": Object {
-                                            "error": "#ff3b30",
-                                            "primary": "#007aff",
-                                            "secondary": "#5856d6",
-                                            "success": "#4cd964",
-                                            "warning": "#ffcc00",
-                                          },
-                                        },
-                                        "primary": "#2089dc",
-                                        "searchBg": "#303337",
-                                        "secondary": "#8F0CE8",
-                                        "success": "#52c41a",
-                                        "warning": "#faad14",
-                                      },
-                                    }
-                                  }
-                                  underlayColor="white"
                                 >
-                                  <Text />
-                                </View>
+                                  Snooze
+                                </Text>
                               </View>
                             </View>
                           </View>
