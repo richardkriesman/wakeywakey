@@ -3753,15 +3753,7 @@ exports[`renders correctly 1`] = `
                       <Text
                         style={
                           Object {
-                            "color": Object {
-                              "color": Array [
-                                208,
-                                8,
-                                63,
-                              ],
-                              "model": "hsl",
-                              "valpha": 1,
-                            },
+                            "color": "#2089dc",
                             "fontSize": 18,
                             "paddingBottom": 1,
                             "paddingTop": 2,
@@ -4182,7 +4174,7 @@ exports[`renders correctly 1`] = `
                           }
                         }
                       >
-                        Analog
+                        Digital
                       </Text>
                     </View>
                     <View
@@ -4296,7 +4288,7 @@ exports[`renders correctly 1`] = `
                           }
                         }
                       >
-                        Digital
+                        Analog
                       </Text>
                     </View>
                     <View

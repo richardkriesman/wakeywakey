@@ -14,15 +14,25 @@ import { DestructiveButton } from "../../components/DestructiveButton";
 import { ListHeader } from "../../components/list/ListHeader";
 import { ListItem } from "../../components/list/ListItem";
 import { ConfirmationModal } from "../../components/modal/ConfirmationModal";
-import {SelectPicker} from "../../components/SelectPicker";
+import { SelectPicker } from "../../components/SelectPicker";
 import { Colors } from "../../constants/Colors";
-import { Schedule } from "../../models/Schedule";
+import { Schedule, ScheduleAudio, ScheduleClockStyle, ScheduleColors } from "../../models/Schedule";
+import * as Log from "../../utils/Log";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
 export interface OptionsListScreenState {
+    audio: ScheduleAudio;
+    clockStyle: ScheduleClockStyle;
+    colorScheme: ScheduleColors;
     isDeleteModalVisible: boolean;
+    snoozeTime: number;
 }
+
+const AudioStrings: string[] = ["MusicBox", "Birds", "PagerBeeps", "Computer", "Loud Alarm", "Normal Alarm"];
+const ColorSchemeStrings: string[] = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
+const SnoozeTimeStrings: string[] = ["5 min", "10 min", "15 min", "20 min", "25 min", "30 min"];
+const ClockStyleStrings: string[] = ["Digital", "Analog"];
 
 @BottomTabBarIcon("ios-cog")
 @Title("Options")
@@ -36,10 +46,14 @@ export class OptionsListScreen extends UIScreen<{}, OptionsListScreenState> {
 
     public constructor(props: NavigationScreenProps) {
         super(props);
-        this.state = {
-            isDeleteModalVisible: false
-        };
         this.schedule = this.props.navigation.getParam("schedule");
+        this.state = {
+            audio: this.schedule.audio,
+            clockStyle: this.schedule.clockStyle,
+            colorScheme: this.schedule.colorScheme,
+            isDeleteModalVisible: false,
+            snoozeTime: SnoozeTimeStrings.indexOf(`${this.schedule.snoozeTime} min`)
+        };
     }
 
     public renderContent(): ReactNode {
@@ -55,35 +69,45 @@ export class OptionsListScreen extends UIScreen<{}, OptionsListScreenState> {
 
                 <ListHeader title="Options" />
 
-                <ListItem leftIcon={schemeIcon} title="Color Scheme" rightIcon={forwardIcon}
-                          onPress={this.onColorPickerPress.bind(this)}/>
-                          <SelectPicker
-                              ref={(ref) => this.colorPicker = ref}
-                              title={"Color Scheme"}
-                              values={["Red", "Orange", "Yellow", "Green", "Blue", "Purple"]}/>
-
-                <ListItem leftIcon={audioIcon} title="Audio"
+                <ListItem leftIcon={schemeIcon}
+                          title="Color Scheme"
                           rightIcon={forwardIcon}
-                          onPress={this.onAudioPickerPress.bind(this)}/>
+                          onPress={this.onColorPickerPress.bind(this)}
+                          subtitle={ColorSchemeStrings[this.state.colorScheme]} />
+                <SelectPicker ref={(ref) => this.colorPicker = ref}
+                              title={"Color Scheme"}
+                              value={this.state.colorScheme}
+                              values={ColorSchemeStrings}/>
+
+                <ListItem leftIcon={audioIcon}
+                          title="Audio"
+                          rightIcon={forwardIcon}
+                          onPress={this.onAudioPickerPress.bind(this)}
+                          subtitle={AudioStrings[this.state.audio]} />
                 <SelectPicker ref={(ref) => this.audioPicker = ref}
-                            title={"Audio"}
-                            values={["MusicBox", "Birds", "PagerBeeps", "Computer", "Loud Alarm", "Normal Alarm"]}/>
+                              title={"Audio"}
+                              value={this.state.audio}
+                              values={AudioStrings}/>
 
                 <ListItem leftIcon={snoozeIcon}
                           title="Snooze"
                           rightIcon={forwardIcon}
-                          onPress={this.onSnoozePickerPress.bind(this)}/>
+                          onPress={this.onSnoozePickerPress.bind(this)}
+                          subtitle={SnoozeTimeStrings[this.state.snoozeTime]} />
                 <SelectPicker ref={(ref) => this.snoozePicker = ref}
                               title={"Snooze"}
-                              values={["5 min", "10 min", "15 min", "20 min", "25 min", "30 min"]}/>
+                              value={this.state.snoozeTime}
+                              values={SnoozeTimeStrings}/>
 
                 <ListItem leftIcon={clockIcon}
                           title="Clock Style"
                           rightIcon={forwardIcon}
-                          onPress={this.onClockPickerPress.bind(this)}/>
+                          onPress={this.onClockPickerPress.bind(this)}
+                          subtitle={ClockStyleStrings[this.state.clockStyle]}/>
                 <SelectPicker ref={(ref) => this.clockPicker = ref}
                               title={"Clock"}
-                              values={["Analog", "Digital"]}/>
+                              value={this.state.clockStyle}
+                              values={ClockStyleStrings}/>
 
                 <View style={styles.footer}>
                     <DestructiveButton
@@ -95,19 +119,82 @@ export class OptionsListScreen extends UIScreen<{}, OptionsListScreenState> {
     }
 
     private onColorPickerPress(): void {
-        this.colorPicker.present();
+        this.colorPicker.present()
+            .then((colorString: string) => {
+                if (colorString === undefined) {
+                    return;
+                }
+
+                const color = ColorSchemeStrings.indexOf(colorString);
+                this.schedule.setColorScheme(color)
+                    .then(() => {
+                        this.setState({
+                            colorScheme: color
+                        });
+                    })
+                    .catch((err) => {
+                        Log.error("Options", err);
+                    });
+            });
     }
 
     private onAudioPickerPress(): void {
-        this.audioPicker.present();
+        this.audioPicker.present()
+            .then((audioString: string) => {
+                if (audioString === undefined) {
+                    return;
+                }
+
+                const audio: number = AudioStrings.indexOf(audioString);
+                this.schedule.setColorScheme(audio)
+                    .then(() => {
+                        this.setState({
+                            audio
+                        });
+                    })
+                    .catch((err) => {
+                        Log.error("Options", err);
+                    });
+            });
     }
 
     private onSnoozePickerPress(): void {
-        this.snoozePicker.present();
+        this.snoozePicker.present()
+            .then((timeString: string) => {
+                if (timeString === undefined) {
+                    return;
+                }
+
+                this.schedule.setSnoozeTime(parseInt(timeString.split(" ")[0], 10))
+                    .then(() => {
+                        this.setState({
+                            snoozeTime: SnoozeTimeStrings.indexOf(timeString)
+                        });
+                    })
+                    .catch((err) => {
+                        Log.error("Options", err);
+                    });
+            });
     }
 
     private onClockPickerPress(): void {
-        this.clockPicker.present();
+        this.clockPicker.present()
+            .then((clockString: string) => {
+                if (clockString === undefined) {
+                    return;
+                }
+
+                const clockStyle = ClockStyleStrings.indexOf(clockString);
+                this.schedule.setClockStyle(clockStyle)
+                    .then(() => {
+                        this.setState({
+                            clockStyle
+                        });
+                    })
+                    .catch((err) => {
+                        Log.error("Options", err);
+                    });
+            });
     }
 
     private onDeleteButtonPress(): void {
