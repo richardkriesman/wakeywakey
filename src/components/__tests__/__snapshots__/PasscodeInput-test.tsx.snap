@@ -5,7 +5,6 @@ exports[`PasscodeInput renders correctly 1`] = `
   style={
     Object {
       "alignItems": "center",
-      "flex": 1,
       "justifyContent": "flex-end",
     }
   }
@@ -13,9 +12,10 @@ exports[`PasscodeInput renders correctly 1`] = `
   <Text
     style={
       Object {
+        "color": "#ffffff",
         "fontSize": 32,
-        "fontWeight": "bold",
         "paddingBottom": 20,
+        "paddingTop": 40,
         "textAlign": "center",
       }
     }
@@ -62,7 +62,6 @@ exports[`PasscodeInput renders correctly 1`] = `
   <View
     style={
       Object {
-        "height": "55%",
         "paddingHorizontal": 10,
         "width": "100%",
       }
