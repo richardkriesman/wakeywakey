@@ -2,6 +2,9 @@
  * @module screens
  */
 
+/**schedule options lists Chelsea Greer
+*/
+
 import React, { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
@@ -14,6 +17,7 @@ import { Colors } from "../../constants/Colors";
 import { Schedule } from "../../models/Schedule";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
+import {SelectPicker} from "../../components/SelectPicker";
 
 export interface OptionsListScreenState {
     isDeleteModalVisible: boolean;
@@ -24,6 +28,10 @@ export interface OptionsListScreenState {
 export class OptionsListScreen extends UIScreen<{}, OptionsListScreenState> {
 
     private readonly schedule: Schedule;
+    private colorPicker: SelectPicker;
+    private audioPicker: SelectPicker;
+    private snoozePicker: SelectPicker;
+    private clockPicker: SelectPicker;
 
     public constructor(props: NavigationScreenProps) {
         super(props);
@@ -46,10 +54,22 @@ export class OptionsListScreen extends UIScreen<{}, OptionsListScreenState> {
 
                 <ListHeader title="Options" />
 
-                <ListItem leftIcon={schemeIcon} title="Color Scheme" subtitle="Summer" rightIcon={forwardIcon}/>
-                <ListItem leftIcon={audioIcon} title="Audio" rightIcon={forwardIcon}/>
-                <ListItem leftIcon={snoozeIcon} title="Snooze" rightIcon={forwardIcon}/>
-                <ListItem leftIcon={clockIcon} title="Clock Style" subtitle="Digital" rightIcon={forwardIcon}/>
+                <ListItem leftIcon={schemeIcon} title="Color Scheme" rightIcon={forwardIcon}
+                          onPress={this.onColorPickerPress.bind(this)}/>
+                          <SelectPicker ref={(ref) => this.colorPicker = ref} title={"ColorScheme"} values={["Red", "Orange", "Yellow", "Green", "Blue", "Purple"]}/>
+
+                <ListItem leftIcon={audioIcon} title="Audio" rightIcon={forwardIcon}
+                            onPress={this.onAudioPickerPress.bind(this)}/>
+                          <SelectPicker ref={(ref) => this.audioPicker = ref} title={"Audio"} values={["MusicBox", "Birds", "PagerBeeps", "Computer", "Loud Alarm", "Normal Alarm"]}/>
+
+                <ListItem leftIcon={snoozeIcon} title="Snooze" rightIcon={forwardIcon}
+                     onPress={this.onSnoozePickerPress.bind(this)}/>
+                        <SelectPicker ref={(ref) => this.snoozePicker = ref} title={"Snooze"} values={["5 min", "10 min", "15 min", "20 min", "25 min", "30 min"]}/>
+
+                <ListItem leftIcon={clockIcon} title="Clock Style" rightIcon={forwardIcon}
+                             onPress={this.onClockPickerPress.bind(this)}/>
+                        <SelectPicker ref={(ref) => this.clockPicker = ref} title={"Clock"} values={["Analog", "Digital"]}/>
+
 
                 <View style={styles.footer}>
                     <DestructiveButton
@@ -60,6 +80,18 @@ export class OptionsListScreen extends UIScreen<{}, OptionsListScreenState> {
         );
     }
 
+    private onColorPickerPress(): void{
+        this.colorPicker.present();
+    }
+    private onAudioPickerPress(): void{
+        this.audioPicker.present();
+    }
+    private onSnoozePickerPress(): void{
+        this.snoozePicker.present();
+    }
+    private onClockPickerPress(): void{
+        this.clockPicker.present();
+    }
     private onDeleteButtonPress(): void {
         this.setState({
             isDeleteModalVisible: true
