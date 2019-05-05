@@ -1,6 +1,7 @@
 import { AlarmService } from "../services/AlarmService";
 import { ScheduleService } from "../services/ScheduleService";
 import { AppDatabase } from "../utils/AppDatabase";
+import { AlarmAudio } from "../utils/Audio";
 import { Model } from "../utils/Model";
 import { Watcher } from "../utils/watcher/Watcher";
 import { Alarm } from "./Alarm";
@@ -12,15 +13,6 @@ export enum ScheduleColors {
     Green = 3,
     Blue = 4,
     Purple = 5
-}
-
-export enum ScheduleAudio {
-    MusicBox = 0,
-    Birds = 1,
-    PagerBeeps = 2,
-    Computer = 3,
-    Loud = 4,
-    Normal = 5
 }
 
 export enum ScheduleClockStyle {
@@ -64,7 +56,7 @@ export class Schedule extends Model {
     private _maximumSnooze: number;
     private _clockStyle: number;
 
-    public get audio(): ScheduleAudio {
+    public get audio(): AlarmAudio {
         return this._audio;
     }
 
@@ -103,7 +95,7 @@ export class Schedule extends Model {
         await this.db.getService(ScheduleService).delete(this);
     }
 
-    public async setAudio(audio: ScheduleAudio): Promise<void> {
+    public async setAudio(audio: AlarmAudio): Promise<void> {
         await this.db.getService(ScheduleService).setAudio(this, audio);
     }
 

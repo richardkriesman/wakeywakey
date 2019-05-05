@@ -2352,7 +2352,7 @@ exports[`renders correctly 1`] = `
                           }
                         }
                       >
-                        Loud Alarm
+                        LoudAlarm Alarm
                       </Text>
                     </View>
                     <View

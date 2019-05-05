@@ -12,9 +12,12 @@ import { Clock, SlideUpIndicator } from "../components";
 import { EmptyView } from "../components/EmptyView";
 import { InactivityHandler } from "../components/InactivityHandler";
 import { Colors } from "../constants/Colors";
+import { Schedule } from "../models/Schedule";
 import { PasscodeService } from "../services/PasscodeService";
 import { PreferenceService } from "../services/PreferenceService";
+import { ScheduleService } from "../services/ScheduleService";
 import { AlarmEvent, AlarmEventType, TimerService } from "../services/TimerService";
+import { getAlarmSound } from "../utils/Audio";
 import * as Log from "../utils/Log";
 import { getEnumKeyByValue } from "../utils/ObjectUtils";
 import { NoHeader, UIScreen } from "../utils/screen";
@@ -33,6 +36,7 @@ export interface HomeScreenProps {
  */
 interface HomeScreenState {
     activeAlarmEvent?: AlarmEvent;
+    activeSchedule?: Schedule;
     activeSound?: Audio.Sound;
     loaded: boolean;
     messageText: string;
@@ -141,6 +145,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     private async fullDatabaseRead(): Promise<Partial<HomeScreenState>> {
         const pref: PreferenceService = this.getService(PreferenceService);
         return {
+            activeSchedule: await this.getService(ScheduleService).getEnabled(),
             loaded: true,
             messageText: "Hello, world!",
             twentyFourHour: await pref.get24HourTime()
@@ -179,21 +184,27 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                     reject(err);
                 })
                 .then(() => { // audio mode has been set, play the alarm
-                    const sound = new Audio.Sound();
-                    this.setState({
-                        activeSound: sound
-                    }, () => { // active sound has been updated, load and play the alarm
-                        sound.loadAsync(require("../../assets/audio/MusicBox.mp3"))
-                            .then(() => {
-                                return sound.setStatusAsync({
+                    getAlarmSound(this.state.activeSchedule.audio)
+                        .then((sound: Audio.Sound) => {
+                            this.setState({
+                                activeSound: sound
+                            }, () => { // active sound has been updated, load and play the alarm
+                                sound.setStatusAsync({
                                     isLooping: true,
                                     shouldPlay: true
+                                })
+                                .then(() => {
+                                    resolve();
+                                })
+                                .catch((err) => {
+                                    reject(err);
                                 });
-                            })
-                            .catch((err) => {
-                                reject(err);
                             });
-                    });
+
+                        })
+                        .catch((err) => {
+                            reject(err);
+                        });
                 });
         });
     }
