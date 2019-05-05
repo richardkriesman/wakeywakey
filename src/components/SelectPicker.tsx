@@ -7,11 +7,12 @@ export interface SelectPickerState {
     isVisible: boolean;
     onCancelled?: () => void;
     onCompleted?: (value: string) => void;
-    value?: string;
+    valueId?: number;
 }
 
 export interface SelectPickerProps {
     title: string;
+    value?: number;
     values: string[];
 }
 
@@ -20,7 +21,8 @@ export class SelectPicker extends React.Component<SelectPickerProps, SelectPicke
     public constructor(props: any) {
         super(props);
         this.state = {
-            isVisible: false
+            isVisible: false,
+            valueId: this.props.value
         };
     }
 
@@ -34,9 +36,9 @@ export class SelectPicker extends React.Component<SelectPickerProps, SelectPicke
                     key={i}
                     title={this.props.values[i]}
                     checkBox={{
-                        checked: this.props.values[i] === this.state.value
+                        checked: i === this.state.valueId
                     }}
-                    onPress={this.onItemPress.bind(this, this.props.values[i])} />
+                    onPress={this.onItemPress.bind(this, i)} />
             );
         }
 
@@ -51,7 +53,7 @@ export class SelectPicker extends React.Component<SelectPickerProps, SelectPicke
                         type="clear" />,
                     <Button
                         key={1}
-                        disabled={!this.state.value}
+                        disabled={this.state.valueId === undefined}
                         onPress={this.onCompleted.bind(this)}
                         title="OK"
                         type="clear" />
@@ -76,7 +78,7 @@ export class SelectPicker extends React.Component<SelectPickerProps, SelectPicke
                 onCancelled: () => {
                     this.setState({
                         isVisible: false,
-                        value: undefined
+                        valueId: undefined
                     }, () => {
                         resolve(undefined);
                     });
@@ -84,7 +86,7 @@ export class SelectPicker extends React.Component<SelectPickerProps, SelectPicke
                 onCompleted: (value: string) => {
                     this.setState({
                         isVisible: false,
-                        value: undefined
+                        valueId: undefined
                     }, () => {
                         resolve(value);
                     });
@@ -100,14 +102,14 @@ export class SelectPicker extends React.Component<SelectPickerProps, SelectPicke
     }
 
     private onCompleted(): void {
-        if (this.state.onCompleted && this.state.value) {
-            this.state.onCompleted(this.state.value);
+        if (this.state.onCompleted && this.state.valueId !== undefined) {
+            this.state.onCompleted(this.props.values[this.state.valueId]);
         }
     }
 
-    private onItemPress(value: string): void {
+    private onItemPress(valueId: number): void {
         this.setState({
-            value
+            valueId
         });
     }
 

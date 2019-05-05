@@ -3,6 +3,7 @@
  */
 
 import { Schedule } from "../models";
+import { ScheduleAudio, ScheduleClockStyle, ScheduleColors } from "../models/Schedule";
 import { Service } from "../utils/service/Service";
 import { ServiceName } from "../utils/service/ServiceOptions";
 import { Emitter, Watcher } from "../utils/watcher";
@@ -20,9 +21,9 @@ export class ScheduleService extends Service {
         // insert the schedule into the database
         const result: SQLResultSet = await this.db.execute(`
             INSERT INTO schedule
-                (name, isEnabled)
+                (name, isEnabled, audio, colorScheme, maximumSnooze, clockStyle)
             VALUES
-                (?, 0)
+                (?, 0, 0, 4, 5, 0)
         `, [name]);
 
         // update the emitters
@@ -30,8 +31,12 @@ export class ScheduleService extends Service {
 
         // build the resulting model
         return Schedule.load(this.db, {
+            audio: 0,
+            clockStyle: 0,
+            colorScheme: 0,
             id: result.insertId,
             isEnabled: false,
+            maximumSnooze: 5,
             name
         });
     }
@@ -88,6 +93,71 @@ export class ScheduleService extends Service {
     }
 
     /**
+     * Gets the {@link Schedule} that is currently enabled, or undefined if no {@link Schedule} is enabled.
+     */
+    public async getEnabled(): Promise<Schedule | undefined> {
+        const result: SQLResultSet = await this.db.execute(`
+            SELECT *
+            FROM schedule
+            WHERE
+                isEnabled = 1
+        `);
+
+        return result.rows.length > 0 ? Schedule.load(this.db, result.rows.item(0)) : undefined;
+    }
+
+    /**
+     * Sets the sound that will play for alarms in a {@link Schedule}.
+     *
+     * @param schedule Schedule to set this property on
+     * @param audio Audio to play
+     */
+    public async setAudio(schedule: Schedule, audio: ScheduleAudio): Promise<void> {
+        await this.db.execute(`
+            UPDATE schedule
+            SET
+                audio = ?
+            WHERE
+                id = ?
+        `, [audio, schedule.id]);
+        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+    }
+
+    /**
+     * Sets the clock style for a {@link Schedule}.
+     *
+     * @param schedule Schedule to set this property on
+     * @param clockStyle Clock style
+     */
+    public async setClockStyle(schedule: Schedule, clockStyle: ScheduleClockStyle): Promise<void> {
+        await this.db.execute(`
+            UPDATE schedule
+            SET
+                clockStyle = ?
+            WHERE
+                id = ?
+        `, [clockStyle, schedule.id]);
+        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+    }
+
+    /**
+     * Sets the color scheme for a {@link Schedule}.
+     *
+     * @param schedule Schedule to set this property on
+     * @param colorScheme Color scheme
+     */
+    public async setColorScheme(schedule: Schedule, colorScheme: ScheduleColors): Promise<void> {
+        await this.db.execute(`
+            UPDATE schedule
+            SET
+                colorScheme = ?
+            WHERE
+                id = ?
+        `, [colorScheme, schedule.id]);
+        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+    }
+
+    /**
      * Enables or disables a {@link Schedule} with the given ID. Only one Schedule can be enabled at any given time, so
      * if the Schedule is being enabled, all others will be disabled.
      *
@@ -107,17 +177,20 @@ export class ScheduleService extends Service {
     }
 
     /**
-     * Gets the {@link Schedule} that is currently enabled, or undefined if no {@link Schedule} is enabled.
+     * Sets the length of a snooze in a {@link Schedule}.
+     *
+     * @param schedule Schedule to set this property on
+     * @param snoozeTime Snooze time in minutes
      */
-    public async getEnabled(): Promise<Schedule | undefined> {
-        const result: SQLResultSet = await this.db.execute(`
-            SELECT *
-            FROM schedule
+    public async setSnoozeTime(schedule: Schedule, snoozeTime: number): Promise<void> {
+        await this.db.execute(`
+            UPDATE schedule
+            SET
+                maximumSnooze = ?
             WHERE
-                isEnabled = 1
-        `);
-
-        return result.rows.length > 0 ? Schedule.load(this.db, result.rows.item(0)) : undefined;
+                id = ?
+        `, [snoozeTime, schedule.id]);
+        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
     }
 
     /**

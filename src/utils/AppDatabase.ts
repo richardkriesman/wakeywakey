@@ -47,7 +47,11 @@ export class AppDatabase {
                         constraint schedule_pk
                             primary key autoincrement,
                     name VARCHAR(30) not null,
-                    isEnabled BOOLEAN default 0 not null
+                    isEnabled BOOLEAN default 0 not null,
+                    audio INTEGER NOT null,
+                    colorScheme INTEGER not null,
+                    maximumSnooze INTEGER not null,
+                    clockStyle INTEGER not null
                 )
             `);
         }
