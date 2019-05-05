@@ -7,5 +7,14 @@ exports[`renders the screen 1`] = `
       "flex": 1,
     }
   }
-/>
+>
+  <View
+    onLayout={[Function]}
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  />
+</RCTSafeAreaView>
 `;

@@ -3,14 +3,8 @@
  */
 
 import React, { ReactNode } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
-import {
-    NavigationEvents,
-    NavigationParams,
-    NavigationRoute, NavigationScreenProp,
-    NavigationScreenProps,
-    StackActions
-} from "react-navigation";
+import { LayoutChangeEvent, LayoutRectangle, Platform, SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import { NavigationEvents, NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
 import * as Log from "../Log";
 import { Service } from "../service/Service";
@@ -25,6 +19,7 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     })
 
     private db?: AppDatabase;
+    private layout?: LayoutRectangle;
 
     protected constructor(props: P & NavigationScreenProps) {
         super(props);
@@ -103,20 +98,34 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
 
     public render(): ReactNode {
         return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView
+                style={styles.container}>
+                <StatusBar
+                    backgroundColor="red"
+                    barStyle="default"
+                    translucent={false} />
                 <NavigationEvents
                     onDidBlur={this.componentDidBlur.bind(this)}
                     onDidFocus={this.componentDidFocus.bind(this)}
                     onWillBlur={this.componentWillBlur.bind(this)}
                     onWillFocus={this.componentWillFocus.bind(this)}
                     navigation={this.props.navigation as any}/>
-                {this.renderContent()}
+                    <View
+                        onLayout={this.onLayout.bind(this)}
+                        style={styles.content}>
+                        {this.renderContent()}
+                    </View>
             </SafeAreaView>
         );
     }
 
     // noinspection JSMethodCanBeStatic
     protected componentDidBlur(): void {
+        return;
+    }
+
+    // noinspection JSMethodCanBeStatic
+    protected componentDidLayoutChange(layout: LayoutRectangle): void {
         return;
     }
 
@@ -136,6 +145,17 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     }
 
     /**
+     * @return Height of the screen's usable area
+     */
+    protected get height(): number {
+        if (Platform.OS === "ios") {
+            return this.layout ? this.layout.height : 0;
+        } else {
+            return this.layout ? this.layout.height - StatusBar.currentHeight : 0;
+        }
+    }
+
+    /**
      * Update just a few keys in the screen's state, with an optional callback.
      * Preserves RN's state-render pipeline by calling setState underneath.
      *
@@ -149,14 +169,29 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     }
 
     /**
+     * @return Width of the screen's usable area
+     */
+    protected get width(): number {
+        return this.layout ? this.layout.width : 0;
+    }
+
+    /**
      * Renders the screen's content within safe area bounds for iOS.
      */
     protected abstract renderContent(): ReactNode;
+
+    private onLayout(event: LayoutChangeEvent): void {
+        this.layout = event.nativeEvent.layout;
+        this.componentDidLayoutChange(this.layout);
+    }
 
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1
+    },
+    content: {
         flex: 1
     }
 });

@@ -6,11 +6,13 @@ import { AntDesign } from "@expo/vector-icons";
 import React, { ReactNode } from "react";
 import ReactNative, { StyleSheet, View } from "react-native";
 import { Input, Text } from "react-native-elements";
+import { Colors } from "../constants/Colors";
 
 const PASSCODE_LENGTH = 4;
 
 export interface PasscodeInputProps {
     // optional
+    autoFocus?: boolean;
     confirmPasscode: boolean; // whether to confirm, does nothing if verifyPasscode is set
     defaultConfirmText: string;
     defaultPromptText: string;
@@ -56,6 +58,21 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
             passcode: "",
             promptText: this.props.defaultPromptText
         });
+    }
+
+    public reset(): void {
+        this.setState({
+            errorMessage: "",
+            isConfirming: false,
+            passcode: "",
+            promptText: this.props.defaultPromptText
+        });
+        this.inputRef.current.clear();
+        this.inputRef.current.blur();
+    }
+
+    public focus(): void {
+        this.inputRef.current.focus();
     }
 
     public async handleChangeText(passcode: string): Promise<void> {
@@ -143,7 +160,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
                     inputContainerStyle={styles.inputContainerStyle}
                     inputStyle={styles.inputStyle}
 
-                    autoFocus={true}
+                    autoFocus={this.props.autoFocus === undefined ? true : this.props.autoFocus}
                     blurOnSubmit={false}
                     caretHidden={true}
                     contextMenuHidden={true}
@@ -164,9 +181,7 @@ export class PasscodeInput extends React.Component<PasscodeInputProps, PasscodeI
 }
 
 const styles = StyleSheet.create({
-    containerStyle: {
-        height: "55%"
-    },
+    containerStyle: {},
     errorStyle: {
         color: "darkred",
         fontSize: 15,
@@ -184,13 +199,14 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         alignItems: "center",
-        flex: 1,
         justifyContent: "flex-end"
     },
     promptStyle: {
+        color: Colors.white,
         fontSize: 32,
-        fontWeight: "bold",
+        // fontWeight: "bold",
         paddingBottom: 20,
+        paddingTop: 40,
         textAlign: "center"
     }
 });
