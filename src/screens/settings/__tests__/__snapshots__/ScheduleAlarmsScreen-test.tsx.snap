@@ -9,46 +9,55 @@ exports[`renders correctly 1`] = `
   }
 >
   <View
-    accessible={true}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
+    onLayout={[Function]}
     style={
       Object {
-        "alignItems": "center",
         "flex": 1,
-        "justifyContent": "center",
       }
     }
   >
-    <Text />
-    <Text
+    <View
+      accessible={true}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "fontSize": 17,
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "center",
         }
       }
     >
-      No alarms yet
-    </Text>
-    <Text
-      style={
-        Array [
+      <Text />
+      <Text
+        style={
           Object {
-            "color": "#5e5e5e",
-            "fontSize": 15,
-          },
-          Object {
-            "color": "#007aff",
-          },
-        ]
-      }
-    >
-      Tap here to create one!
-    </Text>
+            "fontSize": 17,
+          }
+        }
+      >
+        No alarms yet
+      </Text>
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#5e5e5e",
+              "fontSize": 15,
+            },
+            Object {
+              "color": "#007aff",
+            },
+          ]
+        }
+      >
+        Tap here to create one!
+      </Text>
+    </View>
   </View>
 </RCTSafeAreaView>
 `;
