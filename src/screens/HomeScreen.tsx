@@ -85,13 +85,11 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
         // render passcode slider once the layout has become available
         let passcodeSlider: ReactNode;
-        console.log("height: " + this.height);
         if (this.height > 0) { // once the screen height is known, it should be greater than 0
 
             // FIXME: Why are we having to add +11 here? Because I have no idea
             const initialTop: number = this.height -
                 (this.state.indicatorLayout ? this.state.indicatorLayout.height : 0) + 11;
-            console.log("initial top: " + initialTop);
             passcodeSlider = (
                 <Slider
                     ref={(ref) => this.slider = ref}
