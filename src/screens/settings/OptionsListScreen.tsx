@@ -16,20 +16,22 @@ import { ListItem } from "../../components/list/ListItem";
 import { ConfirmationModal } from "../../components/modal/ConfirmationModal";
 import { SelectPicker } from "../../components/SelectPicker";
 import { Colors } from "../../constants/Colors";
-import { Schedule, ScheduleAudio, ScheduleClockStyle, ScheduleColors } from "../../models/Schedule";
+import { Schedule, ScheduleClockStyle, ScheduleColors } from "../../models/Schedule";
+import { AlarmAudio } from "../../utils/Audio";
 import * as Log from "../../utils/Log";
 import { BottomTabBarIcon, Title } from "../../utils/screen/NavigationOptions";
 import { UIScreen } from "../../utils/screen/UIScreen";
 
 export interface OptionsListScreenState {
-    audio: ScheduleAudio;
+    audio: AlarmAudio;
     clockStyle: ScheduleClockStyle;
     colorScheme: ScheduleColors;
     isDeleteModalVisible: boolean;
     snoozeTime: number;
 }
 
-const AudioStrings: string[] = ["MusicBox", "Birds", "PagerBeeps", "Computer", "Loud Alarm", "Normal Alarm"];
+const AudioStrings: string[] = ["MusicBox", "Birds", "Pager Beeps", "Computer", "Loud Alarm", "Normal Alarm",
+    "Special"];
 const ColorSchemeStrings: string[] = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"];
 const SnoozeTimeStrings: string[] = ["5 min", "10 min", "15 min", "20 min", "25 min", "30 min"];
 const ClockStyleStrings: string[] = ["Digital", "Analog"];
@@ -146,7 +148,7 @@ export class OptionsListScreen extends UIScreen<{}, OptionsListScreenState> {
                 }
 
                 const audio: number = AudioStrings.indexOf(audioString);
-                this.schedule.setColorScheme(audio)
+                this.schedule.setAudio(audio)
                     .then(() => {
                         this.setState({
                             audio

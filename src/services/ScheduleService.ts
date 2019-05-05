@@ -3,7 +3,8 @@
  */
 
 import { Schedule } from "../models";
-import { ScheduleAudio, ScheduleClockStyle, ScheduleColors } from "../models/Schedule";
+import { ScheduleClockStyle, ScheduleColors } from "../models/Schedule";
+import { AlarmAudio } from "../utils/Audio";
 import { Service } from "../utils/service/Service";
 import { ServiceName } from "../utils/service/ServiceOptions";
 import { Emitter, Watcher } from "../utils/watcher";
@@ -112,7 +113,7 @@ export class ScheduleService extends Service {
      * @param schedule Schedule to set this property on
      * @param audio Audio to play
      */
-    public async setAudio(schedule: Schedule, audio: ScheduleAudio): Promise<void> {
+    public async setAudio(schedule: Schedule, audio: AlarmAudio): Promise<void> {
         await this.db.execute(`
             UPDATE schedule
             SET
