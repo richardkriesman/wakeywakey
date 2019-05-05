@@ -3,7 +3,7 @@
  */
 
 import React, { ReactNode } from "react";
-import { LayoutChangeEvent, LayoutRectangle, SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import { LayoutChangeEvent, LayoutRectangle, Platform, SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import { NavigationEvents, NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
 import * as Log from "../Log";
@@ -148,7 +148,11 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
      * @return Height of the screen's usable area
      */
     protected get height(): number {
-        return this.layout ? this.layout.height - StatusBar.currentHeight : 0;
+        if (Platform.OS === "ios") {
+            return this.layout ? this.layout.height : 0;
+        } else {
+            return this.layout ? this.layout.height - StatusBar.currentHeight : 0;
+        }
     }
 
     /**

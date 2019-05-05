@@ -4,12 +4,19 @@
 
 import { Audio, KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
-import { LayoutChangeEvent, LayoutRectangle, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+    LayoutChangeEvent,
+    LayoutRectangle,
+    StyleSheet,
+    Text,
+    View
+} from "react-native";
 import { Button } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
-import { Clock } from "../components";
-import { InactivityHandler, Slider } from "../components";
+import { Clock, InactivityHandler, Slider } from "../components";
+import { PasscodeInput } from "../components/PasscodeInput";
+import { SliderPosition } from "../components/Slider";
 import { Colors } from "../constants/Colors";
 import { PasscodeService } from "../services/PasscodeService";
 import { PreferenceService } from "../services/PreferenceService";
@@ -33,6 +40,7 @@ export interface HomeScreenProps {
 interface HomeScreenState {
     activeAlarmEvent?: AlarmEvent;
     activeSound?: Audio.Sound;
+    hasPasscode?: boolean;
     indicatorLayout?: LayoutRectangle;
     messageText: string;
     twentyFourHour: boolean;
@@ -50,6 +58,9 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     private static onRefreshError(err: any): void {
         Log.error("HomeScreen", err);
     }
+
+    private passcodeInput: PasscodeInput;
+    private slider: Slider;
 
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
@@ -74,23 +85,38 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
         // render passcode slider once the layout has become available
         let passcodeSlider: ReactNode;
+        console.log("height: " + this.height);
         if (this.height > 0) { // once the screen height is known, it should be greater than 0
+
             // FIXME: Why are we having to add +11 here? Because I have no idea
             const initialTop: number = this.height -
                 (this.state.indicatorLayout ? this.state.indicatorLayout.height : 0) + 11;
+            console.log("initial top: " + initialTop);
             passcodeSlider = (
                 <Slider
+                    ref={(ref) => this.slider = ref}
                     onIndicatorLayout={this.onIndicatorLayout.bind(this)}
+                    onPositionChanged={this.onSliderPositionChanged.bind(this)}
                     initialTop={initialTop}>
                     <View style={styles.passcodeContainer}>
-                        <ScrollView>
-                            <Text style={styles.passcodeInnerText}>
-                                Spongebob me boy, enter that password! Arghegegegegegh
-                            </Text>
-                            <Text style={styles.passcodeInnerText}>
-                                Spongebob me boy, enter that password! Arghegegegegegh
-                            </Text>
-                        </ScrollView>
+                        {this.state.hasPasscode ?
+                            // a passcode exists. prompt for it
+                            <PasscodeInput
+                                ref={(ref) => this.passcodeInput = ref}
+                                autoFocus={false}
+                                handleSuccess={this.onPasscodeSuccess.bind(this)}
+                                verifyPasscode={this.onPasscodeVerify.bind(this)}/>
+                            :
+                            // no passcode exists. require user to create one.
+                            <PasscodeInput
+                                ref={(ref) => this.passcodeInput = ref}
+                                autoFocus={false}
+                                confirmPasscode={true}
+                                defaultPromptText="Enter a new passcode:"
+                                handleSuccess={this.onPasscodeSet.bind(this)}
+                            />
+                        }
+
                     </View>
                 </Slider>
             );
@@ -119,37 +145,12 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
         );
     }
 
-    public async switchToSettings(): Promise<void> {
-        const hasPasscode: boolean = await this.getService(PasscodeService).hasPasscode();
-        this.present("PasscodeGate", {
-            backButtonName: "Home",
-            hasPasscode,
-            screen: this,
-            successScreenKey: "Settings"
-        });
-    }
-
-    public onSnoozePressed(): void {
-        this.stopAudio()
-            .then(() => {
-                this.setState({
-                    messageText: "Alarm snoozed!"
-                });
-            });
-    }
-
     protected componentDidLayoutChange(layout: LayoutRectangle): void {
         this.forceUpdate(); // some components depend on the height of the screen - force an update when it changes
     }
 
     protected componentWillFocus(): void {
         this.refresh().catch(HomeScreen.onRefreshError.bind(this));
-    }
-
-    private onIndicatorLayout(event: LayoutChangeEvent): void {
-        this.setState({
-            indicatorLayout: event.nativeEvent.layout
-        });
     }
 
     private async refresh(): Promise<void> {
@@ -167,6 +168,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     private async fullDatabaseRead(): Promise<Partial<HomeScreenState>> {
         const pref: PreferenceService = this.getService(PreferenceService);
         return {
+            hasPasscode: await this.getService(PasscodeService).hasPasscode(),
             messageText: "Hello, world!",
             twentyFourHour: await pref.get24HourTime()
         };
@@ -188,6 +190,45 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
             this.startAlarm();
 
         });
+    }
+
+    private onIndicatorLayout(event: LayoutChangeEvent): void {
+        this.setState({
+            indicatorLayout: event.nativeEvent.layout
+        });
+    }
+
+    private onPasscodeSuccess(): void {
+        this.slider.close()
+            .then(() => {
+                this.present("Settings");
+            });
+    }
+
+    private onPasscodeVerify(passcode: string): Promise<boolean> {
+        return this.getService(PasscodeService).verifyPasscode(passcode);
+    }
+
+    private async onPasscodeSet(passcode: string): Promise<void> {
+        await this.getService(PasscodeService).setPasscode(passcode);
+        this.onPasscodeSuccess();
+    }
+
+    private onSliderPositionChanged(position: SliderPosition): void {
+        if (position === SliderPosition.Expanded) {
+            this.passcodeInput.focus();
+        } else {
+            this.passcodeInput.reset();
+        }
+    }
+
+    private onSnoozePressed(): void {
+        this.stopAudio()
+            .then(() => {
+                this.setState({
+                    messageText: "Alarm snoozed!"
+                });
+            });
     }
 
     private startAlarm(): Promise<void> {
@@ -271,12 +312,12 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     passcodeContainer: {
-        alignSelf: "center",
+        alignItems: "center",
         backgroundColor: "black",
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         height: 600,
-        width: 300,
+        width: 400,
         zIndex: 2
     },
     passcodeInnerText: {

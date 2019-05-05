@@ -14,7 +14,7 @@ import {
 import { Button, Icon } from "react-native-elements";
 import { Colors } from "../constants/Colors";
 
-enum SliderPosition {
+export enum SliderPosition {
     Collapsed = 0,
     Expanded = 1
 }
@@ -35,6 +35,7 @@ interface PasscodeGateSliderState {
 export interface PasscodeGateSliderProps {
     initialTop: number;
     onIndicatorLayout?: (event: LayoutChangeEvent) => void;
+    onPositionChanged?: (position: SliderPosition) => void;
 }
 
 export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGateSliderState> {
@@ -50,6 +51,14 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
         this.state = {
             indicatorRotation: new Animated.Value(0)
         };
+    }
+
+    public close(): Promise<void> {
+        return this.animate(SliderPosition.Collapsed);
+    }
+
+    public open(): Promise<void> {
+        return this.animate(SliderPosition.Expanded);
     }
 
     public render(): ReactNode {
@@ -147,6 +156,9 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
                     }, () => { // yDrag has been updated, set motion state to idle so we can drag again
                         this.position = position;
                         this.motion = SliderMotion.Idle;
+                        if (this.props.onPositionChanged) {
+                            this.props.onPositionChanged(this.position);
+                        }
                         resolve();
                     });
                 });

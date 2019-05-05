@@ -1,6 +1,6 @@
 import React from "react";
 import "react-native";
-import renderer, { ReactTestInstance } from "react-test-renderer";
+import renderer from "react-test-renderer";
 import { TestEnvironment } from "../../utils/testing";
 import { HomeScreen } from "../HomeScreen";
 
@@ -29,33 +29,6 @@ describe("app snapshot", () => {
             <HomeScreen initialMessageText={initialMessageText} {...env.emptyUIScreenProps} />
         ).toJSON();
         expect(tree).toMatchSnapshot();
-    });
-
-});
-
-describe("screen instance methods", () => {
-
-    it("switches to settings", async (done) => {
-        // mock component
-        const component = renderer.create(
-            <HomeScreen initialMessageText={initialMessageText} {...env.emptyUIScreenProps}/>
-        );
-
-        // get instance
-        const instance: (ReactTestInstance & HomeScreen) | null = component.getInstance() as any;
-        expect(instance).toBeDefined();
-
-        // spy on present
-        const present = jest.spyOn(instance, "present");
-
-        // switch to settings
-        await instance.switchToSettings();
-
-        // check that everything was called correctly
-        expect(present).toBeCalled();
-
-        // done
-        done();
     });
 
 });
