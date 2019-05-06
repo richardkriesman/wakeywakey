@@ -57,7 +57,7 @@ interface HomeScreenState {
 @NoHeader
 export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
-    public static defaultInitialMessageText: string = "Hello, world!";
+    public static defaultInitialMessageText: string = "";
 
     private static onRefreshError(err: any): void {
         Log.error("HomeScreen", err);
@@ -69,7 +69,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
         this.state = {
-            messageText: "",
+            messageText: HomeScreen.defaultInitialMessageText,
             twentyFourHour: false
         };
     }
@@ -124,6 +124,11 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
             );
         }
 
+        // don't render the message <Text> if the message is empty
+        const messageComponent = this.state.messageText
+            ? <Text style={styles.message}>{this.state.messageText}</Text>
+            : null;
+
         // render screen
         return (
             <InactivityHandler
@@ -132,7 +137,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                 <KeepAwake/>
                 <View style={styles.container}>
                     <View style={styles.contentWrapper}>
-                        <Text style={styles.message}>{this.state.messageText}</Text>
+                        {messageComponent}
                         <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
                         <Button
                             buttonStyle={styles.snoozeButton}
@@ -157,7 +162,6 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     private async refresh(): Promise<void> {
         if (!this.getService(PreferenceService)) {
             this.setState({ messageText: this.props.initialMessageText });
-            this.forceUpdate(); // FIXME: this shouldn't do anything - test it and remove if so?
             return;
         }
 
@@ -171,7 +175,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
         return {
             activeSchedule: await this.getService(ScheduleService).getEnabled(),
             hasPasscode: await this.getService(PasscodeService).hasPasscode(),
-            messageText: "Hello, world!",
+            messageText: this.state.messageText,
             twentyFourHour: await pref.get24HourTime()
         };
     }
@@ -256,12 +260,12 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                                     isLooping: true,
                                     shouldPlay: true
                                 })
-                                .then(() => {
-                                    resolve();
-                                })
-                                .catch((err) => {
-                                    reject(err);
-                                });
+                                    .then(() => {
+                                        resolve();
+                                    })
+                                    .catch((err) => {
+                                        reject(err);
+                                    });
                             });
 
                         })
@@ -287,7 +291,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     }
 }
 
-const messageTextMap: Map<AlarmEventType|null, string> = new Map([
+const messageTextMap: Map<AlarmEventType | null, string> = new Map([
     [null, "Hello, world!"],
     [AlarmEventType.SLEEP, "Time for bed!"],
     [AlarmEventType.WAKE, "Time to wake up!"],
