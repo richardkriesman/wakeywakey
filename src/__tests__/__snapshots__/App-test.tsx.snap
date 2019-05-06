@@ -145,16 +145,6 @@ exports[`renders the root without loading screen 1`] = `
                             }
                           }
                         >
-                          <Text
-                            style={
-                              Object {
-                                "fontSize": 30,
-                                "textAlign": "center",
-                              }
-                            }
-                          >
-                            
-                          </Text>
                           <View
                             style={Object {}}
                           >

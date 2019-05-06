@@ -68,16 +68,6 @@ exports[`app snapshot renders the screen 1`] = `
               }
             }
           >
-            <Text
-              style={
-                Object {
-                  "fontSize": 30,
-                  "textAlign": "center",
-                }
-              }
-            >
-              
-            </Text>
             <View
               style={Object {}}
             >
