@@ -292,7 +292,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 }
 
 const messageTextMap: Map<AlarmEventType | null, string> = new Map([
-    [null, "Hello, world!"],
+    [null, HomeScreen.defaultInitialMessageText],
     [AlarmEventType.SLEEP, "Time for bed!"],
     [AlarmEventType.WAKE, "Time to wake up!"],
     [AlarmEventType.GET_UP, "Time to get up!"]
