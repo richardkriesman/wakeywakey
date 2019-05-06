@@ -124,11 +124,6 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
             );
         }
 
-        // don't render the message <Text> if the message is empty
-        const messageComponent = this.state.messageText
-            ? <Text style={styles.message}>{this.state.messageText}</Text>
-            : null;
-
         // render screen
         return (
             <InactivityHandler
@@ -137,7 +132,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                 <KeepAwake/>
                 <View style={styles.container}>
                     <View style={styles.contentWrapper}>
-                        {messageComponent}
+                        <Text style={styles.message}>{this.state.messageText}</Text>
                         <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
                         <Button
                             buttonStyle={styles.snoozeButton}
