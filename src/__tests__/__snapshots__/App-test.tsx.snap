@@ -201,18 +201,21 @@ exports[`renders the root without loading screen 1`] = `
                             <View>
                               <View
                                 style={
-                                  Object {
-                                    "alignItems": "center",
-                                    "marginTop": 20,
-                                    "padding": 0,
-                                  }
+                                  Array [
+                                    Object {
+                                      "alignItems": "center",
+                                      "justifyContent": "center",
+                                      "padding": 0,
+                                    },
+                                    Object {
+                                      "height": 0,
+                                    },
+                                  ]
                                 }
                               >
                                 <View
                                   style={
                                     Object {
-                                      "flex": 1,
-                                      "flexBasis": "100%",
                                       "justifyContent": "center",
                                       "width": "85%",
                                     }

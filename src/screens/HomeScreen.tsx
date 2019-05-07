@@ -169,7 +169,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                     alarm={this.state.activeAlarm}
                     onThemeTransition={this.onThemeTransition.bind(this)}
                     time={this.state.time}>
-                    <View style={styles.container}>
+                    <View style={[styles.container, { height: this.height }]}>
                         <View style={styles.contentWrapper}>
                             <Text style={[styles.message, textDynamicStyle]}>{this.state.messageText}</Text>
                             <Clock
@@ -427,12 +427,10 @@ const styles = StyleSheet.create({
     clockWrapper: {},
     container: {
         alignItems: "center",
-        marginTop: 20,
+        justifyContent: "center",
         padding: 0
     },
     contentWrapper: {
-        flex: 1,
-        flexBasis: "100%",
         justifyContent: "center",
         width: "85%"
     },
