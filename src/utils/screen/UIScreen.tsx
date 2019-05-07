@@ -3,7 +3,16 @@
  */
 
 import React, { ReactNode } from "react";
-import { LayoutChangeEvent, LayoutRectangle, Platform, SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
+import {
+    LayoutChangeEvent,
+    LayoutRectangle,
+    Platform,
+    SafeAreaView,
+    StatusBar,
+    StatusBarStyle,
+    StyleSheet,
+    View
+} from "react-native";
 import { NavigationEvents, NavigationParams, NavigationScreenProps, StackActions } from "react-navigation";
 import { AppDatabase } from "../AppDatabase";
 import * as Log from "../Log";
@@ -17,6 +26,10 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     public static navigationOptions = ({navigation}: NavigationScreenProps) => ({
         title: navigation.getParam("title", "Untitled")
     })
+
+    protected shouldRenderStatusBarTranslucent: boolean = false;
+    protected shouldRenderSafeArea: boolean = true;
+    protected statusBarStyle: StatusBarStyle = "default";
 
     private db?: AppDatabase;
     private layout?: LayoutRectangle;
@@ -97,26 +110,41 @@ export abstract class UIScreen<P = {}, S = {}> extends React.Component<P & Navig
     }
 
     public render(): ReactNode {
-        return (
-            <SafeAreaView
-                style={styles.container}>
-                <StatusBar
-                    backgroundColor="red"
-                    barStyle="default"
-                    translucent={false} />
-                <NavigationEvents
-                    onDidBlur={this.componentDidBlur.bind(this)}
-                    onDidFocus={this.componentDidFocus.bind(this)}
-                    onWillBlur={this.componentWillBlur.bind(this)}
-                    onWillFocus={this.componentWillFocus.bind(this)}
-                    navigation={this.props.navigation as any}/>
-                    <View
-                        onLayout={this.onLayout.bind(this)}
-                        style={styles.content}>
-                        {this.renderContent()}
-                    </View>
-            </SafeAreaView>
-        );
+        const content: ReactNode = [
+            <StatusBar
+                key={0}
+                barStyle={this.statusBarStyle}
+                translucent={this.shouldRenderStatusBarTranslucent} />,
+            <NavigationEvents
+                key={1}
+                onDidBlur={this.componentDidBlur.bind(this)}
+                onDidFocus={this.componentDidFocus.bind(this)}
+                onWillBlur={this.componentWillBlur.bind(this)}
+                onWillFocus={this.componentWillFocus.bind(this)}
+                navigation={this.props.navigation as any}/>,
+            <View
+                key={2}
+                onLayout={this.onLayout.bind(this)}
+                style={styles.content}>
+                {this.renderContent()}
+            </View>
+        ];
+
+        if (this.shouldRenderSafeArea) {
+            return (
+                <SafeAreaView
+                    style={styles.container}>
+                    {content}
+                </SafeAreaView>
+            );
+        } else {
+            return (
+                <View
+                    style={styles.container}>
+                    {content}
+                </View>
+            );
+        }
     }
 
     // noinspection JSMethodCanBeStatic

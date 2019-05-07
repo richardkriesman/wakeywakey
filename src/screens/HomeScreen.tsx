@@ -5,17 +5,17 @@
 import { Audio, KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
 import {
+    Dimensions,
     LayoutChangeEvent,
     LayoutRectangle,
     StyleSheet,
     Text,
-    View
+    View, ViewStyle
 } from "react-native";
 import { Button } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
-import { Clock, InactivityHandler, Slider } from "../components";
-import { PasscodeInput } from "../components/PasscodeInput";
+import { Clock, InactivityHandler, PasscodeInput, SkyBackground, Slider } from "../components";
 import { SliderPosition } from "../components/Slider";
 import { Colors } from "../constants/Colors";
 import { Schedule } from "../models/Schedule";
@@ -68,7 +68,7 @@ interface HomeScreenState {
 @NoHeader
 export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
-    public static defaultInitialMessageText: string = "";
+    public static defaultInitialMessageText: string = " ";
 
     private static onRefreshError(err: any): void {
         Log.error("HomeScreen", err);
@@ -79,6 +79,8 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
     public constructor(props: HomeScreenProps & NavigationScreenProps) {
         super(props);
+        this.shouldRenderSafeArea = false; // disable the safe area for this screen, we're handling it manually
+        this.shouldRenderStatusBarTranslucent = true; // render the status bar as translucent for this screen
         this.state = {
             messageText: HomeScreen.defaultInitialMessageText,
             snoozeState: SnoozeState.Disabled,
@@ -102,17 +104,19 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
         // render passcode slider once the layout has become available
         let passcodeSlider: ReactNode;
         if (this.height > 0) { // once the screen height is known, it should be greater than 0
-
-            // FIXME: Why are we having to add +11 here? Because I have no idea
             const initialTop: number = this.height -
-                (this.state.indicatorLayout ? this.state.indicatorLayout.height : 0) + 11;
+                (this.state.indicatorLayout ? this.state.indicatorLayout.height : 0);
+            const contentDynamicStyle: ViewStyle = {
+                width: this.width
+            };
+
             passcodeSlider = (
                 <Slider
                     ref={(ref) => this.slider = ref}
                     onIndicatorLayout={this.onIndicatorLayout.bind(this)}
                     onPositionChanged={this.onSliderPositionChanged.bind(this)}
                     initialTop={initialTop}>
-                    <View style={styles.passcodeContainer}>
+                    <View style={[styles.passcodeContainer, contentDynamicStyle]}>
                         {this.state.hasPasscode ?
                             // a passcode exists. prompt for it
                             <PasscodeInput
@@ -130,7 +134,6 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                                 handleSuccess={this.onPasscodeSet.bind(this)}
                             />
                         }
-
                     </View>
                 </Slider>
             );
@@ -154,19 +157,21 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                 idleTime={15000}
                 navigation={this.props.navigation}>
                 <KeepAwake/>
-                <View style={styles.container}>
-                    <View style={styles.contentWrapper}>
-                        <Text style={styles.message}>{this.state.messageText}</Text>
-                        <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
-                        <Button
-                            buttonStyle={styles.snoozeButton}
-                            disabled={isSnoozeDisabled}
-                            title={snoozeButtonText}
-                            onPress={this.onSnoozePressed.bind(this)}
-                        />
+                <SkyBackground>
+                    <View style={styles.container}>
+                        <View style={styles.contentWrapper}>
+                            <Text style={styles.message}>{this.state.messageText}</Text>
+                            <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
+                            <Button
+                                buttonStyle={styles.snoozeButton}
+                                disabled={isSnoozeDisabled}
+                                title={snoozeButtonText}
+                                onPress={this.onSnoozePressed.bind(this)}
+                            />
+                        </View>
                     </View>
-                    {passcodeSlider}
-                </View>
+                </SkyBackground>
+                {passcodeSlider}
             </InactivityHandler>
         );
     }
@@ -286,13 +291,13 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                         .then(() => {
                             this.setState({
                                 activeAlarmEvent: undefined,
-                                messageText: " ",
+                                messageText: HomeScreen.defaultInitialMessageText,
                                 snoozeState: SnoozeState.Disabled
                             });
                         });
                 } else {
                     this.setState({
-                        messageText: " ",
+                        messageText: HomeScreen.defaultInitialMessageText,
                         snoozeState: SnoozeState.Disabled
                     });
                 }
@@ -393,7 +398,6 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         height: 600,
-        width: 400,
         zIndex: 2
     },
     passcodeInnerText: {
