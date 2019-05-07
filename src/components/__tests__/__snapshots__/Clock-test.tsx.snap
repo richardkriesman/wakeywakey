@@ -12,10 +12,13 @@ exports[`HomeScreenClock renders the correct (fake) initial time 1`] = `
   >
     <Text
       style={
-        Object {
-          "fontSize": 60,
-          "textAlign": "center",
-        }
+        Array [
+          Object {
+            "fontSize": 60,
+            "textAlign": "center",
+          },
+          undefined,
+        ]
       }
     >
       6:00 pm
@@ -36,10 +39,13 @@ exports[`HomeScreenClock renders the correct (fake) later time 1`] = `
   >
     <Text
       style={
-        Object {
-          "fontSize": 60,
-          "textAlign": "center",
-        }
+        Array [
+          Object {
+            "fontSize": 60,
+            "textAlign": "center",
+          },
+          undefined,
+        ]
       }
     >
       8:30 pm
