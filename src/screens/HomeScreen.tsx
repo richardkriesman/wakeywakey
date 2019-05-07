@@ -237,7 +237,6 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     private onAlarmEventFired(when: Date, event: AlarmEvent): void {
 
         // log the event change
-        console.log(event);
         const eventName: string = getEnumKeyByValue(AlarmEventType, event.type);
         Log.info("HomeScreen", `Responding to event ${eventName} for Alarm ${event.alarm.id}`);
 

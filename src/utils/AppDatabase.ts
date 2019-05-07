@@ -114,16 +114,17 @@ export class AppDatabase {
     }
 
     /**
-     * Gets an {@link EmitterSet} for the specified {@link Model} class. The EmitterSet persists for the life of the
+     * Gets an {@link EmitterSet} for the specified {@link Service}. The EmitterSet persists for the life of the
      * {@link AppDatabase}.
      *
-     * @param name Name of the EmitterSet
+     * @param service The {@link Service} to use.
      */
-    public getEmitterSet<T extends Model>(name: string): EmitterSet<T> {
-        let emitters: EmitterSet<T>|undefined = this.emitters.get(name);
+    public getEmitterSet<T extends Model>(service: new(db: AppDatabase) => any): EmitterSet<T> {
+        const serviceName: string = this.getServiceName(service);
+        let emitters: EmitterSet<T>|undefined = this.emitters.get(serviceName);
         if (!emitters) {
             emitters = new EmitterSet<T>();
-            this.emitters.set(name, emitters);
+            this.emitters.set(serviceName, emitters);
         }
         return emitters;
     }
@@ -159,11 +160,7 @@ export class AppDatabase {
      * @param service The {@link Service} class to retrieve.
      */
     public getService<T extends Service>(service: new(db: AppDatabase) => T): T {
-        if (!service.hasOwnProperty("SERVICE_NAME")) { // service name is not set, throw exception
-            throw new Error("The Service cannot be resolved because it does not have a name set.");
-        }
-        const serviceName: string = ((service as unknown) as ServiceStaticBase).SERVICE_NAME;
-
+        const serviceName: string = this.getServiceName(service);
         if (!this.services.has(serviceName)) {
             this.services.set(serviceName, new service(this));
         }
@@ -217,6 +214,18 @@ export class AppDatabase {
                 (?, ?);
         `, [key, value]);
         Log.info(DATABASE_LOG_TAG, `SET ${key}: ${value}`);
+    }
+
+    /**
+     * Gets the SERVICE_NAME for a particular {@link Service}.
+     *
+     * @param service The Service whose name to retrieve.
+     */
+    private getServiceName<T extends Service>(service: new(db: AppDatabase) => T): string {
+        if (!service.hasOwnProperty("SERVICE_NAME")) { // service name is not set, throw exception
+            throw new Error("The Service cannot be resolved because it does not have a name set.");
+        }
+        return ((service as unknown) as ServiceStaticBase).SERVICE_NAME;
     }
 
 }

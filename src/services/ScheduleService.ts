@@ -28,7 +28,7 @@ export class ScheduleService extends Service {
         `, [name]);
 
         // update the emitters
-        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+        this.db.getEmitterSet<Schedule>(ScheduleService).update(await this.getAll());
 
         // build the resulting model
         return Schedule.load(this.db, {
@@ -55,7 +55,7 @@ export class ScheduleService extends Service {
             WHERE
                 id = ?
         `, [schedule.id]);
-        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+        this.db.getEmitterSet<Schedule>(ScheduleService).update(await this.getAll());
     }
 
     /**
@@ -121,7 +121,7 @@ export class ScheduleService extends Service {
             WHERE
                 id = ?
         `, [audio, schedule.id]);
-        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+        this.db.getEmitterSet<Schedule>(ScheduleService).update(await this.getAll());
     }
 
     /**
@@ -138,7 +138,7 @@ export class ScheduleService extends Service {
             WHERE
                 id = ?
         `, [clockStyle, schedule.id]);
-        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+        this.db.getEmitterSet<Schedule>(ScheduleService).update(await this.getAll());
     }
 
     /**
@@ -155,7 +155,7 @@ export class ScheduleService extends Service {
             WHERE
                 id = ?
         `, [colorScheme, schedule.id]);
-        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+        this.db.getEmitterSet<Schedule>(ScheduleService).update(await this.getAll());
     }
 
     /**
@@ -174,7 +174,7 @@ export class ScheduleService extends Service {
                     ELSE 0
                     END
         `, [scheduleId, isEnabled ? 1 : 0]);
-        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+        this.db.getEmitterSet<Schedule>(ScheduleService).update(await this.getAll());
     }
 
     /**
@@ -191,14 +191,14 @@ export class ScheduleService extends Service {
             WHERE
                 id = ?
         `, [snoozeTime, schedule.id]);
-        this.db.getEmitterSet<Schedule>(Schedule.name).update(await this.getAll());
+        this.db.getEmitterSet<Schedule>(ScheduleService).update(await this.getAll());
     }
 
     /**
      * Returns a {@link Watcher} for all schedules.
      */
     public watchAll(): Watcher<Schedule> {
-        const emitter: Emitter<Schedule> = this.db.getEmitterSet<Schedule>(Schedule.name).create();
+        const emitter: Emitter<Schedule> = this.db.getEmitterSet<Schedule>(ScheduleService).create();
         this.getAll() // get an initial data set
             .then((schedules: Schedule[]) => {
                 emitter.updateInitialSet(schedules);
