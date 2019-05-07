@@ -3,6 +3,7 @@
  */
 import { Alarm } from "../models/Alarm";
 import { Schedule } from "../models/Schedule";
+import { AlarmEvent, AlarmEventType } from "../utils/AlarmEvent";
 import * as Log from "../utils/Log";
 import { getEnumKeyByValue } from "../utils/ObjectUtils";
 import { Service } from "../utils/service/Service";
@@ -12,15 +13,6 @@ import { AlarmService } from "./AlarmService";
 import { ScheduleService } from "./ScheduleService";
 
 const TIMER_LOG_TAG: string = "AppTimer";
-
-/** Which type of {@link AlarmEventType} is being fired */
-export enum AlarmEventType { SLEEP, WAKE, GET_UP }
-
-/** Data about {@link Alarm}-related event being fired */
-export interface AlarmEvent {
-    alarm: Alarm;
-    type: AlarmEventType;
-}
 
 /** A function to execute when a {@link TimerEvent} fires. */
 export type TimerHandler = (d?: Date, ev?: AlarmEvent) => void;
@@ -65,11 +57,23 @@ export class TimerService extends Service {
      */
     private static alarmTimesAsMap(alarm: Alarm): Map<AlarmEventType, Time> {
         return new Map<AlarmEventType, Time>([
-            [ AlarmEventType.SLEEP, alarm.sleepTime ],
-            [ AlarmEventType.WAKE, alarm.wakeTime ],
-            [ AlarmEventType.GET_UP, alarm.getUpTime ]
+            [ AlarmEventType.Sleep, alarm.sleepTime ],
+            [ AlarmEventType.Wake, alarm.wakeTime ],
+            [ AlarmEventType.GetUp, alarm.getUpTime ]
         ]);
     }
+
+    /**
+     * The snoozed {@link AlarmEvent}.
+     */
+    private snoozedEvent?: AlarmEvent;
+
+    /**
+     * The number of minutes remaining before the snoozed {@link AlarmEvent} should be replayed.
+     *
+     * Can be undefined if no AlarmEvent is currently snoozed.
+     */
+    private snoozeTime?: number = 0;
 
     /**
      * An instance field containing this service's {@link NodeJS.Timeout}'s ID.
@@ -89,6 +93,14 @@ export class TimerService extends Service {
      * A map to register {@link TimerEvent}s and their respective lists of {@link TimerHandler}s.
      */
     private handlers: TimerHandlerMap = new Map<TimerEvent, TimerHandler[]>();
+
+    /**
+     * Cancel any snoozed {@link AlarmEvent}.
+     */
+    public cancelSnooze(): void {
+        this.snoozedEvent = undefined;
+        this.snoozeTime = undefined;
+    }
 
     /**
      * Add a handler that listens for the given Timer event.
@@ -197,6 +209,18 @@ export class TimerService extends Service {
      */
     private async checkActiveAlarms(now: Date): Promise<void> {
         Log.info("TimerService", "Checking for new alarms");
+
+        // check if there's any snoozed event to replay
+        if (this.snoozedEvent) {
+            this.snoozeTime--;
+            if (this.snoozeTime <= 0) { // snooze is up, replay event
+                this.fireAll(TimerEvent.ALARM, now, this.snoozedEvent);
+                this.snoozedEvent = undefined;
+                this.snoozeTime = undefined;
+            }
+        }
+
+        // check for any new alarms to fire
         const alarms: Alarm[] = await this.fetchActiveAlarms();
         alarms.forEach(this.checkAlarm.bind(this, now));
     }
@@ -227,7 +251,7 @@ export class TimerService extends Service {
         Array.from(timesMap.entries()).forEach((e: [AlarmEventType, Time]) => {
             // ignore seconds, in case this fires a second too early or late
             if (e[1].equals(nowTime, true)) {
-                this.fireAll(TimerEvent.ALARM, now, { alarm, type: e[0] });
+                this.fireAll(TimerEvent.ALARM, now, new AlarmEvent(alarm, e[0], this.snoozeAlarmEvent.bind(this)));
             }
         });
     }
@@ -238,5 +262,18 @@ export class TimerService extends Service {
     private async fetchActiveAlarms(): Promise<Alarm[]> {
         const schedule: Schedule | undefined = await this.db.getService(ScheduleService).getEnabled();
         return schedule ? await this.db.getService(AlarmService).getBySchedule(schedule) : [];
+    }
+
+    /**
+     * Snoozes an {@link AlarmEvent} for the time specified by the relevant {@link Schedule}'s configured snooze time.
+     *
+     * @param alarmEvent AlarmEvent to snooze
+     */
+    private async snoozeAlarmEvent(alarmEvent: AlarmEvent): Promise<void> {
+        this.snoozedEvent = alarmEvent;
+
+        // initialize the snooze time
+        const schedule: Schedule = await this.db.getService(ScheduleService).get(alarmEvent.alarm.scheduleId);
+        this.snoozeTime = schedule.snoozeTime;
     }
 }
