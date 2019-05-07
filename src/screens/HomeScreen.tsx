@@ -4,30 +4,27 @@
 
 import { Audio, KeepAwake, SplashScreen } from "expo";
 import React, { ReactNode } from "react";
-import {
-    Dimensions,
-    LayoutChangeEvent,
-    LayoutRectangle,
-    StyleSheet,
-    Text,
-    View, ViewStyle
-} from "react-native";
+import { LayoutChangeEvent, LayoutRectangle, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Button } from "react-native-elements";
 import { NavigationScreenProps } from "react-navigation";
 
 import { Clock, InactivityHandler, PasscodeInput, SkyBackground, Slider } from "../components";
 import { SliderPosition } from "../components/Slider";
 import { Colors } from "../constants/Colors";
+import { Alarm } from "../models/Alarm";
 import { Schedule } from "../models/Schedule";
+import { AlarmService } from "../services/AlarmService";
 import { PasscodeService } from "../services/PasscodeService";
 import { PreferenceService } from "../services/PreferenceService";
 import { ScheduleService } from "../services/ScheduleService";
 import { TimerService } from "../services/TimerService";
 import { AlarmEvent, AlarmEventType } from "../utils/AlarmEvent";
+import * as AlarmUtils from "../utils/AlarmUtils";
 import { getAlarmSound } from "../utils/Audio";
 import * as Log from "../utils/Log";
 import { getEnumKeyByValue } from "../utils/ObjectUtils";
 import { NoHeader, UIScreen } from "../utils/screen";
+import { Time } from "../utils/Time";
 
 /**
  * Home screen properties. Navigation by Miika, intersection type by Richard Kriesman.
@@ -51,13 +48,16 @@ export enum SnoozeState {
  * @author Richard Kriesman
  */
 interface HomeScreenState {
+    activeAlarm?: Alarm;
     activeAlarmEvent?: AlarmEvent;
     activeSchedule?: Schedule;
     activeSound?: Audio.Sound;
     hasPasscode?: boolean;
     indicatorLayout?: LayoutRectangle;
+    isDarkTheme: boolean;
     messageText: string;
     snoozeState: SnoozeState;
+    time: Time;
     twentyFourHour: boolean;
 }
 
@@ -82,8 +82,10 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
         this.shouldRenderSafeArea = false; // disable the safe area for this screen, we're handling it manually
         this.shouldRenderStatusBarTranslucent = true; // render the status bar as translucent for this screen
         this.state = {
+            isDarkTheme: false,
             messageText: HomeScreen.defaultInitialMessageText,
             snoozeState: SnoozeState.Disabled,
+            time: new Time(),
             twentyFourHour: false
         };
     }
@@ -94,12 +96,18 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                 // loaded fine. hide splash screen and bind events.
                 SplashScreen.hide();
 
+                this.getService(TimerService).on("second", this.onSecond.bind(this));
                 this.getService(TimerService).on("alarm", this.onAlarmEventFired.bind(this));
             })
             .catch(HomeScreen.onRefreshError.bind(this));
     }
 
     public renderContent(): ReactNode {
+
+        // build text dynamic style
+        const textDynamicStyle: TextStyle = {
+            color: this.state.isDarkTheme ? Colors.white : Colors.black
+        };
 
         // render passcode slider once the layout has become available
         let passcodeSlider: ReactNode;
@@ -157,11 +165,17 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                 idleTime={15000}
                 navigation={this.props.navigation}>
                 <KeepAwake/>
-                <SkyBackground>
+                <SkyBackground
+                    alarm={this.state.activeAlarm}
+                    onThemeTransition={this.onThemeTransition.bind(this)}
+                    time={this.state.time}>
                     <View style={styles.container}>
                         <View style={styles.contentWrapper}>
-                            <Text style={styles.message}>{this.state.messageText}</Text>
-                            <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
+                            <Text style={[styles.message, textDynamicStyle]}>{this.state.messageText}</Text>
+                            <Clock
+                                textStyle={textDynamicStyle}
+                                twentyFourHour={this.state.twentyFourHour}
+                                wrapperStyle={styles.clockWrapper}/>
                             <Button
                                 buttonStyle={styles.snoozeButton}
                                 disabled={isSnoozeDisabled}
@@ -197,8 +211,23 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
     private async fullDatabaseRead(): Promise<Partial<HomeScreenState>> {
         const pref: PreferenceService = this.getService(PreferenceService);
+
+        // determine the active alarm if there is one
+        const activeSchedule: Schedule|undefined = await this.getService(ScheduleService).getEnabled();
+        let activeAlarm: Alarm|undefined;
+        if (activeSchedule) {
+            const alarms: Alarm[] = await this.getService(AlarmService).getBySchedule(activeSchedule);
+            for (const alarm of alarms) {
+                if (AlarmUtils.isActiveToday(alarm)) {
+                    activeAlarm = alarm;
+                    break;
+                }
+            }
+        }
+
         return {
-            activeSchedule: await this.getService(ScheduleService).getEnabled(),
+            activeAlarm,
+            activeSchedule,
             hasPasscode: await this.getService(PasscodeService).hasPasscode(),
             messageText: this.state.messageText,
             twentyFourHour: await pref.get24HourTime()
@@ -228,6 +257,11 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
             // start playing sound until dismissed if there isn't already an alarm going off
             if (!this.state.activeSound) {
                 this.startAlarm();
+            }
+
+            // set the active alarm to the next alarm if this was the get up time
+            if (event.type === AlarmEventType.GetUp) {
+                this.refresh();
             }
 
         });
@@ -261,6 +295,13 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
         } else {
             this.passcodeInput.reset();
         }
+    }
+
+    private onSecond(date?: Date): void {
+        const time: Time = Time.createFromDate(date);
+        this.setState({
+            time
+        });
     }
 
     private onSnoozePressed(): void {
@@ -304,6 +345,13 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                 break;
 
         }
+    }
+
+    private onThemeTransition(isDarkTheme: boolean): void {
+        this.statusBarStyle = isDarkTheme ? "light-content" : "dark-content";
+        this.setState({
+            isDarkTheme
+        });
     }
 
     private startAlarm(): Promise<void> {
