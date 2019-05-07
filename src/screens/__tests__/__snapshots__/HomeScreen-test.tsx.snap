@@ -127,7 +127,7 @@ exports[`app snapshot renders the screen 1`] = `
                   style={
                     Object {
                       "alignItems": "center",
-                      "backgroundColor": "#000000",
+                      "backgroundColor": "hsl(208, 8%, 90%)",
                       "borderColor": "#2089dc",
                       "borderRadius": 3,
                       "borderWidth": 0,
@@ -140,7 +140,15 @@ exports[`app snapshot renders the screen 1`] = `
                   <Text
                     style={
                       Object {
-                        "color": "white",
+                        "color": Object {
+                          "color": Array [
+                            208,
+                            8,
+                            63,
+                          ],
+                          "model": "hsl",
+                          "valpha": 1,
+                        },
                         "fontSize": 18,
                         "paddingBottom": 1,
                         "paddingTop": 2,

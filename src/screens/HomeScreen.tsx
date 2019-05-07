@@ -22,7 +22,8 @@ import { Schedule } from "../models/Schedule";
 import { PasscodeService } from "../services/PasscodeService";
 import { PreferenceService } from "../services/PreferenceService";
 import { ScheduleService } from "../services/ScheduleService";
-import { AlarmEvent, AlarmEventType, TimerService } from "../services/TimerService";
+import { TimerService } from "../services/TimerService";
+import { AlarmEvent, AlarmEventType } from "../utils/AlarmEvent";
 import { getAlarmSound } from "../utils/Audio";
 import * as Log from "../utils/Log";
 import { getEnumKeyByValue } from "../utils/ObjectUtils";
@@ -37,6 +38,15 @@ export interface HomeScreenProps {
 }
 
 /**
+ * Snooze button state. Determines what happens when the snooze button is pressed.
+ */
+export enum SnoozeState {
+    Disabled = 0,
+    Snooze = 1,
+    Dismiss = 2
+}
+
+/**
  * Home screen state
  * @author Richard Kriesman
  */
@@ -47,6 +57,7 @@ interface HomeScreenState {
     hasPasscode?: boolean;
     indicatorLayout?: LayoutRectangle;
     messageText: string;
+    snoozeState: SnoozeState;
     twentyFourHour: boolean;
 }
 
@@ -70,6 +81,7 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
         super(props);
         this.state = {
             messageText: HomeScreen.defaultInitialMessageText,
+            snoozeState: SnoozeState.Disabled,
             twentyFourHour: false
         };
     }
@@ -124,6 +136,18 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
             );
         }
 
+        // determine snooze button text
+        let snoozeButtonText: string;
+        let isSnoozeDisabled: boolean = false;
+        if (this.state.snoozeState === SnoozeState.Dismiss) {
+            snoozeButtonText = "Dismiss";
+        } else {
+            snoozeButtonText = "Snooze";
+            if (this.state.snoozeState === SnoozeState.Disabled) {
+                isSnoozeDisabled = true;
+            }
+        }
+
         // render screen
         return (
             <InactivityHandler
@@ -136,7 +160,8 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
                         <Clock wrapperStyle={styles.clockWrapper} twentyFourHour={this.state.twentyFourHour}/>
                         <Button
                             buttonStyle={styles.snoozeButton}
-                            title="Snooze"
+                            disabled={isSnoozeDisabled}
+                            title={snoozeButtonText}
                             onPress={this.onSnoozePressed.bind(this)}
                         />
                     </View>
@@ -178,17 +203,27 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     private onAlarmEventFired(when: Date, event: AlarmEvent): void {
 
         // log the event change
+        console.log(event);
         const eventName: string = getEnumKeyByValue(AlarmEventType, event.type);
         Log.info("HomeScreen", `Responding to event ${eventName} for Alarm ${event.alarm.id}`);
+
+        // determine new snooze state
+        const snoozeState: SnoozeState = event.type === AlarmEventType.Wake ? SnoozeState.Snooze : SnoozeState.Dismiss;
+        if (snoozeState !== SnoozeState.Snooze) { // alarm is not snoozeable, dismiss any snoozed events
+            this.getService(TimerService).cancelSnooze();
+        }
 
         // set this event as the active one
         this.setState({
             activeAlarmEvent: event,
-            messageText: messageTextMap.get(event.type)
+            messageText: messageTextMap.get(event.type),
+            snoozeState
         }, () => { // update alarm state
 
-            // start playing sound until dismissed
-            this.startAlarm();
+            // start playing sound until dismissed if there isn't already an alarm going off
+            if (!this.state.activeSound) {
+                this.startAlarm();
+            }
 
         });
     }
@@ -224,12 +259,46 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
     }
 
     private onSnoozePressed(): void {
-        this.stopAudio()
-            .then(() => {
-                this.setState({
-                    messageText: "Alarm snoozed!"
-                });
-            });
+        switch (this.state.snoozeState) {
+
+            // snooze the alarm
+            case SnoozeState.Snooze:
+                this.state.activeAlarmEvent.snooze()
+                    .catch((err) => {
+                        Log.error("HomeScreen", err);
+                    })
+                    .then(() => {
+                        return this.stopAudio();
+                    })
+                    .then(() => {
+                        this.setState({
+                            messageText: `Snoozed for ${this.state.activeSchedule.snoozeTime} minutes`,
+                            snoozeState: SnoozeState.Dismiss
+                        });
+                    });
+                break;
+
+            // dismiss the alarm
+            case SnoozeState.Dismiss:
+                this.getService(TimerService).cancelSnooze();
+                if (this.state.activeSound) {
+                    this.stopAudio()
+                        .then(() => {
+                            this.setState({
+                                activeAlarmEvent: undefined,
+                                messageText: " ",
+                                snoozeState: SnoozeState.Disabled
+                            });
+                        });
+                } else {
+                    this.setState({
+                        messageText: " ",
+                        snoozeState: SnoozeState.Disabled
+                    });
+                }
+                break;
+
+        }
     }
 
     private startAlarm(): Promise<void> {
@@ -288,9 +357,9 @@ export class HomeScreen extends UIScreen<HomeScreenProps, HomeScreenState> {
 
 const messageTextMap: Map<AlarmEventType | null, string> = new Map([
     [null, HomeScreen.defaultInitialMessageText],
-    [AlarmEventType.SLEEP, "Time for bed!"],
-    [AlarmEventType.WAKE, "Time to wake up!"],
-    [AlarmEventType.GET_UP, "Time to get up!"]
+    [AlarmEventType.Sleep, "Time for bed!"],
+    [AlarmEventType.Wake, "Time to wake up!"],
+    [AlarmEventType.GetUp, "Time to get up!"]
 ]);
 
 const styles = StyleSheet.create({
