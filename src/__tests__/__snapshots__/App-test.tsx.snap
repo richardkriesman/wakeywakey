@@ -78,7 +78,7 @@ exports[`renders the root without loading screen 1`] = `
                 }
               }
             >
-              <RCTSafeAreaView
+              <View
                 style={
                   Object {
                     "flex": 1,
@@ -127,123 +127,213 @@ exports[`renders the root without loading screen 1`] = `
                       }
                     >
                       <View
+                        onLayout={[Function]}
                         style={
                           Object {
-                            "alignItems": "center",
-                            "marginTop": 20,
-                            "padding": 0,
+                            "flex": 1,
                           }
                         }
                       >
                         <View
                           style={
                             Object {
+                              "backgroundColor": "rgba(212, 212, 247, 1)",
                               "flex": 1,
-                              "flexBasis": "100%",
-                              "justifyContent": "center",
-                              "width": "85%",
                             }
                           }
                         >
-                          <Text
+                          <RCTSafeAreaView
                             style={
                               Object {
-                                "fontSize": 30,
-                                "textAlign": "center",
+                                "flex": 1,
                               }
                             }
-                          >
-                            
-                          </Text>
-                          <View
-                            style={Object {}}
                           >
                             <View
                               style={
                                 Object {
-                                  "marginBottom": 20,
-                                  "marginTop": 20,
+                                  "backgroundColor": "yellow",
+                                  "borderRadius": 50,
+                                  "height": 100,
+                                  "left": "5%",
+                                  "position": "absolute",
+                                  "top": 50,
+                                  "width": 100,
                                 }
                               }
-                            >
-                              <Text
-                                style={
+                            />
+                            <View
+                              style={
+                                Array [
                                   Object {
-                                    "fontSize": 60,
-                                    "textAlign": "center",
-                                  }
-                                }
-                              >
-                                12:22 pm
-                              </Text>
-                            </View>
-                          </View>
-                          <View
-                            style={
-                              Object {
-                                "borderRadius": 3,
+                                    "backgroundColor": "#1f601f",
+                                    "height": 270,
+                                    "position": "absolute",
+                                    "width": "150%",
+                                  },
+                                  Object {
+                                    "borderTopLeftRadius": 0,
+                                    "borderTopRightRadius": 0,
+                                    "left": 0,
+                                    "top": 0,
+                                  },
+                                ]
                               }
-                            }
-                          >
+                            />
                             <View
-                              accessible={true}
-                              isTVSelectable={true}
-                              onResponderGrant={[Function]}
-                              onResponderMove={[Function]}
-                              onResponderRelease={[Function]}
-                              onResponderTerminate={[Function]}
-                              onResponderTerminationRequest={[Function]}
-                              onStartShouldSetResponder={[Function]}
                               style={
-                                Object {
-                                  "opacity": 1,
-                                }
+                                Array [
+                                  Object {
+                                    "backgroundColor": "green",
+                                    "height": 230,
+                                    "position": "absolute",
+                                    "width": "150%",
+                                  },
+                                  Object {
+                                    "borderTopLeftRadius": 0,
+                                    "borderTopRightRadius": 0,
+                                    "left": 0,
+                                    "top": 0,
+                                  },
+                                ]
                               }
-                            >
+                            />
+                            <View>
                               <View
                                 style={
-                                  Object {
-                                    "alignItems": "center",
-                                    "backgroundColor": "hsl(208, 8%, 90%)",
-                                    "borderColor": "#2089dc",
-                                    "borderRadius": 3,
-                                    "borderWidth": 0,
-                                    "flexDirection": "row",
-                                    "justifyContent": "center",
-                                    "padding": 15,
-                                  }
+                                  Array [
+                                    Object {
+                                      "alignItems": "center",
+                                      "justifyContent": "center",
+                                      "padding": 0,
+                                    },
+                                    Object {
+                                      "height": 0,
+                                    },
+                                  ]
                                 }
                               >
-                                <Text
+                                <View
                                   style={
                                     Object {
-                                      "color": Object {
-                                        "color": Array [
-                                          208,
-                                          8,
-                                          63,
-                                        ],
-                                        "model": "hsl",
-                                        "valpha": 1,
-                                      },
-                                      "fontSize": 18,
-                                      "paddingBottom": 1,
-                                      "paddingTop": 2,
-                                      "textAlign": "center",
+                                      "justifyContent": "center",
+                                      "width": "85%",
                                     }
                                   }
                                 >
-                                  Snooze
-                                </Text>
+                                  <Text
+                                    style={
+                                      Array [
+                                        Object {
+                                          "fontSize": 30,
+                                          "textAlign": "center",
+                                        },
+                                        Object {
+                                          "color": "#000000",
+                                        },
+                                      ]
+                                    }
+                                  >
+                                     
+                                  </Text>
+                                  <View
+                                    style={Object {}}
+                                  >
+                                    <View
+                                      style={
+                                        Object {
+                                          "marginBottom": 20,
+                                          "marginTop": 20,
+                                        }
+                                      }
+                                    >
+                                      <Text
+                                        style={
+                                          Array [
+                                            Object {
+                                              "fontSize": 60,
+                                              "textAlign": "center",
+                                            },
+                                            Object {
+                                              "color": "#000000",
+                                            },
+                                          ]
+                                        }
+                                      >
+                                        12:22 pm
+                                      </Text>
+                                    </View>
+                                  </View>
+                                  <View
+                                    style={
+                                      Object {
+                                        "borderRadius": 3,
+                                      }
+                                    }
+                                  >
+                                    <View
+                                      accessible={true}
+                                      isTVSelectable={true}
+                                      onResponderGrant={[Function]}
+                                      onResponderMove={[Function]}
+                                      onResponderRelease={[Function]}
+                                      onResponderTerminate={[Function]}
+                                      onResponderTerminationRequest={[Function]}
+                                      onStartShouldSetResponder={[Function]}
+                                      style={
+                                        Object {
+                                          "opacity": 1,
+                                        }
+                                      }
+                                    >
+                                      <View
+                                        style={
+                                          Object {
+                                            "alignItems": "center",
+                                            "backgroundColor": "hsl(208, 8%, 90%)",
+                                            "borderColor": "#2089dc",
+                                            "borderRadius": 3,
+                                            "borderWidth": 0,
+                                            "flexDirection": "row",
+                                            "justifyContent": "center",
+                                            "padding": 15,
+                                          }
+                                        }
+                                      >
+                                        <Text
+                                          style={
+                                            Object {
+                                              "color": Object {
+                                                "color": Array [
+                                                  208,
+                                                  8,
+                                                  63,
+                                                ],
+                                                "model": "hsl",
+                                                "valpha": 1,
+                                              },
+                                              "fontSize": 18,
+                                              "paddingBottom": 1,
+                                              "paddingTop": 2,
+                                              "textAlign": "center",
+                                            }
+                                          }
+                                        >
+                                          Snooze
+                                        </Text>
+                                      </View>
+                                    </View>
+                                  </View>
+                                </View>
                               </View>
                             </View>
-                          </View>
+                          </RCTSafeAreaView>
                         </View>
                       </View>
                     </View>
                   </View>
                 </View>
-              </RCTSafeAreaView>
+              </View>
             </View>
           </View>
         </View>

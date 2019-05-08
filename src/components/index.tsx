@@ -12,6 +12,7 @@ export { InactivityHandler } from "./InactivityHandler";
 export { PasscodeInput } from "./PasscodeInput";
 export { ScheduleListItem } from "./ScheduleListItem";
 export { Slider } from "./Slider";
+export { SkyBackground } from "./SkyBackground";
 export { TabBarIcon } from "./TabBarIcon";
 export { TextInputModal } from "./modal/TextInputModal";
 export { ToggleButton } from "./ToggleButton";

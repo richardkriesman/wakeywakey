@@ -24,7 +24,7 @@ export class AlarmService extends MockService {
         });
 
         // update the emitters
-        this.appDb.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        this.appDb.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         // build the resulting model
         return Alarm.load(this.appDb, row);
@@ -33,7 +33,7 @@ export class AlarmService extends MockService {
 
     public async delete(alarm: Alarm): Promise<void> {
         this.mockDb.delete("alarm", Alarm.save(alarm));
-        await this.appDb.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.appDb.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
     }
 
     public async get(id: number): Promise<Alarm | undefined> {
@@ -64,7 +64,7 @@ export class AlarmService extends MockService {
     public async setDays(alarm: Alarm, days: number): Promise<Alarm> {
         this.mockDb.update("alarm", Alarm.save(alarm));
 
-        await this.appDb.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.appDb.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         const data: any = Alarm.save(alarm);
         data.days = days;
@@ -74,7 +74,7 @@ export class AlarmService extends MockService {
     public async setGetUpTime(alarm: Alarm, time: Time): Promise<Alarm> {
         this.mockDb.update("alarm", Alarm.save(alarm));
 
-        await this.appDb.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.appDb.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         const data: any = Alarm.save(alarm);
         data.getUpTime = time.totalSeconds;
@@ -84,7 +84,7 @@ export class AlarmService extends MockService {
     public async setSleepTime(alarm: Alarm, time: Time): Promise<Alarm> {
         this.mockDb.update("alarm", Alarm.save(alarm));
 
-        await this.appDb.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.appDb.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         const data: any = Alarm.save(alarm);
         data.sleepTime = time.totalSeconds;
@@ -94,7 +94,7 @@ export class AlarmService extends MockService {
     public async setWakeTime(alarm: Alarm, time: Time): Promise<Alarm> {
         this.mockDb.update("alarm", Alarm.save(alarm));
 
-        await this.appDb.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.appDb.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         const data: any = Alarm.save(alarm);
         data.wakeTime = time.totalSeconds;
@@ -102,7 +102,7 @@ export class AlarmService extends MockService {
     }
 
     public watchBySchedule(schedule: Schedule): Watcher<Alarm> {
-        const emitter: Emitter<Alarm> = this.appDb.getEmitterSet<Alarm>(Alarm.name).create();
+        const emitter: Emitter<Alarm> = this.appDb.getEmitterSet<Alarm>(AlarmService).create();
 
         // configure filter
         emitter.onFilter((alarms: Alarm[]) => { // filter out alarms not attached to this schedule

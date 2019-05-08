@@ -3,12 +3,13 @@
  */
 
 import React, { ReactNode } from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 
 import { Text } from "react-native";
 
 interface ClockProps {
     wrapperStyle?: ViewStyle;
+    textStyle?: TextStyle;
     twentyFourHour: boolean;
 }
 
@@ -81,7 +82,7 @@ export class Clock extends React.Component<ClockProps, ClockState> {
         return (
             <View style={this.props.wrapperStyle}>
                 <View style={styles.innerWrapper}>
-                    <Text style={styles.clockText}>
+                    <Text style={[styles.clockText, this.props.textStyle]}>
                         {this.timeString}
                     </Text>
                 </View>

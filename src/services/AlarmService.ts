@@ -37,7 +37,7 @@ export class AlarmService extends Service {
         `, [schedule.id, days, sleepTime.totalSeconds, wakeTime.totalSeconds, getUpTime.totalSeconds]);
 
         // update the emitters
-        this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        this.db.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         // build the resulting model
         return Alarm.load(this.db, {
@@ -61,7 +61,7 @@ export class AlarmService extends Service {
             WHERE
                 id = ?
         `, [alarm.id]);
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.db.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
     }
 
     /**
@@ -128,7 +128,7 @@ export class AlarmService extends Service {
                 id = ?
         `, [days, alarm.id]);
 
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.db.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         const data: any = Alarm.save(alarm);
         data.days = days;
@@ -150,7 +150,7 @@ export class AlarmService extends Service {
                 id = ?
         `, [time.totalSeconds, alarm.id]);
 
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.db.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         const data: any = Alarm.save(alarm);
         data.getUpTime = time.totalSeconds;
@@ -172,7 +172,7 @@ export class AlarmService extends Service {
                 id = ?
         `, [time.totalSeconds, alarm.id]);
 
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.db.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         const data: any = Alarm.save(alarm);
         data.sleepTime = time.totalSeconds;
@@ -194,7 +194,7 @@ export class AlarmService extends Service {
                 id = ?
         `, [time.totalSeconds, alarm.id]);
 
-        await this.db.getEmitterSet<Alarm>(Alarm.name).update(await this.getAll());
+        await this.db.getEmitterSet<Alarm>(AlarmService).update(await this.getAll());
 
         const data: any = Alarm.save(alarm);
         data.wakeTime = time.totalSeconds;
@@ -207,7 +207,7 @@ export class AlarmService extends Service {
      * @param schedule Schedule whose Alarms to watch
      */
     public watchBySchedule(schedule: Schedule): Watcher<Alarm> {
-        const emitter: Emitter<Alarm> = this.db.getEmitterSet<Alarm>(Alarm.name).create();
+        const emitter: Emitter<Alarm> = this.db.getEmitterSet<Alarm>(AlarmService).create();
 
         // configure filter
         emitter.onFilter((alarms: Alarm[]) => { // filter out alarms not attached to this schedule

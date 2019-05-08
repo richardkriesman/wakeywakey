@@ -50,6 +50,23 @@ export function formatTime(time: Time, is24HourTime: boolean): string {
     }
 }
 
+/**
+ * Determines whether or not an {@link Alarm} is current active today
+ *
+ * @param alarm Alarm to check
+ */
+export function isActiveToday(alarm: Alarm): boolean {
+
+    // get day of week as a characteristic vector
+    let dayOfWeek: number = (new Date()).getDay() - 1;
+    if (dayOfWeek < 0) { // now.getDay() starts on sunday, but we start with monday - normalize this
+        dayOfWeek = 6;
+    }
+    const today: number = 1 << dayOfWeek;
+
+    return alarm.isDayActive(today);
+}
+
 export function padTime(time: number): string {
     return ("0" + time).slice(-2);
 }

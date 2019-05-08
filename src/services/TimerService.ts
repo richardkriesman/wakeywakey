@@ -4,6 +4,7 @@
 import { Alarm } from "../models/Alarm";
 import { Schedule } from "../models/Schedule";
 import { AlarmEvent, AlarmEventType } from "../utils/AlarmEvent";
+import * as AlarmUtils from "../utils/AlarmUtils";
 import * as Log from "../utils/Log";
 import { getEnumKeyByValue } from "../utils/ObjectUtils";
 import { Service } from "../utils/service/Service";
@@ -233,15 +234,8 @@ export class TimerService extends Service {
      */
     private checkAlarm(now: Date, alarm: Alarm): void {
 
-        // get day of week as a characteristic vector
-        let dayOfWeek: number = now.getDay() - 1;
-        if (dayOfWeek < 0) { // now.getDay() starts on sunday, but we start with monday - normalize this
-            dayOfWeek = 6;
-        }
-        const today: number = 1 << dayOfWeek;
-
         // bail out if this alarm is not active today
-        if (!alarm.isDayActive(today)) {
+        if (!AlarmUtils.isActiveToday(alarm)) {
             return;
         }
 

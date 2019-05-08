@@ -5,13 +5,13 @@
 import React, { ReactNode } from "react";
 import {
     Animated,
-    Easing,
     GestureResponderEvent,
     LayoutChangeEvent,
     StyleSheet,
     View} from "react-native";
 
 import { Button, Icon } from "react-native-elements";
+import { AnimationCurves } from "../constants/Animation";
 import { Colors } from "../constants/Colors";
 
 export enum SliderPosition {
@@ -142,12 +142,12 @@ export class Slider extends React.Component<PasscodeGateSliderProps, PasscodeGat
                 Animated.parallel([
                     Animated.timing(this.state.yAnim, {
                         duration,
-                        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+                        easing: AnimationCurves.standardBezier,
                         toValue: yToValue
                     }),
                     Animated.timing(this.state.indicatorRotation, {
                         duration,
-                        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+                        easing: AnimationCurves.standardBezier,
                         toValue: indicatorToValue
                     })
                 ]).start(() => {
